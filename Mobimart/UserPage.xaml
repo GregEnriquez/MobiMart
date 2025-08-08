@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="MobiMart.UserPage"
+    BackgroundColor="#FDF4DC"
+    Title="User">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Grid ColumnDefinitions="Auto, *" VerticalOptions="Center">
+                <Image 
+                    Source="avatar_placeholder.png" 
+                    WidthRequest="100" HeightRequest="100"
+                    HorizontalOptions="Center"
+                    Aspect="AspectFill"
+                    BackgroundColor="LightGray">
+                    <Image.Clip>
+                        <EllipseGeometry Center="50,50" RadiusX="50" RadiusY="50" />
+                    </Image.Clip>
+                </Image>
+                <Button 
+                    Text="Change" 
+                    BackgroundColor="#D99B2B"
+                    TextColor="White"
+                    CornerRadius="10"
+                    Padding="10,5"
+                    Grid.Column="1"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Start" />
+            </Grid>
+
+            <BoxView HeightRequest="1" BackgroundColor="#D99B2B" />
+
+            <Label Text="Full Name" FontAttributes="Bold" TextColor="Black" />
+            <Entry Placeholder="Enter full name" BackgroundColor="White" TextColor="Black" />
+
+            <Label Text="Email" FontAttributes="Bold" TextColor="Black" />
+            <Entry Placeholder="Enter email" BackgroundColor="White" TextColor="Black" Keyboard="Email" />
+
+            <Label Text="Password" FontAttributes="Bold" TextColor="Black" />
+            <Entry Placeholder="Enter password" IsPassword="True" BackgroundColor="White" TextColor="Black" />
+
+            <Label Text="Age" FontAttributes="Bold" TextColor="Black" />
+            <Entry Placeholder="Enter age" BackgroundColor="White" TextColor="Black" Keyboard="Numeric" />
+
+            <Label Text="Birthday" FontAttributes="Bold" TextColor="Black" />
+            <Entry Placeholder="MM/DD/YYYY" BackgroundColor="White" TextColor="Black" />
+
+            <Label Text="Phone Number" FontAttributes="Bold" TextColor="Black" />
+            <Entry Placeholder="Enter phone number" BackgroundColor="White" TextColor="Black" Keyboard="Telephone" />
+
+            <Label Text="Join Business" FontAttributes="Bold" TextColor="Black" />
+            <Entry Placeholder="Enter business code" BackgroundColor="White" TextColor="Black" />
+
+            <Button 
+                Text="Create or Join" 
+                BackgroundColor="#D99B2B" 
+                TextColor="White"
+                CornerRadius="10"
+                HeightRequest="45" />
+
+            <Button 
+                Text="Save Changes" 
+                BackgroundColor="#D99B2B" 
+                TextColor="White"
+                CornerRadius="10"
+                HeightRequest="45"
+                Margin="0,20,0,0" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

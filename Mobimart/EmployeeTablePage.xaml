@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MobiMart.EmployeeTablePage"
+             Title="EmployeeTablePage"
+             BackgroundColor="#FDF4DC">
+
+    <ScrollView>
+    <VerticalStackLayout Padding="20" Spacing="15">
+
+        <Grid ColumnDefinitions="*,*,*,*,*"
+              Padding="5"
+              BackgroundColor="#D99B2B">
+            <Label Text="Name" TextColor="White" FontAttributes="Bold" />
+            <Label Text="Email" TextColor="White" FontAttributes="Bold" Grid.Column="1" />
+            <Label Text="Age" TextColor="White" FontAttributes="Bold" Grid.Column="2" />
+            <Label Text="Phone" TextColor="White" FontAttributes="Bold" Grid.Column="3" />
+            <Label Text="Type" TextColor="White" FontAttributes="Bold" Grid.Column="4" />
+        </Grid>
+
+        <CollectionView x:Name="EmployeeList" ItemsSource="{Binding Employees}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="*,*,*,*,*" Padding="5" BackgroundColor="White">
+                        <Label Text="{Binding Name}" TextColor="Black" />
+                        <Label Text="{Binding Email}" TextColor="Black" Grid.Column="1" />
+                        <Label Text="{Binding Age}" TextColor="Black" Grid.Column="2" />
+                        <Label Text="{Binding Phone}" TextColor="Black" Grid.Column="3" />
+                        <Label Text="{Binding EmployeeType}" TextColor="Black" Grid.Column="4" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Button 
+            Text="Edit" 
+            BackgroundColor="#D99B2B" 
+            TextColor="White"
+            CornerRadius="10"
+            HeightRequest="45"
+            Command="{Binding EditCommand}" />
+    </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

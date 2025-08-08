@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MobiMart.MainPage"
+             BackgroundColor="#FDF4DC">
+
+    <Shell.TitleView>
+        <Grid>
+            <Label 
+                Text="MobiMart"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                TextColor="White"
+                FontSize="20"
+                FontAttributes="Bold"/>
+        </Grid>
+    </Shell.TitleView>
+
+    <VerticalStackLayout Padding="30" Spacing="20">
+
+        <Label 
+            Text="Login" 
+            FontSize="32" 
+            FontAttributes="Bold" 
+            HorizontalOptions="Center" 
+            TextColor="#D99B2B" />
+
+        <Entry 
+            Placeholder="Email"
+            BackgroundColor="White"
+            HeightRequest="50"
+            TextColor="Black" />
+
+        <Entry 
+            Placeholder="Password"
+            IsPassword="True"
+            BackgroundColor="White"
+            HeightRequest="50"
+            TextColor="Black" />
+
+        <Button 
+            Text="Login"
+            BackgroundColor="#D99B2B"
+            TextColor="White"
+            CornerRadius="10"
+            HeightRequest="50" />
+
+        <Label 
+            Text="Don't have an account? Sign Up" 
+            HorizontalOptions="Center"
+            TextColor="#D99B2B">
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnSignUpTapped" />
+            </Label.GestureRecognizers>
+        </Label>
+
+    </VerticalStackLayout>
+
+</ContentPage>
