@@ -13,7 +13,7 @@
 
     <ShellContent
         Title="Home"
-        ContentTemplate="{DataTemplate local:EmployeeTablePage}"
-        Route="EmployeeTablePage" />
+        ContentTemplate="{DataTemplate local:TransactionPage}"
+        Route="TransactionPage" />
 
 </Shell>

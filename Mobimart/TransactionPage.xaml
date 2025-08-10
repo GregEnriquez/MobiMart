@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MobiMart.TransactionPage"
+             Title="TransactionPage"
+             BackgroundColor="#FDF4DC">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20">
+
+            <Grid BackgroundColor="#D99B2B" Padding="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Image Source="menu_icon.png"
+                       WidthRequest="30" HeightRequest="30"
+                       VerticalOptions="Center"/>
+
+                <VerticalStackLayout Grid.Column="1"
+                                     HorizontalOptions="Center"
+                                     VerticalOptions="Center">
+                    <Label Text="App Name"
+                           FontAttributes="Bold"
+                           FontSize="20"
+                           HorizontalOptions="Center"
+                           TextColor="White"/>
+                    <Button Text="Transaction Page"
+                            BackgroundColor="#F2C94C"
+                            TextColor="White"
+                            CornerRadius="20"
+                            Padding="15,5"
+                            FontAttributes="Bold"/>
+                </VerticalStackLayout>
+
+                <Image Grid.Column="2" Source="cart_icon.png"
+                       WidthRequest="30" HeightRequest="30"
+                       VerticalOptions="Center"/>
+            </Grid>
+
+            <Frame BackgroundColor="#E1C16E" CornerRadius="10" Padding="10" Margin="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Transaction List"
+                           FontAttributes="Bold"
+                           FontSize="16"
+                           TextColor="Black"/>
+
+                    <Grid ColumnDefinitions="*, Auto, Auto" BackgroundColor="#C6A34F" Padding="5">
+                        <Label Text="Item Name" TextColor="White" FontAttributes="Bold" />
+                        <Label Grid.Column="1" Text="Amount" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+                        <Label Grid.Column="2" Text="Price" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+                    </Grid>
+
+                    <!-- Example Rows -->
+                    <Grid ColumnDefinitions="*, Auto, Auto" Padding="5">
+                        <Label Text="Tomi" VerticalOptions="Center"/>
+                        <Entry Grid.Column="1" Text="20" WidthRequest="50" HorizontalOptions="Center"/>
+                        <Entry Grid.Column="2" Text="200" WidthRequest="60" HorizontalOptions="Center"/>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*, Auto, Auto" Padding="5">
+                        <Label Text="Milk Magic" VerticalOptions="Center"/>
+                        <Entry Grid.Column="1" Text="5" WidthRequest="50" HorizontalOptions="Center"/>
+                        <Entry Grid.Column="2" Text="100" WidthRequest="60" HorizontalOptions="Center"/>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*, Auto, Auto" Padding="5">
+                        <Label Text="Royal Mismo" VerticalOptions="Center"/>
+                        <Entry Grid.Column="1" Text="3" WidthRequest="50" HorizontalOptions="Center"/>
+                        <Entry Grid.Column="2" Text="60" WidthRequest="60" HorizontalOptions="Center"/>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*, Auto, Auto" Padding="5">
+                        <Label Text="Safeguard" VerticalOptions="Center"/>
+                        <Entry Grid.Column="1" Text="2" WidthRequest="50" HorizontalOptions="Center"/>
+                        <Entry Grid.Column="2" Text="40" WidthRequest="60" HorizontalOptions="Center"/>
+                    </Grid>
+
+                    <Label Text="+ Add Item" HorizontalOptions="Center" TextColor="Black" />
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <HorizontalStackLayout Spacing="5" Padding="10,0">
+                <Image Source="star_icon.png" WidthRequest="20" HeightRequest="20"/>
+                <Label Text="Total Price:" FontAttributes="Bold" TextColor="Brown"/>
+                <Label Text="400" FontAttributes="Bold" TextColor="Black"/>
+            </HorizontalStackLayout>
+
+            <Button Text="Save Transaction"
+                    BackgroundColor="Transparent"
+                    BorderColor="Brown"
+                    BorderWidth="1"
+                    CornerRadius="20"
+                    TextColor="Brown"
+                    WidthRequest="200"
+                    HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
