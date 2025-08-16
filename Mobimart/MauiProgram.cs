@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using MobiMart.View;
+using MobiMart.ViewModel;
 
 namespace MobiMart
 {
@@ -15,8 +17,14 @@ namespace MobiMart
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+            builder.Services.AddSingleton<LoginViewModel>();
+
+
+            builder.Services.AddSingleton<SignUpPage>();
+        
+
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();

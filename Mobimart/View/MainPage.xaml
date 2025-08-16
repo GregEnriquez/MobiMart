@@ -1,14 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MobiMart.MainPage"
+             xmlns:local="clr-namespace:MobiMart"
+             xmlns:view="clr-namespace:MobiMart.View"
+             xmlns:viewmodel="clr-namespace:MobiMart.ViewModel"
+             x:DataType="viewmodel:LoginViewModel"
+             Shell.FlyoutBehavior="Disabled"
+             x:Class="MobiMart.View.MainPage"
              BackgroundColor="#FDF4DC">
 
     <Shell.TitleView>
         <Grid>
             <Label 
                 Text="MobiMart"
-                HorizontalOptions="Center"
+                HorizontalOptions="Start"
                 VerticalOptions="Center"
                 TextColor="White"
                 FontSize="20"
@@ -50,7 +55,7 @@
             HorizontalOptions="Center"
             TextColor="#D99B2B">
             <Label.GestureRecognizers>
-                <TapGestureRecognizer Tapped="OnSignUpTapped" />
+                <TapGestureRecognizer Command="{Binding GoToSignupCommand}" />
             </Label.GestureRecognizers>
         </Label>
 
