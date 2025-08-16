@@ -3,8 +3,9 @@
     x:Class="MobiMart.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:MobiMart"
+    xmlns:view="clr-namespace:MobiMart.View"
     Shell.FlyoutBehavior="Flyout"
+    Shell.TabBarIsVisible="False"
     Title="MobiMart"
     Shell.NavBarHasShadow="False"
     Shell.BackgroundColor="#D99B2B"
@@ -12,8 +13,23 @@
     Shell.ForegroundColor="White">
 
     <ShellContent
+        FlyoutItemIsVisible="False"
         Title="Home"
-        ContentTemplate="{DataTemplate local:EmployeeTablePage}"
-        Route="EmployeeTablePage" />
+        ContentTemplate="{DataTemplate view:MainPage}"
+        Route="MainPage"/>
+
+    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
+        <ShellContent
+            Title="User Page"
+            ContentTemplate="{DataTemplate view:UserPage}"
+            Icon="dotnet_bot.png"
+            Route="UserPage"/>
+        <ShellContent
+            Title="Business Page"
+            ContentTemplate="{DataTemplate view:BusinessPage}"
+            Icon="dotnet_bot.png"
+            Route="BusinessPage"/>
+    </FlyoutItem>
+
 
 </Shell>
