@@ -1,0 +1,23 @@
+
+###
+POST http://localhost:5198/users/
+Content-Type: application/json
+
+{
+    "firstName": "Jake Zyrus",
+    "lastName": "Pempengco",
+    "email": "jake-zy@gmail.com",
+    "password": "39b239b238ds@7n56",
+    "birthDate": "2000-05-16",
+    "age": 25,
+    "phoneNumber": "09053687822",
+    "employeeType": "employee"
+}
+
+
+###
+DELETE http://localhost:5198/users/2
+
+
+###
+GET http://localhost:5198/users/1
