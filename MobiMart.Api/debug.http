@@ -16,8 +16,19 @@ Content-Type: application/json
 
 
 ###
+PUT http://localhost:5198/businesses/2
+Content-Type: application/json
+
+{
+    "name": "My Cool Sari-sari Store",
+    "address": "456 My House Down the Street",
+    "code": "I2JE4"
+}
+
+
+###
 DELETE http://localhost:5198/users/2
 
 
 ###
-GET http://localhost:5198/users/1
+GET http://localhost:5198/businesses/2

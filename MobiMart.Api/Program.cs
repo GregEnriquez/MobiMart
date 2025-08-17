@@ -9,6 +9,7 @@ builder.Services.AddSqlite<MobiMartContext>(connString);
 
 var app = builder.Build();
 app.MapUsersEndpoints();
+app.MapBusinessesEndpoints();
 
 await app.MigrateDbAsync();
 app.Run();
