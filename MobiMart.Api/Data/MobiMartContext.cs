@@ -9,6 +9,7 @@ public class MobiMartContext(DbContextOptions<MobiMartContext> options) : DbCont
     public DbSet<User> Users => Set<User>();
     public DbSet<Business> Businesses => Set<Business>();
     public DbSet<Inventory> Inventories => Set<Inventory>();
+    public DbSet<Description> Descriptions => Set<Description>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

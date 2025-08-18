@@ -50,4 +50,15 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:5198/inventories/2
+DELETE http://localhost:5198/descriptions/1
+
+
+
+###
+POST http://localhost:5198/descriptions
+Content-Type: application/json
+
+{
+    "itemId": 1,
+    "text": "It features crispy corn puffs coated in a sweet chocolate layer, creating a satisfying and indulgent treat. The snack is described as having a light, airy texture and a mild chocolate flavor."
+}

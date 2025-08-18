@@ -1,7 +1,7 @@
 namespace MobiMart.Api.Dtos;
 
 public record class InventoryDto(
-    int Id,
+    int ItemId,
     int BusinessId,
     int DeliveryId,
     int DescriptionId,
