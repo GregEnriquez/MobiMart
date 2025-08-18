@@ -23,7 +23,7 @@ public static class BusinessesEndpoints
         {
             Business? business = await dbContext.Businesses.FindAsync(id);
 
-            return business is null ? Results.NotFound() : Results.Ok(business);
+            return business is null ? Results.NotFound() : Results.Ok(business.ToDto());
         })
         .WithName(GetBusinessesEndpointName);
 
@@ -61,6 +61,7 @@ public static class BusinessesEndpoints
             await dbContext.Businesses
                            .Where(business => business.Id == id)
                            .ExecuteDeleteAsync();
+                           
             return Results.NoContent();
         });
 

@@ -32,3 +32,22 @@ DELETE http://localhost:5198/users/2
 
 ###
 GET http://localhost:5198/businesses/2
+
+
+
+###
+POST http://localhost:5198/inventories
+Content-Type: application/json
+
+{
+    "businessId": 0,
+    "deliveryId": 0,
+    "descriptionId": 0,
+    "totalAmount": 1,
+    "itemName": "Mobi Chips",
+    "retailPrice": "6.50",
+    "itemType": "supply"
+}
+
+###
+DELETE http://localhost:5198/inventories/2
