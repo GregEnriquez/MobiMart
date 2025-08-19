@@ -62,3 +62,52 @@ Content-Type: application/json
     "itemId": 1,
     "text": "It features crispy corn puffs coated in a sweet chocolate layer, creating a satisfying and indulgent treat. The snack is described as having a light, airy texture and a mild chocolate flavor."
 }
+
+
+###
+POST http://localhost:5198/suppliers/
+Content-Type: application/json
+
+{
+    "businessId": 2,
+    "type": "Whole Sale",
+    "name": "Jack n' Jill Mdse",
+    "email": "Jack.n.Jill@gmail.com",
+    "socialsLink": "https://facebook.com/jack-n-jill-mdse",
+    "socialsDescription": "facebook page"
+}
+
+###
+POST http://localhost:5198/suppliers/contacts
+Content-Type: application/json
+
+{
+    "supplierId": 3,
+    "name": "John Mark Sadaya",
+    "email": "jmsadaya@gmail.com"
+}
+
+
+###
+DELETE http://localhost:5198/suppliers/3
+
+###
+GET http://localhost:5198/suppliers/5
+
+
+### TEST or debug the wholesale inventory endpoint
+POST http://localhost:5198/wholesale-inventories
+Content-Type: application/json
+
+{
+    "supplierId": 5,
+    "itemName": "Moby",
+    "deliveryAmount": 20,
+    "dateDelivered": "2025-06-21",
+    "expirationDate": "2027-12-12",
+    "batchWorth": 130,
+    "itemType": "Junk Food"
+}
+
+###
+GET http://localhost:5198/wholesale-inventories/1

@@ -12,6 +12,9 @@ app.MapUsersEndpoints();
 app.MapBusinessesEndpoints();
 app.MapInventoriesEndpoints();
 app.MapDescriptionsEndpoint();
+app.MapSuppliersEndpoints();
+app.MapSupplierContactsEndpoints();
+app.MapWholeSaleInventoriesEndpoints();
 
 await app.MigrateDbAsync();
 app.Run();

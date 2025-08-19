@@ -24,7 +24,7 @@ public static class InventoriesEndpoints
         {
             Inventory? inv = await dbContext.Inventories.FindAsync(id);
 
-            return inv is null ? Results.NotFound() : Results.Ok(inv);
+            return inv is null ? Results.NotFound() : Results.Ok(inv.ToDto());
         })
         .WithName(GetInventoriesEndpointName);
 
