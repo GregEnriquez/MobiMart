@@ -37,3 +37,21 @@ public record class CreateUserDto(
     string PhoneNumber,
     string EmployeeType
 );
+
+
+public record class UserAuthDto(
+    [Required] string Email,
+    [Required] string Password
+);
+
+
+public record class TokenResponseDto(
+    [Required] string AccessToken,
+    [Required] string RefreshToken
+);
+
+
+public record class RefreshTokenRequestDto(
+    int UserId,
+    string RefreshToken
+);

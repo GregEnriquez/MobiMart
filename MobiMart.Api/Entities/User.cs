@@ -14,4 +14,6 @@ public class User
     public int Age { get; set; }
     public string PhoneNumber { get; set; } = "";
     public required string EmployeeType { get; set; }
+    public string? RefreshToken { get; set; }
+    public DateTime? RefreshTokenExpiryTime { get; set; }
 }

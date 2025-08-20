@@ -11,7 +11,7 @@
         <Grid>
             <Label 
             Text="MobiMart"
-            HorizontalOptions="Center"
+            HorizontalOptions="Start"
             VerticalOptions="Center"
             TextColor="White"
             FontSize="20"
@@ -33,7 +33,7 @@
             Keyboard="Email"
             BackgroundColor="White"
             HeightRequest="50"
-            TextColor="Black" />
+            TextColor="Black"/>
 
         <Entry 
             Placeholder="Password"
