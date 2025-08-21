@@ -31,12 +31,14 @@
             TextColor="#D99B2B" />
 
         <Entry 
+            Text = "{Binding Email}"
             Placeholder="Email"
             BackgroundColor="White"
             HeightRequest="50"
             TextColor="Black" />
 
         <Entry 
+            Text = "{Binding Password}"
             Placeholder="Password"
             IsPassword="True"
             BackgroundColor="White"
@@ -48,7 +50,8 @@
             BackgroundColor="#D99B2B"
             TextColor="White"
             CornerRadius="10"
-            HeightRequest="50" />
+            HeightRequest="50"
+            Command="{Binding LoginUserCommand}"/>
 
         <Label 
             Text="Don't have an account? Sign Up" 
