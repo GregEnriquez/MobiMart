@@ -4,8 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:view="clr-namespace:MobiMart.View"
     x:Class="MobiMart.View.SignUpPage"
+    xmlns:viewmodel="clr-namespace:MobiMart.ViewModel"
+    x:DataType="viewmodel:SignUpViewModel"
     BackgroundColor="#FDF4DC"
-    Title="Sign Up">
+    Title="{Binding Title}">
 
     <Shell.TitleView>
         <Grid>
@@ -28,33 +30,57 @@
             HorizontalOptions="Center" 
             TextColor="#D99B2B" />
 
-        <Entry 
+        <Entry
+            Text = "{Binding Email}" 
             Placeholder="Email"
             Keyboard="Email"
             BackgroundColor="White"
             HeightRequest="50"
             TextColor="Black"/>
+        <Label
+            Text = "*Email is already registered"
+            TextColor = "red"
+            FontSize = "12"
+            Margin = "0, -15, 0, -5"
+            IsVisible = "{Binding EmailHasError}"/>
 
-        <Entry 
+        <Entry
+            Text ="{Binding Password}"
             Placeholder="Password"
             IsPassword="True"
             BackgroundColor="White"
             HeightRequest="50"
-            TextColor="Black" />
+            TextColor="Black"/>
+        <Label
+            Text = "*Password must contain atleast 8 characters"
+            TextColor = "red"
+            FontSize = "12"
+            Margin = "0, -15, 0, -5"
+            IsVisible = "{Binding PasswordHasError}"/>
 
         <Entry 
+            Text = "{Binding ConfirmPassword}"
             Placeholder="Confirm Password"
             IsPassword="True"
             BackgroundColor="White"
             HeightRequest="50"
-            TextColor="Black" />
+            TextColor="Black"/>
+        <Label
+            Text = "*Passwords does not match"
+            TextColor = "red"
+            FontSize = "12"
+            Margin = "0, -15, 0, -5"
+            IsVisible = "{Binding ConfirmPasswordHasError}"/>
+
 
         <Button 
             Text="Sign Up"
             BackgroundColor="#D99B2B"
             TextColor="White"
             CornerRadius="10"
-            HeightRequest="50" />
+            HeightRequest="50" 
+            Command="{Binding RegisterUserCommand}"
+            IsEnabled="{Binding IsNotBusy}"/>
 
         <Label 
             Text="Already have an account? Login"

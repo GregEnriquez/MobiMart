@@ -14,9 +14,10 @@ public static class UsersEndpoints
     public static WebApplication MapUsersEndpoints(this WebApplication app)
     {
         // GET /users
-        app.MapGet("users", () =>
+        app.MapGet("users", (MobiMartContext dbContext) =>
         {
-            return Results.BadRequest();
+            return Results.Ok(dbContext.Users.Find(1));
+            // return Results.BadRequest();
         });
 
         // GET /users/1
