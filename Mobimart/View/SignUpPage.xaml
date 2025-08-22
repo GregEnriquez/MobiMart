@@ -66,7 +66,7 @@
             HeightRequest="50"
             TextColor="Black"/>
         <Label
-            Text = "*Passwords does not match"
+            Text = "*Passwords do not match"
             TextColor = "red"
             FontSize = "12"
             Margin = "0, -15, 0, -5"
