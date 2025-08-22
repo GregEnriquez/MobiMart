@@ -7,7 +7,8 @@
     xmlns:viewmodel="clr-namespace:MobiMart.ViewModel"
     x:DataType="viewmodel:SignUpViewModel"
     BackgroundColor="#FDF4DC"
-    Title="{Binding Title}">
+    Title="{Binding Title}"
+    Shell.NavBarIsVisible="{Binding IsNotBusy}">
 
     <Shell.TitleView>
         <Grid>
@@ -21,8 +22,8 @@
         </Grid>
     </Shell.TitleView>
 
+    <Grid>
     <VerticalStackLayout Padding="30" Spacing="20">
-
         <Label 
             Text="Sign Up" 
             FontSize="28" 
@@ -90,6 +91,16 @@
                 <TapGestureRecognizer Tapped="OnLoginTapped" />
             </Label.GestureRecognizers>
         </Label>
-
     </VerticalStackLayout>
+    
+    <Border BackgroundColor="#66000000"
+                StrokeThickness="0"
+                IsVisible="{Binding IsBusy}" 
+                InputTransparent="{Binding IsBusy}">
+        <ActivityIndicator IsRunning="{Binding IsBusy}" 
+                            Color="#D99B2B" 
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Center" />
+    </Border>
+    </Grid>
 </ContentPage>

@@ -12,7 +12,7 @@ namespace MobiMart.Service;
 public class UserService
 {
     static SQLiteAsyncConnection? db;
-    readonly string baseUrl = DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:5199" : "http://localhost:5198";
+    string baseUrl = DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:5199" : "http://localhost:5198";
     HttpClient client;
 
     public UserService()
@@ -21,6 +21,7 @@ public class UserService
         {
             BaseAddress = new Uri(baseUrl)
         };
+        client.Timeout = TimeSpan.FromSeconds(8);
     }
 
     async Task Init()
@@ -37,14 +38,13 @@ public class UserService
     {
         await Init();
 
-        User user = new()
+        var payload = new
         {
             Email = email,
             Password = password
         };
-
-        var id = await db!.InsertAsync(user);
-        Debug.WriteLine(id);
+        var content = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
+        var response = await client.PostAsync("/auth/login", content);
     }
 
 
@@ -60,16 +60,36 @@ public class UserService
         };
         var json = JsonConvert.SerializeObject(payload);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
-        var response = await client.PostAsync("/auth/register", content);
-        if (!response.IsSuccessStatusCode)
-        {
-            Debug.WriteLine(response.Content.ReadAsStringAsync());
-            return false;
-        }
 
-        // save the user on the database
-        User user = JsonConvert.DeserializeObject<User>(await response.Content.ReadAsStringAsync())!;
-        var id = await db!.InsertAsync(user);
+        try
+        {
+            var response = await client.PostAsync("/auth/register", content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                Debug.WriteLine(response.Content.ReadAsStringAsync());
+                return false;
+            }
+
+            // save the user on the database
+            User user = JsonConvert.DeserializeObject<User>(await response.Content.ReadAsStringAsync())!;
+            var id = await db!.InsertAsync(user);
+        }
+        catch (HttpRequestException e)
+        {
+            Debug.WriteLine(e.Message);
+            throw new HttpRequestException("Can't connect to the database.");
+        }
+        catch (TaskCanceledException e)
+        {
+            Debug.WriteLine(e.Message);
+            throw new TaskCanceledException("The server took too long to respond.");
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine(e.Message);
+            throw new Exception(e.Message);
+        }
 
         return true;
     }

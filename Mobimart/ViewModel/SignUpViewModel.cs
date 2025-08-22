@@ -44,10 +44,31 @@ public partial class SignUpViewModel : BaseViewModel
             return;
         }
 
-        if (!await userService.RegisterUserAsync(Email, Password))
+        try
         {
-            EmailHasError = true;
+            if (!await userService.RegisterUserAsync(Email, Password))
+            {
+                EmailHasError = true;
+                IsBusy = false;
+                return;
+            }
+        }
+        catch (HttpRequestException e)
+        {
             IsBusy = false;
+            await Shell.Current.DisplayAlert("Connection Error", e.Message, "OK");
+            return;
+        }
+        catch (TaskCanceledException e)
+        {
+            IsBusy = false;
+            await Shell.Current.DisplayAlert("Timeout Error", e.Message, "OK");
+            return;
+        }
+        catch (Exception e)
+        {
+            IsBusy = false;
+            await Shell.Current.DisplayAlert("Error", e.Message, "OK");
             return;
         }
 
