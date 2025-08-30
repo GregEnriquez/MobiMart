@@ -44,6 +44,13 @@ namespace MobiMart.Api.Controllers
             return Ok(result);
         }
 
+        [Authorize]
+        [HttpPost("logout")]
+        public async Task<ActionResult> Logout(LogoutUserDto request)
+        {
+            return await authService.LogoutAsync(request.UserId) ? Ok() : BadRequest();
+        }
+
 
         [Authorize]
         [HttpGet]

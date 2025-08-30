@@ -128,4 +128,16 @@ public class AuthService(MobiMartContext context, IConfiguration configuration) 
 
         return user;
     }
+
+    public async Task<bool> LogoutAsync(int userId)
+    {
+        var user = await context.Users.FindAsync(userId);
+        if (user is null) return false;
+
+        user.RefreshToken = null;
+        user.RefreshTokenExpiryTime = null;
+        await context.SaveChangesAsync();
+
+        return true;
+    }
 }

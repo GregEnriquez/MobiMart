@@ -55,3 +55,8 @@ public record class RefreshTokenRequestDto(
     int UserId,
     string RefreshToken
 );
+
+
+public record class LogoutUserDto(
+    int UserId
+);
