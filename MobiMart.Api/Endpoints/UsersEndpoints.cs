@@ -11,26 +11,28 @@ public static class UsersEndpoints
 {
     const string GetUserEndpointName = "GetUser";
 
-    public static WebApplication MapUsersEndpoints(this WebApplication app)
+    public static RouteGroupBuilder MapUsersEndpoints(this WebApplication app)
     {
+        var group = app.MapGroup("users");
+
         // GET /users
-        app.MapGet("users", (MobiMartContext dbContext) =>
+        group.MapGet("/", (MobiMartContext dbContext) =>
         {
             return Results.Ok(dbContext.Users.Find(1));
             // return Results.BadRequest();
         });
 
         // GET /users/1
-        app.MapGet("users/{id}", async (int id, MobiMartContext dbContext) =>
+        group.MapGet("/{email}", async (string email, MobiMartContext dbContext) =>
         {
-            User? user = await dbContext.Users.FindAsync(id);
+            User? user = await dbContext.Users.FirstOrDefaultAsync(x => x.Email == email);
 
             return user is null ? Results.NotFound() : Results.Ok(user.ToDto());
         })
         .WithName(GetUserEndpointName);
 
         // POST /users
-        app.MapPost("users", async (CreateUserDto newUser, MobiMartContext dbContext) =>
+        group.MapPost("/", async (CreateUserDto newUser, MobiMartContext dbContext) =>
         {
             User user = newUser.ToEntity();
 
@@ -42,7 +44,7 @@ public static class UsersEndpoints
         .WithParameterValidation();
 
         // PUT /users/1
-        app.MapPut("users/{id}", async (int id, UpdateUserDto updatedUser,MobiMartContext dbContext) =>
+        group.MapPut("/{id}", async (int id, UpdateUserDto updatedUser,MobiMartContext dbContext) =>
         {
             var existingUser = await dbContext.Users.FindAsync(id);
             if (existingUser is null) return Results.NotFound();
@@ -57,7 +59,7 @@ public static class UsersEndpoints
         });
 
         // DELETE /users/1
-        app.MapDelete("users/{id}", async (int id, MobiMartContext dbContext) =>
+        group.MapDelete("/{id}", async (int id, MobiMartContext dbContext) =>
         {
             await dbContext.Users
                      .Where(game => game.Id == id)
@@ -66,6 +68,6 @@ public static class UsersEndpoints
             return Results.NoContent();
         });
 
-        return app;
+        return group;
     }
 }

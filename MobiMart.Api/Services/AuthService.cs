@@ -80,7 +80,7 @@ public class AuthService(MobiMartContext context, IConfiguration configuration) 
             issuer: configuration.GetValue<String>("AppSettings:Issuer"),
             audience: configuration.GetValue<String>("AppSettings:Audience"),
             claims: claims,
-            expires: DateTime.UtcNow.AddDays(1),
+            expires: DateTime.UtcNow.AddDays(7),
             signingCredentials: creds
         );
 
@@ -92,7 +92,7 @@ public class AuthService(MobiMartContext context, IConfiguration configuration) 
     {
         var refreshToken = GenerateRefreshToken();
         user.RefreshToken = refreshToken;
-        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddMonths(1);
         await context.SaveChangesAsync();
         return refreshToken;
     }

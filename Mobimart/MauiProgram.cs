@@ -23,6 +23,8 @@ namespace MobiMart
             builder.Services.AddSingleton<SignUpViewModel>();
 
             builder.Services.AddSingleton<SignUpPage>();
+            builder.Services.AddSingleton<BusinessPage>();
+            builder.Services.AddSingleton<EmployeeTablePage>();
         
 
 #if DEBUG

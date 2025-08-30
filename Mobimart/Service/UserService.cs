@@ -1,8 +1,7 @@
 using System;
 using System.Diagnostics;
+using System.Net.Http.Headers;
 using System.Text;
-using System.Text.Json.Serialization;
-using CommunityToolkit.Mvvm.Input;
 using MobiMart.Model;
 using Newtonsoft.Json;
 using SQLite;
@@ -31,6 +30,7 @@ public class UserService
         db = new SQLiteAsyncConnection(databasePath);
         
         await db.CreateTableAsync<User>();
+        await db.CreateTableAsync<UserInstance>();
     }
 
 
@@ -44,7 +44,58 @@ public class UserService
             Password = password
         };
         var content = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
-        var response = await client.PostAsync("/auth/login", content);
+        var tokens = new Dictionary<string, string>();
+        try
+        {
+            var response = await client.PostAsync("/auth/login", content);
+            if (!response.IsSuccessStatusCode) throw new Exception("Invalid username or password.");
+
+            tokens = JsonConvert.DeserializeObject<Dictionary<string, string>>(await response.Content.ReadAsStringAsync());
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokens!["accessToken"]);
+        }
+        catch (HttpRequestException e)
+        {
+            Debug.WriteLine(e.Message);
+            throw new HttpRequestException("Can't connect to the database.");
+        }
+        catch (TaskCanceledException e)
+        {
+            Debug.WriteLine(e.Message);
+            throw new TaskCanceledException("The server took too long to respond.");
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine(e.StackTrace);
+            throw new Exception(e.Message);
+        }
+
+        // check if user already exists on the local db
+        var user = await db!.Table<User>().FirstOrDefaultAsync(x => x.Email == email);
+        if (user is null)
+        {
+            // pull user from remote db
+            var response = await client.GetAsync($"users/{email}");
+            user = JsonConvert.DeserializeObject<User>(await response.Content.ReadAsStringAsync())!;
+            // then add it to local db
+            await db!.InsertAsync(user);
+        }
+
+        // replace tokens
+        user = await db.Table<User>().Where(x => x.Id == user!.Id).FirstOrDefaultAsync();
+        user.RefreshToken = tokens["refreshToken"];
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddMonths(1).ToString("yyyy-MM-dd HH:mm:ss.fff");
+        await db.UpdateAsync(user);
+
+        // create user instance
+        await db!.InsertAsync(new UserInstance()
+        {
+            UserId = user.Id,
+            AccessToken = tokens["accessToken"],
+            RefreshToken = user.RefreshToken,
+            RefreshTokenExpiryTime = user.RefreshTokenExpiryTime,
+        });
+        // debug
+        // var instance = await db.Table<UserInstance>().Where(x => x.UserId == user!.Id).FirstOrDefaultAsync();
     }
 
 
@@ -67,7 +118,6 @@ public class UserService
 
             if (!response.IsSuccessStatusCode)
             {
-                Debug.WriteLine(response.Content.ReadAsStringAsync());
                 return false;
             }
 

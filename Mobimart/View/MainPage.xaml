@@ -21,6 +21,7 @@
         </Grid>
     </Shell.TitleView>
 
+    <Grid>
     <VerticalStackLayout Padding="30" Spacing="20">
 
         <Label 
@@ -61,7 +62,17 @@
                 <TapGestureRecognizer Command="{Binding GoToSignupCommand}" />
             </Label.GestureRecognizers>
         </Label>
-
     </VerticalStackLayout>
+    
+    <Border BackgroundColor="#66000000"
+                StrokeThickness="0"
+                IsVisible="{Binding IsBusy}" 
+                InputTransparent="{Binding IsBusy}">
+        <ActivityIndicator IsRunning="{Binding IsBusy}" 
+                            Color="#D99B2B" 
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Center" />
+    </Border>
+    </Grid>
 
 </ContentPage>

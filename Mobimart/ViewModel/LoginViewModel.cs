@@ -24,7 +24,33 @@ public partial class LoginViewModel : BaseViewModel
     [RelayCommand]
     async Task LoginUser()
     {
-        await userService.LoginUserAsync(Email, Password);
+        try
+        {
+            IsBusy = true;
+            await userService.LoginUserAsync(Email, Password);
+        }
+        catch (HttpRequestException e)
+        {
+            IsBusy = false;
+            await Shell.Current.DisplayAlert("Connection Error", e.Message, "OK");
+            return;
+        }
+        catch (TaskCanceledException e)
+        {
+            IsBusy = false;
+            await Shell.Current.DisplayAlert("Timeout Error", e.Message, "OK");
+            return;
+        }
+        catch (Exception e)
+        {
+            IsBusy = false;
+            await Shell.Current.DisplayAlert("Error", e.Message, "OK");
+            return;
+        }
+
+        // login is succesful (do something)
+        await Shell.Current.GoToAsync("//UserPage", true);
+        IsBusy = false;
     }
 
 
