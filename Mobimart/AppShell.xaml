@@ -29,6 +29,11 @@
             ContentTemplate="{DataTemplate view:BusinessPage}"
             Icon="dotnet_bot.png"
             Route="BusinessPage"/>
+        <ShellContent
+            Title="Supplier List"
+            ContentTemplate="{DataTemplate view:SupplierList}"
+            Icon="dotnet_bot.png"
+            Route="SupplierList"/>
     </FlyoutItem>
 
 
