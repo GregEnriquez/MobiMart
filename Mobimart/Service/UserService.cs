@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Net.Http.Headers;
 using System.Text;
+using Android.Icu.Text;
 using MobiMart.Model;
 using Newtonsoft.Json;
 using SQLite;
@@ -28,9 +29,81 @@ public class UserService
         if (db != null) return;
         var databasePath = Path.Combine(FileSystem.AppDataDirectory, "mobimart.db");
         db = new SQLiteAsyncConnection(databasePath);
-        
+
         await db.CreateTableAsync<User>();
         await db.CreateTableAsync<UserInstance>();
+    }
+
+
+    public async Task<bool> ResumeUserInstanceAsync()
+    {
+        await Init();
+
+        // check for an active user instance
+        var userInstance = await db!.Table<UserInstance>().FirstOrDefaultAsync();
+        if (userInstance is null)
+        {
+            // return the user to login page
+            return false;
+        }
+
+        // if refresh token validity is expired
+        DateTime expiry = DateTime.Parse(userInstance.RefreshTokenExpiryTime);
+        if (expiry < DateTime.Today)
+        {
+            // logout the user
+            await LogoutUserAsync();
+            return false;
+        }
+
+        // else, try to refresh the tokens (online)
+        var user = await db!.Table<User>().Where(x => x.Id == userInstance.UserId).FirstOrDefaultAsync();
+        var payload = new
+        {
+            UserId = user.Id,
+            RefreshToken = user.RefreshToken
+        };
+        var content = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
+        try
+        {
+            var response = await client.PostAsync("/auth/refresh-token", content);
+            if (!response.IsSuccessStatusCode)
+            {
+                if (response.ReasonPhrase == "Unauthorized")
+                {
+                    // logout bro
+                    await LogoutUserAsync();
+                    return false;
+                }
+            }
+            var tokens = JsonConvert.DeserializeObject<Dictionary<string, string>>(await response.Content.ReadAsStringAsync());
+            user.RefreshToken = tokens!["refreshToken"];
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddMonths(1).ToString("yyyy-MM-dd HH:mm:ss.fff");
+            await db.UpdateAsync(user);
+
+            userInstance.AccessToken = tokens!["accessToken"];
+            userInstance.RefreshToken = user.RefreshToken;
+            userInstance.RefreshTokenExpiryTime = user.RefreshTokenExpiryTime;
+            await db.UpdateAsync(userInstance);
+        }
+        // if can't connect online, just let bro in anyway (since refresh token is not expired)
+        catch (HttpRequestException e)
+        {
+            Debug.WriteLine(e.StackTrace);
+        }
+        catch (TaskCanceledException e)
+        {
+            Debug.WriteLine(e.StackTrace);
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine(e.StackTrace);
+        }
+
+        // attach authorization header to the http client
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userInstance.AccessToken);
+        // take the user to the main page
+        return true;
     }
 
 
@@ -142,5 +215,20 @@ public class UserService
         }
 
         return true;
+    }
+
+
+    private async Task LogoutUserAsync()
+    {
+        await Init();
+
+        var userInstance = await db!.Table<UserInstance>().FirstOrDefaultAsync();
+        var user = await db!.Table<User>().Where(x => x.Id == userInstance.UserId).FirstOrDefaultAsync();
+
+        user.RefreshToken = "";
+        user.RefreshTokenExpiryTime = "";
+        await db!.UpdateAsync(user);
+
+        await db.DeleteAllAsync<UserInstance>();
     }
 }

@@ -128,3 +128,7 @@ Content-Type: application/json
     "email": "fxyrus26@gmail.com",
     "password": "myPassword123"
 } 
+
+
+### 
+DELETE http://localhost:5198/users/17

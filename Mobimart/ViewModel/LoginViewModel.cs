@@ -18,6 +18,18 @@ public partial class LoginViewModel : BaseViewModel
     public LoginViewModel(UserService userService)
     {
         this.userService = userService;
+
+        Debug.WriteLine("i was initiated");
+        Task.Run(async () =>
+        {
+            IsBusy = true;
+            if (await userService.ResumeUserInstanceAsync())
+            {
+                await Shell.Current.GoToAsync("//UserPage", true);
+                IsBusy = false;
+            }
+            IsBusy = false;
+        });
     }
 
 
