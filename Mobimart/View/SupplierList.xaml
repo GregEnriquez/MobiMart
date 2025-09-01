@@ -61,6 +61,15 @@
                     />
             </Grid>
 
+            <Button 
+                Text="Add Supplier" 
+                BackgroundColor="#D99B2B" 
+                TextColor="White"
+                CornerRadius="10"
+                HeightRequest="45"
+                Margin="0,20,0,0" 
+                Clicked="onButtonClicked"/>
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:view="clr-namespace:MobiMart.View"
+             x:Class="MobiMart.View.AddSupplier"
+             BackgroundColor="#FDF4DC"
+             Title="AddSupplier">
+    
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Grid ColumnDefinitions="Auto, *" VerticalOptions="Center" ColumnSpacing="25" HorizontalOptions="Center">
+                <Image 
+                    Source="avatar_placeholder.png" 
+                    WidthRequest="100" HeightRequest="100"
+                    HorizontalOptions="Center"
+                    Aspect="AspectFill"
+                    BackgroundColor="LightGray">
+                    <Image.Clip>
+                        <EllipseGeometry Center="50,50" RadiusX="50" RadiusY="50" />
+                    </Image.Clip>
+                </Image>
+                <Button 
+                    Text="Change" 
+                    BackgroundColor="#D99B2B"
+                    TextColor="White"
+                    CornerRadius="10"
+                    Padding="10,5"
+                    Grid.Column="1"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Start" />
+            </Grid>
+
+            <BoxView HeightRequest="1" BackgroundColor="#D99B2B" />
+
+            <Label Text="Supplier Name" FontAttributes="Bold" TextColor="#6F4E37" />
+            <Border
+                Stroke="#A9882D"
+                StrokeThickness="1.5"
+                StrokeShape="RoundRectangle 10,10,10,10">
+                <Entry Placeholder="Enter Supplier Name" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+            </Border>
+            
+
+            <Label Text="Supplier Type" FontAttributes="Bold" TextColor="#6F4E37" />
+            <Border
+                Stroke="#A9882D"
+                StrokeThickness="1.5"
+                StrokeShape="RoundRectangle 10,10,10,10">
+                <Entry Placeholder="Enter Supplier Type" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+
+            </Border>
+
+            <Label Text="Supplier Number" FontAttributes="Bold" TextColor="#6F4E37" />
+            <Border
+                Stroke="#A9882D"
+                StrokeThickness="1.5"
+                StrokeShape="RoundRectangle 10,10,10,10">
+                <Entry Placeholder="Enter Supplier Number" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+
+            </Border>
+
+            <Label Text="Supplier Email" FontAttributes="Bold" TextColor="#6F4E37" />
+            <Border
+                Stroke="#A9882D"
+                StrokeThickness="1.5"
+                StrokeShape="RoundRectangle 10,10,10,10">
+                <Entry Placeholder="Enter Supplier Email" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+
+            </Border>
+
+            <Label Text="Supplier Socials" FontAttributes="Bold" TextColor="#6F4E37" />
+            <Border
+                Stroke="#A9882D"
+                StrokeThickness="1.5"
+                StrokeShape="RoundRectangle 10,10,10,10">
+                <Entry Placeholder="Enter Supplier Socials" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+
+            </Border>
+
+            <HorizontalStackLayout
+                HorizontalOptions="Center"
+                Spacing="5">
+
+                <Image 
+                   Source="plus.png" 
+                   WidthRequest="15" HeightRequest="15"
+                   VerticalOptions="Center" />
+                <Label Text="Add More" FontAttributes="Bold" TextColor="#6F4E37"/>
+            </HorizontalStackLayout>
+            
+
+            <Button 
+                Text="Add Contact" 
+                BackgroundColor="#D99B2B" 
+                TextColor="White"
+                CornerRadius="10"
+                HeightRequest="45" />
+
+            <Button 
+                Text="Save Changes" 
+                BackgroundColor="#D99B2B" 
+                TextColor="White"
+                CornerRadius="10"
+                HeightRequest="45"
+                Margin="0,20,0,0" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

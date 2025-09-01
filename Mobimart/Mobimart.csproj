@@ -68,6 +68,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="View\AddSupplier.xaml.cs">
+	    <DependentUpon>AddSupplier.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="View\AddSupplier.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="View\SupplierList.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
