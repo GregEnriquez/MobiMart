@@ -40,9 +40,9 @@
             <Entry Placeholder="Enter business address" BackgroundColor="White" TextColor="Black" />
 
             <Label Text="Business Code" FontAttributes="Bold" TextColor="Black" />
-            <Frame Padding="10" BackgroundColor="White" BorderColor="#D99B2B" CornerRadius="8">
+            <Border Padding="10" BackgroundColor="White" Stroke="#D99B2B" StrokeShape="8,8,8,8">
                 <Label Text="ABC123" TextColor="Black" FontAttributes="Bold" />
-            </Frame>
+            </Border>
 
             <Button 
                 Text="Copy Code" 

@@ -48,7 +48,6 @@
                 StrokeThickness="1.5"
                 StrokeShape="RoundRectangle 10,10,10,10">
                 <Entry Placeholder="Enter Supplier Type" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
-
             </Border>
 
             <Label Text="Supplier Number" FontAttributes="Bold" TextColor="#6F4E37" />
@@ -57,7 +56,6 @@
                 StrokeThickness="1.5"
                 StrokeShape="RoundRectangle 10,10,10,10">
                 <Entry Placeholder="Enter Supplier Number" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
-
             </Border>
 
             <Label Text="Supplier Email" FontAttributes="Bold" TextColor="#6F4E37" />
@@ -66,7 +64,6 @@
                 StrokeThickness="1.5"
                 StrokeShape="RoundRectangle 10,10,10,10">
                 <Entry Placeholder="Enter Supplier Email" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
-
             </Border>
 
             <Label Text="Supplier Socials" FontAttributes="Bold" TextColor="#6F4E37" />
@@ -75,7 +72,6 @@
                 StrokeThickness="1.5"
                 StrokeShape="RoundRectangle 10,10,10,10">
                 <Entry Placeholder="Enter Supplier Socials" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
-
             </Border>
 
             <HorizontalStackLayout
@@ -95,7 +91,8 @@
                 BackgroundColor="#D99B2B" 
                 TextColor="White"
                 CornerRadius="10"
-                HeightRequest="45" />
+                HeightRequest="45"
+                Clicked="onButtonClicked"/>
 
             <Button 
                 Text="Save Changes" 

@@ -10,6 +10,7 @@ namespace MobiMart
 
             Routing.RegisterRoute(nameof(SignUpPage), typeof(SignUpPage));
             Routing.RegisterRoute(nameof(AddSupplier), typeof(AddSupplier));
+            Routing.RegisterRoute(nameof(AddContacts), typeof(AddContacts));
         }
     }
 }

@@ -6,4 +6,9 @@ public partial class AddSupplier : ContentPage
 	{
 		InitializeComponent();
 	}
+
+    private async void onButtonClicked(object sender, EventArgs args)
+    {
+        await Shell.Current.GoToAsync(nameof(AddContacts));
+    }
 }
