@@ -1,8 +1,8 @@
 namespace MobiMart;
 
-public partial class TransactionPage : ContentPage
+public partial class Barcode : ContentPage
 {
-	public TransactionPage()
+	public Barcode()
 	{
 		InitializeComponent();
 	}

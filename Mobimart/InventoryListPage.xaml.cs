@@ -6,4 +6,9 @@ public partial class InventoryListPage : ContentPage
 	{
 		InitializeComponent();
 	}
+
+    private void OnHamburgerClicked(object sender, EventArgs e)
+    {
+        Shell.Current.FlyoutIsPresented = true;
+    }
 }

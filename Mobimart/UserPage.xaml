@@ -6,68 +6,163 @@
     BackgroundColor="#FDF4DC"
     Title="User">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="15">
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="Auto, *">
+            <ImageButton
+                Grid.Column="0"
+                Source="hamburger_icon.png"
+                HeightRequest="24"
+                WidthRequest="24"
+                Clicked="OnHamburgerClicked" />
 
-            <Grid ColumnDefinitions="Auto, *" VerticalOptions="Center">
-                <Image 
-                    Source="avatar_placeholder.png" 
-                    WidthRequest="100" HeightRequest="100"
+            <Label
+                Grid.ColumnSpan="2"
+                Text="MobiMart"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                FontSize="20"
+                TextColor="White"
+                FontAttributes="Bold" />
+        </Grid>
+    </Shell.TitleView>
+    
+    <ScrollView>
+        <VerticalStackLayout Padding="10" Spacing="15">
+
+            <Label Text="User Page"
                     HorizontalOptions="Center"
-                    Aspect="AspectFill"
-                    BackgroundColor="LightGray">
-                    <Image.Clip>
-                        <EllipseGeometry Center="50,50" RadiusX="50" RadiusY="50" />
-                    </Image.Clip>
-                </Image>
+                    VerticalOptions="Center"
+                    TextColor="#6D5206"
+                    FontSize="18"
+                    FontAttributes="Bold" />
+
+            <BoxView HeightRequest="1" BackgroundColor="#6D5206" />
+            
+            <Grid ColumnDefinitions="*, *" VerticalOptions="Center">
+                <Frame Grid.RowSpan="2"
+                       WidthRequest="70"
+                       HeightRequest="70"
+                       CornerRadius="35"
+                       IsClippedToBounds="True"
+                       VerticalOptions="Center"
+                       Margin="0,0,10,0">
+
+                    <Image Source="profile_avatar.png" Aspect="AspectFill">
+                    </Image>
+                </Frame>
+                
                 <Button 
                     Text="Change" 
-                    BackgroundColor="#D99B2B"
-                    TextColor="White"
-                    CornerRadius="10"
+                    BackgroundColor="#FBE7B3"
+                    BorderColor="#6D5206"
+                    BorderWidth="2"
+                    TextColor="#6D5206"
+                    CornerRadius="20"
                     Padding="10,5"
                     Grid.Column="1"
                     VerticalOptions="Center"
-                    HorizontalOptions="Start" />
+                    HorizontalOptions="Start"
+                    FontSize="13"/>
             </Grid>
 
-            <BoxView HeightRequest="1" BackgroundColor="#D99B2B" />
+            <BoxView HeightRequest="1" BackgroundColor="#6D5206" />
 
-            <Label Text="Full Name" FontAttributes="Bold" TextColor="Black" />
-            <Entry Placeholder="Enter full name" BackgroundColor="White" TextColor="Black" />
+            <Label Text="Full Name" FontAttributes="Bold" TextColor="#6D5206" FontSize="13"/>
+            <Border Stroke="#6D5206" 
+                    StrokeThickness="1" 
+                    StrokeShape="RoundRectangle 10,10,10,10">
+                <Entry Placeholder="Enter full name" BackgroundColor="White" TextColor="#6D5206" FontSize="12"/>
+            </Border>
 
-            <Label Text="Email" FontAttributes="Bold" TextColor="Black" />
-            <Entry Placeholder="Enter email" BackgroundColor="White" TextColor="Black" Keyboard="Email" />
+            <Label Text="Email" FontAttributes="Bold" TextColor="#6D5206" FontSize="13"/>
+            <Border Stroke="#6D5206" 
+                    StrokeThickness="1" 
+                    StrokeShape="RoundRectangle 10,10,10,10">
+                <Entry Placeholder="Enter email" BackgroundColor="White" TextColor="#6D5206" Keyboard="Email" FontSize="12"/>
+            </Border>
 
-            <Label Text="Password" FontAttributes="Bold" TextColor="Black" />
-            <Entry Placeholder="Enter password" IsPassword="True" BackgroundColor="White" TextColor="Black" />
+            <Label Text="Password" FontAttributes="Bold" TextColor="#6D5206" FontSize="13"/>
+            <Border Stroke="#6D5206" 
+                    StrokeThickness="1" 
+                    StrokeShape="RoundRectangle 10,10,10,10">
+                <Entry Placeholder="Enter password" IsPassword="True" BackgroundColor="White" TextColor="#6D5206" FontSize="12"/>
+            </Border>
 
-            <Label Text="Age" FontAttributes="Bold" TextColor="Black" />
-            <Entry Placeholder="Enter age" BackgroundColor="White" TextColor="Black" Keyboard="Numeric" />
+            <Label Text="Age" FontAttributes="Bold" TextColor="#6D5206" FontSize="13"/>
+            <Border Stroke="#6D5206" 
+                    StrokeThickness="1" 
+                    StrokeShape="RoundRectangle 10,10,10,10">
+                <Entry Placeholder="Enter age" BackgroundColor="White" TextColor="#6D5206" Keyboard="Numeric" FontSize="12"/>
+            </Border>
 
-            <Label Text="Birthday" FontAttributes="Bold" TextColor="Black" />
-            <Entry Placeholder="MM/DD/YYYY" BackgroundColor="White" TextColor="Black" />
+            <Label Text="Birthday" FontAttributes="Bold" TextColor="#6D5206" FontSize="13"/>
+            <Border Stroke="#6D5206" 
+                    StrokeThickness="1" 
+                    StrokeShape="RoundRectangle 10,10,10,10">
+                <Entry Placeholder="MM/DD/YYYY" BackgroundColor="White" TextColor="#6D5206" FontSize="12"/>
+            </Border>
 
-            <Label Text="Phone Number" FontAttributes="Bold" TextColor="Black" />
-            <Entry Placeholder="Enter phone number" BackgroundColor="White" TextColor="Black" Keyboard="Telephone" />
+            <Label Text="Phone Number" FontAttributes="Bold" TextColor="#6D5206" FontSize="13"/>
+            <Border Stroke="#6D5206" 
+                    StrokeThickness="1" 
+                    StrokeShape="RoundRectangle 10,10,10,10">
+                <Entry Placeholder="Enter phone number" BackgroundColor="White" TextColor="#6D5206" Keyboard="Telephone" FontSize="12"/>
+            </Border>
 
-            <Label Text="Join Business" FontAttributes="Bold" TextColor="Black" />
-            <Entry Placeholder="Enter business code" BackgroundColor="White" TextColor="Black" />
 
-            <Button 
-                Text="Create or Join" 
-                BackgroundColor="#D99B2B" 
-                TextColor="White"
-                CornerRadius="10"
-                HeightRequest="45" />
+            <Label Text="Join Business:" FontAttributes="Bold" TextColor="#6D5206" FontSize="13"/>
+            
+            <HorizontalStackLayout Spacing="12" HorizontalOptions="Center">
+                <Border Stroke="#6D5206" 
+                        StrokeThickness="1" 
+                        StrokeShape="RoundRectangle 10,10,10,10"
+                        HeightRequest="50"
+                        WidthRequest="80">
+                    <Entry Placeholder="Code" BackgroundColor="White" TextColor="#6D5206" FontSize="12" WidthRequest="75" HeightRequest="45" HorizontalTextAlignment="Center"/>
+                </Border>
+
+                <VerticalStackLayout>
+                    <Button 
+                        Text="Create" 
+                        BackgroundColor="#FBE7B3"
+                        BorderColor="#6D5206"
+                        BorderWidth="2"
+                        TextColor="#6D5206"
+                        CornerRadius="20"
+                        HeightRequest="20"
+                        HorizontalOptions="Center"
+                        WidthRequest="70"
+                        Margin="0,0,0,5" 
+                        FontSize="10"
+                        Padding="5,0"
+                        Clicked="OnCreateClicked"/>
+                    <Button 
+                        Text="Join" 
+                        BackgroundColor="#FBE7B3"
+                        BorderColor="#6D5206"
+                        BorderWidth="2"
+                        TextColor="#6D5206"
+                        CornerRadius="20"
+                        HeightRequest="15"
+                        HorizontalOptions="Center"
+                        WidthRequest="70"
+                        Margin="0,0,0,5" 
+                        FontSize="10"
+                        Padding="5,0"/>
+                </VerticalStackLayout>
+            </HorizontalStackLayout>
 
             <Button 
                 Text="Save Changes" 
-                BackgroundColor="#D99B2B" 
-                TextColor="White"
-                CornerRadius="10"
-                HeightRequest="45"
-                Margin="0,20,0,0" />
+                BackgroundColor="#FBE7B3"
+                BorderColor="#6D5206"
+                BorderWidth="2"
+                TextColor="#6D5206"
+                CornerRadius="20"
+                HeightRequest="40"
+                HorizontalOptions="Center"
+                WidthRequest="200"
+                Margin="0,10,0,10" />
 
         </VerticalStackLayout>
     </ScrollView>

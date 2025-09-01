@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage 
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="MobiMart.SignUpPage"
-    BackgroundColor="#FDF4DC"
-    Title="Sign Up">
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MobiMart.SignUpPage"
+             BackgroundColor="#FDF4DC"
+             Title="Sign Up">
 
     <Shell.TitleView>
         <Grid>
             <Label 
-            Text="MobiMart"
-            HorizontalOptions="Center"
-            VerticalOptions="Center"
-            TextColor="White"
-            FontSize="20"
-            FontAttributes="Bold"/>
+                Text="MobiMart"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                TextColor="White"
+                FontSize="20"
+                FontAttributes="Bold"/>
         </Grid>
     </Shell.TitleView>
 
@@ -25,32 +24,46 @@
             FontSize="28" 
             FontAttributes="Bold" 
             HorizontalOptions="Center" 
-            TextColor="#D99B2B" />
+            TextColor="#6D5206" />
 
-        <Entry 
-            Placeholder="Email"
-            Keyboard="Email"
-            BackgroundColor="White"
-            HeightRequest="50"
-            TextColor="Black" />
+        <Border Stroke="#6D5206" 
+                StrokeThickness="1" 
+                StrokeShape="RoundRectangle 10,10,10,10">
+            
+            <Entry 
+                Placeholder="Email"
+                Keyboard="Email"
+                BackgroundColor="White"
+                HeightRequest="50"
+                TextColor="#6D5206" />
+        </Border>
 
-        <Entry 
-            Placeholder="Password"
-            IsPassword="True"
-            BackgroundColor="White"
-            HeightRequest="50"
-            TextColor="Black" />
+        <Border Stroke="#6D5206" 
+                StrokeThickness="1" 
+                StrokeShape="RoundRectangle 10,10,10,10">
 
-        <Entry 
-            Placeholder="Confirm Password"
-            IsPassword="True"
-            BackgroundColor="White"
-            HeightRequest="50"
-            TextColor="Black" />
+            <Entry 
+                Placeholder="Password"
+                IsPassword="True"
+                BackgroundColor="White"
+                HeightRequest="50"
+                TextColor="#6D5206" />
+        </Border>
+
+        <Border Stroke="#6D5206" 
+                StrokeThickness="1" 
+                StrokeShape="RoundRectangle 10,10,10,10">
+            <Entry 
+                Placeholder="Confirm Password"
+                IsPassword="True"
+                BackgroundColor="White"
+                HeightRequest="50"
+                TextColor="#6D5206" />
+        </Border>
 
         <Button 
             Text="Sign Up"
-            BackgroundColor="#D99B2B"
+            BackgroundColor="#6D5206"
             TextColor="White"
             CornerRadius="10"
             HeightRequest="50" />
@@ -58,11 +71,13 @@
         <Label 
             Text="Already have an account? Login"
             HorizontalOptions="Center"
-            TextColor="#D99B2B">
+            TextDecorations="Underline"
+            TextColor="#6D5206">
             <Label.GestureRecognizers>
                 <TapGestureRecognizer Tapped="OnLoginTapped" />
             </Label.GestureRecognizers>
         </Label>
 
     </VerticalStackLayout>
+    
 </ContentPage>

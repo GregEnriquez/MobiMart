@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MobiMart.MainPage"
-             BackgroundColor="#FDF4DC">
+             BackgroundColor="#FDF4DC"
+             Title="Login">
 
     <Shell.TitleView>
         <Grid>
@@ -23,24 +24,35 @@
             FontSize="32" 
             FontAttributes="Bold" 
             HorizontalOptions="Center" 
-            TextColor="#D99B2B" />
+            TextColor="#6D5206" />
 
-        <Entry 
-            Placeholder="Email"
-            BackgroundColor="White"
-            HeightRequest="50"
-            TextColor="Black" />
+        <Border Stroke="#6D5206" 
+                StrokeThickness="1" 
+                StrokeShape="RoundRectangle 10,10,10,10">
+            
+            <Entry 
+                Placeholder="Email"
+                Keyboard="Email"
+                BackgroundColor="White"
+                HeightRequest="50"
+                TextColor="#6D5206" />
+        </Border>
 
-        <Entry 
-            Placeholder="Password"
-            IsPassword="True"
-            BackgroundColor="White"
-            HeightRequest="50"
-            TextColor="Black" />
+        <Border Stroke="#6D5206" 
+                StrokeThickness="1" 
+                StrokeShape="RoundRectangle 10,10,10,10">
+
+            <Entry 
+                Placeholder="Password"
+                IsPassword="True"
+                BackgroundColor="White"
+                HeightRequest="50"
+                TextColor="#6D5206" />
+        </Border>
 
         <Button 
             Text="Login"
-            BackgroundColor="#D99B2B"
+            BackgroundColor="#6D5206"
             TextColor="White"
             CornerRadius="10"
             HeightRequest="50" />
@@ -48,7 +60,8 @@
         <Label 
             Text="Don't have an account? Sign Up" 
             HorizontalOptions="Center"
-            TextColor="#D99B2B">
+            TextDecorations="Underline"
+            TextColor="#6D5206">
             <Label.GestureRecognizers>
                 <TapGestureRecognizer Tapped="OnSignUpTapped" />
             </Label.GestureRecognizers>

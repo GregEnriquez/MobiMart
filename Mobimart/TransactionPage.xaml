@@ -2,101 +2,137 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MobiMart.TransactionPage"
-             Title="TransactionPage"
-             BackgroundColor="#FDF4DC">
+             BackgroundColor="#FDF4DC"
+             Title="TransactionPage">
 
-    <ScrollView>
-        <VerticalStackLayout Spacing="20">
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="Auto, *">
+            <ImageButton
+                Grid.Column="0"
+                Source="hamburger_icon.png"
+                HeightRequest="24"
+                WidthRequest="24"
+                Clicked="OnHamburgerClicked" />
 
-            <Grid BackgroundColor="#D99B2B" Padding="10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+            <Label
+                Grid.ColumnSpan="2"
+                Text="MobiMart"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                FontSize="20"
+                TextColor="White"
+                FontAttributes="Bold" />
+        </Grid>
+    </Shell.TitleView>
 
-                <Image Source="menu_icon.png"
-                       WidthRequest="30" HeightRequest="30"
-                       VerticalOptions="Center"/>
+    <Grid RowDefinitions="Auto, Auto, *, Auto, Auto">
+        
+        <Label Grid.Row="0" 
+               Text="Transaction Page"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"
+               TextColor="#6D5206"
+               FontSize="18"
+               FontAttributes="Bold"
+               Padding="10"/>
 
-                <VerticalStackLayout Grid.Column="1"
-                                     HorizontalOptions="Center"
-                                     VerticalOptions="Center">
-                    <Label Text="App Name"
-                           FontAttributes="Bold"
-                           FontSize="20"
+        <Frame Grid.Row="1"
+               BackgroundColor="#F6CD5E" 
+               CornerRadius="10" 
+               Padding="10" 
+               Margin="10"
+               BorderColor="#6D5206">
+            
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Transaction List"
+                       FontAttributes="Bold"
+                       FontSize="16"
+                       TextColor="#6D5206"/>
+
+                <Grid ColumnDefinitions="*, *, Auto" RowDefinitions="Auto, Auto, Auto" Padding="5">
+                    <BoxView Grid.Row="0" Grid.ColumnSpan="3" HeightRequest="1" BackgroundColor="#6D5206" VerticalOptions="Start" />
+
+                    <Label Grid.Row="1" Text="Item Name" TextColor="#6D5206" FontAttributes="Bold" />
+                    <Label Grid.Row="1" Grid.Column="1" Text="Amount" TextColor="#6D5206" FontAttributes="Bold" HorizontalOptions="Center" />
+                    <Label Grid.Row="1" Grid.Column="2" Text="Price" TextColor="#6D5206" FontAttributes="Bold" HorizontalOptions="Center" />
+
+                    <BoxView Grid.Row="2" Grid.ColumnSpan="3" HeightRequest="1" BackgroundColor="#6D5206" VerticalOptions="End" />
+                </Grid>
+
+                <Grid ColumnDefinitions="*, Auto, Auto" Padding="5">
+                    <Label Text="Milk Magic" TextColor="#6D5206" VerticalOptions="Center"/>
+
+                    <Frame Margin="5,0" 
+                           Grid.Column="1"
+                           Padding="5"
+                           WidthRequest="50"
+                           BorderColor="#6D5206"
+                           CornerRadius="5"
+                           HasShadow="False"
                            HorizontalOptions="Center"
-                           TextColor="White"/>
-                    <Button Text="Transaction Page"
-                            BackgroundColor="#F2C94C"
-                            TextColor="White"
-                            CornerRadius="20"
-                            Padding="15,5"
-                            FontAttributes="Bold"/>
-                </VerticalStackLayout>
+                           BackgroundColor="Transparent">
+                        <Label Text="5" TextColor="#6D5206" HorizontalOptions="Center"/>
+                    </Frame>
 
-                <Image Grid.Column="2" Source="cart_icon.png"
-                       WidthRequest="30" HeightRequest="30"
-                       VerticalOptions="Center"/>
-            </Grid>
+                    <Frame Grid.Column="2"
+                           Padding="5"
+                           WidthRequest="60"
+                           BorderColor="#6D5206"
+                           CornerRadius="5"
+                           HasShadow="False"
+                           HorizontalOptions="Center"
+                           BackgroundColor="Transparent">
+                        <Label Text="100" TextColor="#6D5206" HorizontalOptions="Center"/>
+                    </Frame>
+                </Grid>
 
-            <Frame BackgroundColor="#E1C16E" CornerRadius="10" Padding="10" Margin="10">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="Transaction List"
-                           FontAttributes="Bold"
-                           FontSize="16"
-                           TextColor="Black"/>
+                <Grid ColumnDefinitions="*, Auto, Auto" Padding="5">
+                    <Label Text="Milk Magic" TextColor="#6D5206" VerticalOptions="Center"/>
 
-                    <Grid ColumnDefinitions="*, Auto, Auto" BackgroundColor="#C6A34F" Padding="5">
-                        <Label Text="Item Name" TextColor="White" FontAttributes="Bold" />
-                        <Label Grid.Column="1" Text="Amount" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
-                        <Label Grid.Column="2" Text="Price" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
-                    </Grid>
+                    <Frame Margin="5,0"
+                           Grid.Column="1"
+                           Padding="5"
+                           WidthRequest="50"
+                           BorderColor="#6D5206"
+                           CornerRadius="5"
+                           HasShadow="False"
+                           HorizontalOptions="Center"
+                           BackgroundColor="Transparent">
+                        <Label Text="5" TextColor="#6D5206" HorizontalOptions="Center"/>
+                    </Frame>
 
-                    <!-- Example Rows -->
-                    <Grid ColumnDefinitions="*, Auto, Auto" Padding="5">
-                        <Label Text="Tomi" VerticalOptions="Center"/>
-                        <Entry Grid.Column="1" Text="20" WidthRequest="50" HorizontalOptions="Center"/>
-                        <Entry Grid.Column="2" Text="200" WidthRequest="60" HorizontalOptions="Center"/>
-                    </Grid>
+                    <Frame Grid.Column="2"
+                           Padding="5"
+                           WidthRequest="60"
+                           BorderColor="#6D5206"
+                           CornerRadius="5"
+                           HasShadow="False"
+                           HorizontalOptions="Center"
+                           BackgroundColor="Transparent">
+                        <Label Text="100" TextColor="#6D5206" HorizontalOptions="Center"/>
+                    </Frame>
+                </Grid>
 
-                    <Grid ColumnDefinitions="*, Auto, Auto" Padding="5">
-                        <Label Text="Milk Magic" VerticalOptions="Center"/>
-                        <Entry Grid.Column="1" Text="5" WidthRequest="50" HorizontalOptions="Center"/>
-                        <Entry Grid.Column="2" Text="100" WidthRequest="60" HorizontalOptions="Center"/>
-                    </Grid>
+                <Label Text="+ Add Item" HorizontalOptions="Center" TextColor="#6D5206" />
+            </VerticalStackLayout>
+        </Frame>
 
-                    <Grid ColumnDefinitions="*, Auto, Auto" Padding="5">
-                        <Label Text="Royal Mismo" VerticalOptions="Center"/>
-                        <Entry Grid.Column="1" Text="3" WidthRequest="50" HorizontalOptions="Center"/>
-                        <Entry Grid.Column="2" Text="60" WidthRequest="60" HorizontalOptions="Center"/>
-                    </Grid>
+        <HorizontalStackLayout Grid.Row="2" Padding="15,5">
+            <Label Text="Total Price:" FontAttributes="Bold" TextColor="#6D5206"/>
+            <Label Text="" FontAttributes="Bold" TextColor="#6D5206"/>
+        </HorizontalStackLayout>
 
-                    <Grid ColumnDefinitions="*, Auto, Auto" Padding="5">
-                        <Label Text="Safeguard" VerticalOptions="Center"/>
-                        <Entry Grid.Column="1" Text="2" WidthRequest="50" HorizontalOptions="Center"/>
-                        <Entry Grid.Column="2" Text="40" WidthRequest="60" HorizontalOptions="Center"/>
-                    </Grid>
+        <Button Grid.Row="3"
+                Text="Save Transaction"
+                TextColor="#6D5206"
+                BackgroundColor="#FBE7B3"
+                BorderColor="#6D5206"
+                BorderWidth="2"
+                CornerRadius="20"
+                HeightRequest="40"
+                HorizontalOptions="Center"
+                WidthRequest="200"
+                Margin="0,10,0,10" />
+    </Grid>
 
-                    <Label Text="+ Add Item" HorizontalOptions="Center" TextColor="Black" />
-
-                </VerticalStackLayout>
-            </Frame>
-
-            <HorizontalStackLayout Spacing="5" Padding="10,0">
-                <Image Source="star_icon.png" WidthRequest="20" HeightRequest="20"/>
-                <Label Text="Total Price:" FontAttributes="Bold" TextColor="Brown"/>
-                <Label Text="400" FontAttributes="Bold" TextColor="Black"/>
-            </HorizontalStackLayout>
-
-            <Button Text="Save Transaction"
-                    BackgroundColor="Transparent"
-                    BorderColor="Brown"
-                    BorderWidth="1"
-                    CornerRadius="20"
-                    TextColor="Brown"
-                    WidthRequest="200"
-                    HorizontalOptions="Center"/>
-        </VerticalStackLayout>
-    </ScrollView>
 </ContentPage>

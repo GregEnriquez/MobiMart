@@ -2,61 +2,151 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MobiMart.BusinessPage"
-             Title="BusinessPage"
-             BackgroundColor="#FDF4DC">
+             BackgroundColor="#FDF4DC"
+             Title="BusinessPage">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="15">
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="Auto, *">
+            <ImageButton
+                Grid.Column="0"
+                Source="hamburger_icon.png"
+                HeightRequest="24"
+                WidthRequest="24"
+                Clicked="OnHamburgerClicked" />
 
-            <Grid ColumnDefinitions="Auto, *" VerticalOptions="Center">
-                <Image 
-                Source="avatar_placeholder.png" 
-                WidthRequest="100" HeightRequest="100"
+            <Label
+                Grid.ColumnSpan="2"
+                Text="MobiMart"
                 HorizontalOptions="Center"
-                Aspect="AspectFill"
-                BackgroundColor="LightGray">
-                    <Image.Clip>
-                        <EllipseGeometry Center="50,50" RadiusX="50" RadiusY="50" />
-                    </Image.Clip>
-                </Image>
-                <Button 
-                Text="Change" 
-                BackgroundColor="#D99B2B"
-                TextColor="White"
-                CornerRadius="10"
-                Padding="10,5"
-                Grid.Column="1"
                 VerticalOptions="Center"
-                HorizontalOptions="Start" />
+                FontSize="20"
+                TextColor="White"
+                FontAttributes="Bold" />
+        </Grid>
+    </Shell.TitleView>
+    
+    <ScrollView>
+        <VerticalStackLayout Padding="10" Spacing="15">
+
+            <Label Text="Business Page"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    TextColor="#6D5206"
+                    FontSize="18"
+                    FontAttributes="Bold" />
+
+            <BoxView HeightRequest="1" BackgroundColor="#6D5206" />
+            
+            <Grid ColumnDefinitions="*, *" VerticalOptions="Center">
+                <Frame Grid.RowSpan="2"
+                       WidthRequest="70"
+                       HeightRequest="70"
+                       CornerRadius="35"
+                       IsClippedToBounds="True"
+                       VerticalOptions="Center"
+                       Margin="0,0,10,0">
+
+                    <Image Source="profile_avatar.png" Aspect="AspectFill">
+                    </Image>
+                </Frame>
+
+                <Button 
+                    Text="Change" 
+                    BackgroundColor="#FBE7B3"
+                    BorderColor="#6D5206"
+                    BorderWidth="2"
+                    TextColor="#6D5206"
+                    CornerRadius="20"
+                    Padding="10,5"
+                    Grid.Column="1"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Start"
+                    FontSize="13"/>
             </Grid>
 
-            <BoxView HeightRequest="1" BackgroundColor="#D99B2B" />
+            <BoxView HeightRequest="1" BackgroundColor="#6D5206" />
 
-            <Label Text="Business Name" FontAttributes="Bold" TextColor="Black" />
-            <Entry Placeholder="Enter business name" BackgroundColor="White" TextColor="Black" />
+            <Label Text="Business Name" FontAttributes="Bold" TextColor="#6D5206" FontSize="13"/>
+            <Border Stroke="#6D5206" 
+                    StrokeThickness="1" 
+                    StrokeShape="RoundRectangle 10,10,10,10">
+                <Entry Placeholder="Enter business name" BackgroundColor="White" TextColor="#6D5206" FontSize="12"/>
+            </Border>
 
-            <Label Text="Business Address" FontAttributes="Bold" TextColor="Black" />
-            <Entry Placeholder="Enter business address" BackgroundColor="White" TextColor="Black" />
+            <Label Text="Business Address" FontAttributes="Bold" TextColor="#6D5206" FontSize="13"/>
+            <Border Stroke="#6D5206" 
+                    StrokeThickness="1" 
+                    StrokeShape="RoundRectangle 10,10,10,10">
+                <Entry Placeholder="Enter business address" BackgroundColor="White" TextColor="#6D5206" FontSize="12"/>
+            </Border>
 
-            <Label Text="Business Code" FontAttributes="Bold" TextColor="Black" />
-            <Frame Padding="10" BackgroundColor="White" BorderColor="#D99B2B" CornerRadius="8">
-                <Label Text="ABC123" TextColor="Black" FontAttributes="Bold" />
-            </Frame>
+            <Label Text="Business Code" FontAttributes="Bold" TextColor="#6D5206" FontSize="13"/>
+
+            <HorizontalStackLayout Spacing="12" HorizontalOptions="Center">
+                <Border Stroke="#6D5206" 
+                        StrokeThickness="1" 
+                        StrokeShape="RoundRectangle 10,10,10,10"
+                        HeightRequest="50"
+                        WidthRequest="80">
+                    <Entry Placeholder="Code" BackgroundColor="White" TextColor="#6D5206" FontSize="12" WidthRequest="75" HeightRequest="45" HorizontalTextAlignment="Center"/>
+                </Border>
+
+                <VerticalStackLayout>
+                    <Button 
+                        Text="Copy" 
+                        BackgroundColor="#FBE7B3"
+                        BorderColor="#6D5206"
+                        BorderWidth="2"
+                        TextColor="#6D5206"
+                        CornerRadius="20"
+                        HeightRequest="20"
+                        HorizontalOptions="Center"
+                        WidthRequest="70"
+                        Margin="0,0,0,5" 
+                        FontSize="10"
+                        Padding="5,0"/>
+                </VerticalStackLayout>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout Spacing="9" HorizontalOptions="Center">
+                <Button 
+                    Text="Back"
+                    Clicked="OnBackClicked"
+                    BackgroundColor="#FBE7B3"
+                    BorderColor="#6D5206"
+                    BorderWidth="2"
+                    TextColor="#6D5206"
+                    CornerRadius="20"
+                    HeightRequest="40"
+                    HorizontalOptions="Center"
+                    WidthRequest="62"
+                    Margin="0,10,0,10" />
+
+                <Button 
+                    Text="Save Changes" 
+                    BackgroundColor="#FBE7B3"
+                    BorderColor="#6D5206"
+                    BorderWidth="2"
+                    TextColor="#6D5206"
+                    CornerRadius="20"
+                    HeightRequest="40"
+                    HorizontalOptions="Center"
+                    WidthRequest="121"
+                    Margin="0,10,0,10" />
+            </HorizontalStackLayout>
 
             <Button 
-            Text="Copy Code" 
-            BackgroundColor="#D99B2B" 
-            TextColor="White"
-            CornerRadius="10"
-            HeightRequest="45" />
-
-            <Button 
-            Text="Save Changes" 
-            BackgroundColor="#D99B2B" 
-            TextColor="White"
-            CornerRadius="10"
-            HeightRequest="45"
-            Margin="0,20,0,0" />
+                Text="View Employees" 
+                Clicked="OnViewClicked"
+                BackgroundColor="#FBE7B3"
+                BorderColor="#6D5206"
+                BorderWidth="2"
+                TextColor="#6D5206"
+                CornerRadius="20"
+                HeightRequest="40"
+                HorizontalOptions="Center"
+                WidthRequest="200"
+                Margin="0,10,0,10" />
 
         </VerticalStackLayout>
     </ScrollView>

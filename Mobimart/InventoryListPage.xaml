@@ -2,79 +2,89 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MobiMart.InventoryListPage"
-             Title="InventoryListPage"
-             BackgroundColor="#FDF4DC">
-    
-    <Grid RowDefinitions="Auto, *, Auto">
+             BackgroundColor="#FDF4DC"
+             Title="InventoryListPage">
 
-        <Grid BackgroundColor="#D99B2B" Padding="10" Row="0" ColumnDefinitions="Auto, *, Auto" VerticalOptions="Center">
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="Auto, *, Auto">
+            <ImageButton
+                Grid.Column="0"
+                Source="hamburger_icon.png"
+                HeightRequest="24"
+                WidthRequest="24"
+                Clicked="OnHamburgerClicked" />
+            
+            <Label
+                Grid.ColumnSpan="3"
+                Text="MobiMart"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                FontSize="20"
+                TextColor="White"
+                FontAttributes="Bold" />
 
-            <Label Grid.Column="1"
-                   Text="App Name"
-                   HorizontalOptions="Center"
-                   VerticalOptions="Center"
-                   FontSize="20"
-                   TextColor="White"
-                   FontAttributes="Bold" />
-
-            <Image Grid.Column="2"
-                   Source="cart_icon.png"
-                   HeightRequest="24"
-                   WidthRequest="24"
-                   VerticalOptions="Center"
-                   HorizontalOptions="End" />
+            <Image 
+                Grid.Column="2"
+                Source="cart_icon.png"
+                HeightRequest="24"
+                WidthRequest="24"
+                VerticalOptions="Center"
+                HorizontalOptions="End"
+                Margin="0,0,10,0" />
         </Grid>
+    </Shell.TitleView>
 
-        <ScrollView Grid.Row="1">
-            <VerticalStackLayout Padding="10" Spacing="15">
+    <Grid RowDefinitions="Auto, *, Auto">
+        <VerticalStackLayout Grid.Row="0" Padding="10" Spacing="15">
 
-                <Button Text="Inventory List"
-                        BackgroundColor="#F4C14B"
-                        TextColor="White"
-                        CornerRadius="20"
-                        HorizontalOptions="Center"
-                        WidthRequest="150" />
+            <Label Text="Inventory List"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    TextColor="#6D5206"
+                    FontSize="18"
+                    FontAttributes="Bold" />
 
-                <SearchBar Placeholder="Search Bar"
-                           BackgroundColor="White"
-                           TextColor="Black"
-                           PlaceholderColor="Gray"
-                           HeightRequest="40"
-                           HorizontalOptions="FillAndExpand" />
+            <Border Stroke="#6D5206" 
+                    StrokeThickness="1" 
+                    StrokeShape="RoundRectangle 10,10,10,10">
+                    
+                <SearchBar Placeholder="Search"
+                            BackgroundColor="White"
+                            TextColor="#6D5206"
+                            HeightRequest="40" />
+            </Border>
 
-                <Grid ColumnDefinitions="*, Auto, *, *, *" BackgroundColor="#C6A34F" Padding="5">
-                    <Label Text="Item Name" TextColor="White" FontAttributes="Bold" />
-                    <Label Grid.Column="1" Text="Quantity" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
-                    <Label Grid.Column="2" Text="Price" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
-                    <Label Grid.Column="3" Text="Type" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
-                    <Label Grid.Column="4" Text="Desc" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
-                </Grid>
+            <Grid ColumnDefinitions="*, Auto, *, *, *" BackgroundColor="#6D5206" Padding="5">
+                <Label Text="Item Name" TextColor="White" FontAttributes="Bold" />
+                <Label Grid.Column="1" Text="Quantity" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+                <Label Grid.Column="2" Text="Price" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+                <Label Grid.Column="3" Text="Type" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+                <Label Grid.Column="4" Text="Desc" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+            </Grid>
 
-                <CollectionView ItemsSource="{Binding InventoryItems}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid ColumnDefinitions="*, Auto, *, *, *" Padding="5" BackgroundColor="#E9D9A4">
-                                <Label Text="{Binding Name}" TextColor="Black" />
-                                <Label Grid.Column="1" Text="{Binding Quantity}" TextColor="Black" HorizontalOptions="Center" />
-                                <Label Grid.Column="2" Text="{Binding Price}" TextColor="Black" HorizontalOptions="Center" />
-                                <Label Grid.Column="3" Text="{Binding Type}" TextColor="Black" HorizontalOptions="Center" />
-                                <Label Grid.Column="4" Text="{Binding Desc}" TextColor="Black" HorizontalOptions="Center" />
-                            </Grid>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-
-            </VerticalStackLayout>
-        </ScrollView>
-
+            <CollectionView ItemsSource="{Binding InventoryItems}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="*, Auto, *, *, *" Padding="5" BackgroundColor="#F6CD5E">
+                            <Label Text="{Binding Name}" TextColor="#6D5206" />
+                            <Label Grid.Column="1" Text="{Binding Quantity}" TextColor="#6D5206" HorizontalOptions="Center" />
+                            <Label Grid.Column="2" Text="{Binding Price}" TextColor="#6D5206" HorizontalOptions="Center" />
+                            <Label Grid.Column="3" Text="{Binding Type}" TextColor="#6D5206" HorizontalOptions="Center" />
+                            <Label Grid.Column="4" Text="{Binding Desc}" TextColor="#6D5206" HorizontalOptions="Center" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+        
         <Button Grid.Row="2"
                 Text="Barcode Scanner"
-                BackgroundColor="Transparent"
-                BorderColor="#D99B2B"
-                BorderWidth="1"
-                TextColor="#D99B2B"
+                BackgroundColor="#FBE7B3"
+                BorderColor="#6D5206"
+                BorderWidth="2"
+                TextColor="#6D5206"
                 CornerRadius="20"
-                HeightRequest="45"
+                HeightRequest="0"
                 HorizontalOptions="Center"
                 WidthRequest="200"
                 Margin="0,10,0,10" />
