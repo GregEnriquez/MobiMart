@@ -12,6 +12,11 @@
                   VerticalOptions="Center"
                   RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto"
                   ColumnSpacing="10">
+
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="onSupplierTap"></TapGestureRecognizer>
+                </Grid.GestureRecognizers>
+                
                 <Image 
                 Source="avatar_placeholder.png" 
                 WidthRequest="100" HeightRequest="100"
