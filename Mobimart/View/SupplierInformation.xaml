@@ -216,7 +216,8 @@
                 TextColor="White"
                 CornerRadius="10"
                 HeightRequest="45"
-                Margin="0,20,0,0" />
+                Margin="0,20,0,0"
+                Clicked="messageSuppClick"/>
 
         </VerticalStackLayout>
     </ScrollView>

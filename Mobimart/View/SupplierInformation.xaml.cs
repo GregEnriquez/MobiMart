@@ -6,4 +6,9 @@ public partial class SupplierInformation : ContentPage
 	{
 		InitializeComponent();
 	}
+
+    private async void messageSuppClick(object sender, EventArgs args)
+    {
+        await Shell.Current.GoToAsync(nameof(MessageSupplier));
+    }
 }
