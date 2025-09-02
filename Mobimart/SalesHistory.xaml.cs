@@ -30,4 +30,9 @@ public partial class SalesHistory : ContentPage
         _currentDate = _currentDate.AddDays(1);
         UpdateDateLabel();
     }
+
+    private async void OnTransactionClicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(ViewTransaction), true);
+    }
 }

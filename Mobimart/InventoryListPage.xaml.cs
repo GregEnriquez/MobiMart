@@ -11,4 +11,11 @@ public partial class InventoryListPage : ContentPage
     {
         Shell.Current.FlyoutIsPresented = true;
     }
+
+    
+    private void PopupClicked(object sender, EventArgs e)
+    {
+        ItemPopup.SetItemInfo("Milk", "5", "50", "Dairy", "Fresh cow’s milk");
+        ItemPopup.IsVisible = true;
+    }
 }

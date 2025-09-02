@@ -81,11 +81,11 @@
                                     HorizontalOptions="End"/>
                         </Grid>
                     </VerticalStackLayout>
-                    <!--
+                    
                     <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnTransactionTapped"/>
+                        <TapGestureRecognizer Tapped="OnTransactionClicked"/>
                     </Frame.GestureRecognizers>
-                    -->
+                    
                 </Frame>
             </VerticalStackLayout>
 
