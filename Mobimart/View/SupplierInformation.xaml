@@ -107,7 +107,8 @@
                  TextColor="White"
                  CornerRadius="10"
                  HeightRequest="45"
-                 Margin="0,0,0,50"/>
+                 Margin="0,0,0,50"
+                 Clicked="suppInventoryClick"/>
 
             <Label 
                 Text="Contact Persons" 

@@ -13,6 +13,7 @@ namespace MobiMart
             Routing.RegisterRoute(nameof(AddContacts), typeof(AddContacts));
             Routing.RegisterRoute(nameof(SupplierInformation), typeof(SupplierInformation));
             Routing.RegisterRoute(nameof(MessageSupplier), typeof(MessageSupplier));
+            Routing.RegisterRoute(nameof(SupplierInventory), typeof(SupplierInventory));
         }
     }
 }

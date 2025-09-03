@@ -11,4 +11,9 @@ public partial class SupplierInformation : ContentPage
     {
         await Shell.Current.GoToAsync(nameof(MessageSupplier));
     }
+
+    private async void suppInventoryClick(object sender, EventArgs args)
+    {
+        await Shell.Current.GoToAsync(nameof(SupplierInventory));
+    }
 }
