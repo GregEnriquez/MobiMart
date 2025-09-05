@@ -13,7 +13,7 @@ public partial class ViewItem : ContentView
         QuantityLabel.Text = $"Quantity: {quantity}";
         PriceLabel.Text = $"Price: {price}";
         TypeLabel.Text = $"Type: {type}";
-        DescLabel.Text = $"Description: {desc}";
+        DescLabel.Text = desc;
     }
 
     private void OnCloseClicked(object sender, EventArgs e)

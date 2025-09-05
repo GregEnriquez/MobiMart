@@ -106,6 +106,13 @@
             Route="SalesHistory" />
     </FlyoutItem>
 
+    <FlyoutItem Title="Supplier List">
+        <ShellContent
+        Title="Supplier List"
+        ContentTemplate="{DataTemplate local:SupplierList}"
+        Route="SupplierList" />
+    </FlyoutItem>
+
     <Shell.FlyoutFooter>
         <Grid Padding="10">
             <VerticalStackLayout Spacing="10">

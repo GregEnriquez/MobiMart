@@ -37,10 +37,14 @@
 
                 <Label x:Name="NameLabel" FontSize="18" FontAttributes="Bold" TextColor="#6D5206" HorizontalOptions="Center"/>
                 <BoxView HeightRequest="1" BackgroundColor="#6D5206" />
+                <Label x:Name="PriceLabel" TextColor="#6D5206" HorizontalOptions="Center"/>
+                <Label Text="Item Description" TextColor="#6D5206"/>
+                <Frame BackgroundColor="#FBE7B3">
+                    <Label x:Name="DescLabel" TextColor="#6D5206"/>
+                </Frame>
                 <Label x:Name="QuantityLabel" TextColor="#6D5206"/>
-                <Label x:Name="PriceLabel" TextColor="#6D5206"/>
                 <Label x:Name="TypeLabel" TextColor="#6D5206"/>
-                <Label x:Name="DescLabel" TextColor="#6D5206"/>
+                
 
                 <Button Text="Add to List" 
                     BackgroundColor="#FBE7B3" 
