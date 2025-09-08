@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:view="clr-namespace:MobiMart.View"
              x:Class="MobiMart.View.EmployeeTablePage"
-             Title="EmployeeTablePage"
+             xmlns:viewmodel="clr-namespace:MobiMart.ViewModel"
+             Title="{Binding Title}"
              BackgroundColor="#FDF4DC">
 
     <ScrollView>

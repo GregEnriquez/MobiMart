@@ -11,4 +11,5 @@ public class UserInstance
     public string AccessToken { get; set; } = "";
     public string RefreshToken { get; set; } = "";
     public string RefreshTokenExpiryTime { get; set; } = "";
+    public string LastModified { get; set; } = "";
 }

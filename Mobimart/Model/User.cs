@@ -19,4 +19,5 @@ public class User
     public string EmployeeType { get; set; } = "";
     public string RefreshToken { get; set; } = "";
     public string RefreshTokenExpiryTime { get; set; } = ""; //DateTime
+    public string LastModified { get; set; } = "";
 }

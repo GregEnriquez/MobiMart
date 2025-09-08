@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.Net.Http.Headers;
 using System.Text;
-using Android.Icu.Text;
 using MobiMart.Model;
 using Newtonsoft.Json;
 using SQLite;
@@ -230,5 +229,26 @@ public class UserService
         await db!.UpdateAsync(user);
 
         await db.DeleteAllAsync<UserInstance>();
+    }
+
+
+    public async Task<UserInstance> GetUserInstanceAsync()
+    {
+        await Init();
+        return await db!.Table<UserInstance>().FirstOrDefaultAsync();
+    }
+
+
+    public async Task<User> GetUserAsync(int id)
+    {
+        await Init();
+        return await db!.Table<User>().Where(x => x.Id == id).FirstOrDefaultAsync();
+    }
+
+
+    public async Task UpdateUserAsync(User updatedUser)
+    {
+        await Init();
+        await db!.UpdateAsync(updatedUser);
     }
 }

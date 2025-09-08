@@ -1,9 +1,12 @@
+using MobiMart.ViewModel;
+
 namespace MobiMart.View;
 
 public partial class BusinessPage : ContentPage
 {
-	public BusinessPage()
+	public BusinessPage(BusinessPageViewModel viewModel)
 	{
-        InitializeComponent();
+		InitializeComponent();
+		this.BindingContext = viewModel;
 	}
 }
