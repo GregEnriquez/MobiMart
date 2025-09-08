@@ -87,6 +87,9 @@
 	  <MauiXaml Update="InventoryListPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="InventoryManager.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="MessageSupplier.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
