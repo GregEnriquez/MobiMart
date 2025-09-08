@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MobiMart.View.DailySales"
+             BackgroundColor="#FDF4DC"
+             Title="DailySales">
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="Auto, *">
+            <ImageButton
+                Grid.Column="0"
+                Source="hamburger_icon.png"
+                HeightRequest="24"
+                WidthRequest="24"
+                Clicked="OnHamburgerClicked" />
+
+            <Label
+                Grid.ColumnSpan="2"
+                Text="MobiMart"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                FontSize="20"
+                TextColor="White"
+                FontAttributes="Bold" />
+        </Grid>
+    </Shell.TitleView>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="10" Spacing="15">
+
+            <Label Text="Daily Sales"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    TextColor="#6D5206"
+                    FontSize="18"
+                    FontAttributes="Bold" />
+
+            <!-- navigation of dates -->
+            <Grid ColumnDefinitions="Auto,*,Auto" VerticalOptions="Center" Padding="0,1">
+                <ImageButton
+                    Source="previous_icon.png"
+                    HeightRequest="40"
+                    WidthRequest="40"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Start"
+                    Margin="0,0,10,0"
+                    Aspect="AspectFit"
+                    Clicked="OnPreviousDayClicked"/>
+
+                <Label x:Name="CurrentDateLabel"
+                        Text="June 15, 2025"
+                        FontSize="13"
+                        FontAttributes="Bold"
+                        TextColor="#6D5206"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        Grid.Column="1">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnDateTapped"/>
+                    </Label.GestureRecognizers>
+                </Label>
+
+                <ImageButton 
+                    Source="next_icon.png"
+                    HeightRequest="40"
+                    WidthRequest="40"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Start"
+                    Margin="0,0,10,0"
+                    Aspect="AspectFit"
+                    Grid.Column="2"
+                    Clicked="OnNextDayClicked"/>
+            </Grid>
+
+            <!-- Previous Balance -->
+            <Label Text="Previous Balance: "
+                    FontAttributes="Bold"
+                    FontSize="16"
+                    TextColor="#6D5206"
+                    HorizontalOptions="Center"/>
+
+            <Border Padding="10" Stroke="LightGray" StrokeThickness="1" 
+                    HeightRequest="200" WidthRequest="250">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10"/>
+                </Border.StrokeShape>
+                <Label Text="[Line Chart Here]"
+                        TextColor="Black"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        FontSize="16"/>
+            </Border>
+
+            <!-- Today's Income -->
+            <Label Text="Today's Income: "
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    TextColor="#6D5206"
+                    HorizontalOptions="Center"/>
+            
+            <Border Padding="10" Stroke="LightGray" StrokeThickness="1"
+                    HeightRequest="200" WidthRequest="250">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10"/>
+                </Border.StrokeShape>
+                <Label Text="[Pie Chart - Income]"
+                        TextColor="Black"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        FontSize="16"/>
+            </Border>
+
+            <!-- Today's Expenses -->
+            <Label Text="Today's Expenses: "
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    TextColor="#6D5206"
+                    HorizontalOptions="Center"/>
+            
+            <Border Padding="10" Stroke="LightGray" StrokeThickness="1"
+                    HeightRequest="200" WidthRequest="250">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10"/>
+                </Border.StrokeShape>
+                <Label Text="[Pie Chart - Expenses]"
+                        TextColor="Black"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        FontSize="16"/>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

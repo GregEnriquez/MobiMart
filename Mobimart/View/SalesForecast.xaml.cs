@@ -1,8 +1,8 @@
 namespace MobiMart.View;
 
-public partial class InventoryManager : ContentPage
+public partial class SalesForecast : ContentPage
 {
-	public InventoryManager()
+	public SalesForecast()
 	{
 		InitializeComponent();
 	}

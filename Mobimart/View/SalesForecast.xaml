@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MobiMart.View.SalesForecast"
+             BackgroundColor="#FDF4DC"
+             Title="SalesForecast">
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="Auto, *">
+            <ImageButton
+                Grid.Column="0"
+                Source="hamburger_icon.png"
+                HeightRequest="24"
+                WidthRequest="24"
+                Clicked="OnHamburgerClicked" />
+
+            <Label
+                Grid.ColumnSpan="2"
+                Text="MobiMart"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                FontSize="20"
+                TextColor="White"
+                FontAttributes="Bold" />
+        </Grid>
+    </Shell.TitleView>
+    
+    <Grid RowDefinitions="Auto, *" ColumnDefinitions="*">
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="15" Spacing="20">
+
+                <!-- Forecast Header -->
+                <Label Text="Forecast for this Month"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       TextColor="#6D5206"/>
+
+                <!-- Chart Placeholder -->
+                <Frame BorderColor="#6D5206"
+                       CornerRadius="10"
+                       Padding="10"
+                       HasShadow="False"
+                       BackgroundColor="#FBE7B3"
+                       HeightRequest="220">
+                    <VerticalStackLayout>
+                        <Label Text="[Chart Placeholder]"
+                               FontSize="14"
+                               HorizontalOptions="Center"
+                               VerticalOptions="CenterAndExpand"
+                               TextColor="Gray"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- for revenue placeholders -->
+                <Label FontSize="16" TextColor="#6D5206">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Forecasted Revenue: " FontAttributes="Bold" TextColor="#6D5206"/>
+                            <Span Text="________" FontAttributes="Italic" TextColor="#6D5206"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+                <Label FontSize="16" TextColor="#6D5206">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Current Revenue: " FontAttributes="Bold" TextColor="#6D5206"/>
+                            <Span Text="________" FontAttributes="Italic" TextColor="#6D5206"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+                <BoxView HeightRequest="1" BackgroundColor="#6D5206" />
+                
+                <!-- Recommendations Header -->
+                <Label Text="Sales Forecasting Recommendations"
+                       FontAttributes="Bold"
+                       FontSize="16"
+                       HorizontalOptions="Center"
+                       TextColor="#6D5206"/>
+
+                <!-- Recommendations Box -->
+                <Frame BorderColor="#6D5206"
+                       BackgroundColor="#FBE7B3"
+                       CornerRadius="8"
+                       Padding="10"
+                       HasShadow="False">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Sales Forecasting Recommendations:"
+                               FontAttributes="Bold"
+                               FontSize="14"
+                               TextColor="#6D5206"/>
+                        <Label Text="• Start of new School Year: This month is the usual start of a new school year. Sales regarding school supplies or snacks will be on the Rise."
+                               FontSize="13"
+                               TextColor="#6D5206"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

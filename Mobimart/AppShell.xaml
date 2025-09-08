@@ -108,9 +108,37 @@
 
     <FlyoutItem Title="Supplier List">
         <ShellContent
-        Title="Supplier List"
-        ContentTemplate="{DataTemplate view:SupplierList}"
-        Route="SupplierList" />
+            Title="Supplier List"
+            ContentTemplate="{DataTemplate view:SupplierList}"
+            Route="SupplierList" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Inventory Manager">
+        <ShellContent
+            Title="Inventory Manager"
+            ContentTemplate="{DataTemplate view:InventoryManager}"
+            Route="InventoryManager" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Daily Sales">
+        <ShellContent
+            Title="Daily Sales"
+            ContentTemplate="{DataTemplate view:DailySales}"
+            Route="DailySales" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Sales Forecast">
+        <ShellContent
+            Title="Sales Forecast"
+            ContentTemplate="{DataTemplate view:SalesForecast}"
+            Route="SalesForecast" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Calendar">
+        <ShellContent
+            Title="Calendar"
+            ContentTemplate="{DataTemplate view:Calendar}"
+            Route="Calendar" />
     </FlyoutItem>
 
     <Shell.FlyoutFooter>

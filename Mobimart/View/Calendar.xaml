@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MobiMart.View.Calendar"
+             BackgroundColor="#FDF4DC"
+             Title="Calendar">
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="Auto, *">
+            <ImageButton
+                Grid.Column="0"
+                Source="hamburger_icon.png"
+                HeightRequest="24"
+                WidthRequest="24"
+                Clicked="OnHamburgerClicked" />
+
+            <Label
+                Grid.ColumnSpan="2"
+                Text="MobiMart"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                FontSize="20"
+                TextColor="White"
+                FontAttributes="Bold" />
+        </Grid>
+    </Shell.TitleView>
+
+    <Grid RowDefinitions="Auto,*">
+
+        <Label Text="Sales History"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                TextColor="#6D5206"
+                FontSize="18"
+                FontAttributes="Bold"
+                Margin="0,10,0,0"/>
+
+        <!-- Calendar Content -->
+        <ScrollView Grid.Row="1" Padding="15">
+            <VerticalStackLayout Spacing="20">
+
+                <!-- Month Navigation -->
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
+                    <ImageButton 
+                        Source="previous_icon.png"
+                        HeightRequest="40"
+                        WidthRequest="40"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Start"
+                        Margin="0,0,10,0"
+                        Aspect="AspectFit"
+                        Clicked="OnPrevMonthClicked" />
+
+                    <Label x:Name="MonthLabel"
+                           FontAttributes="Bold"
+                           FontSize="15"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           TextColor="#6D5206"/>
+
+                    <ImageButton 
+                        Source="next_icon.png"
+                        HeightRequest="40"
+                        WidthRequest="40"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Start"
+                        Margin="0,0,10,0"
+                        Aspect="AspectFit"
+                        Clicked="OnNextMonthClicked" />
+                </HorizontalStackLayout>
+
+                <!-- Calendar Grid (di ko alam pano gawing pavertical) -->
+                <Grid x:Name="CalendarGrid"
+                      ColumnDefinitions="*,*,*,*,*,*,*"
+                      RowSpacing="10"
+                      ColumnSpacing="10" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
