@@ -3,43 +3,91 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:view="clr-namespace:MobiMart.View"
              x:Class="MobiMart.View.EmployeeTablePage"
-             Title="EmployeeTablePage"
-             BackgroundColor="#FDF4DC">
+             BackgroundColor="#FDF4DC"
+             Title="EmployeeTablePage">
 
-    <ScrollView>
-    <VerticalStackLayout Padding="20" Spacing="15">
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="Auto, *">
+            <ImageButton
+                Grid.Column="0"
+                Source="hamburger_icon.png"
+                HeightRequest="24"
+                WidthRequest="24"
+                Clicked="OnHamburgerClicked" />
 
-        <Grid ColumnDefinitions="*,*,*,*,*"
-              Padding="5"
-              BackgroundColor="#D99B2B">
-            <Label Text="Name" TextColor="White" FontAttributes="Bold" />
-            <Label Text="Email" TextColor="White" FontAttributes="Bold" Grid.Column="1" />
-            <Label Text="Age" TextColor="White" FontAttributes="Bold" Grid.Column="2" />
-            <Label Text="Phone" TextColor="White" FontAttributes="Bold" Grid.Column="3" />
-            <Label Text="Type" TextColor="White" FontAttributes="Bold" Grid.Column="4" />
+            <Label
+                Grid.ColumnSpan="2"
+                Text="MobiMart"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                FontSize="20"
+                TextColor="White"
+                FontAttributes="Bold" />
         </Grid>
+    </Shell.TitleView>
 
-        <CollectionView x:Name="EmployeeList" ItemsSource="{Binding Employees}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Grid ColumnDefinitions="*,*,*,*,*" Padding="5" BackgroundColor="White">
-                        <Label Text="{Binding Name}" TextColor="Black" />
-                        <Label Text="{Binding Email}" TextColor="Black" Grid.Column="1" />
-                        <Label Text="{Binding Age}" TextColor="Black" Grid.Column="2" />
-                        <Label Text="{Binding Phone}" TextColor="Black" Grid.Column="3" />
-                        <Label Text="{Binding EmployeeType}" TextColor="Black" Grid.Column="4" />
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+    <Grid RowDefinitions="*,Auto">
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Padding="10" Spacing="15">
+                <Label Text="Employee Table"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        TextColor="#6D5206"
+                        FontSize="18"
+                        FontAttributes="Bold" />
+                <ScrollView Orientation="Horizontal">
+                    <VerticalStackLayout Spacing="0">
+                        <Grid ColumnDefinitions="*,*,*,*,*" Padding="5" BackgroundColor="#6D5206">
+                            <Label Text="Name" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center"/>
+                            <Label Text="Email" TextColor="White" FontAttributes="Bold" Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Center"/>
+                            <Label Text="Age" TextColor="White" FontAttributes="Bold" Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Center"/>
+                            <Label Text="Phone" TextColor="White" FontAttributes="Bold" Grid.Column="3" HorizontalOptions="Center" VerticalOptions="Center"/>
+                            <Label Text="Type" TextColor="White" FontAttributes="Bold" Grid.Column="4" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Grid>
 
-        <Button 
-            Text="Edit" 
-            BackgroundColor="#D99B2B" 
-            TextColor="White"
-            CornerRadius="10"
-            HeightRequest="45"
-            Command="{Binding EditCommand}" />
-    </VerticalStackLayout>
-    </ScrollView>
+                        <CollectionView x:Name="EmployeeList" ItemsSource="{Binding Employees}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="*,*,*,*,*" Padding="5" BackgroundColor="#F6CD5E">
+                                        <Label Text="{Binding Name}" TextColor="#6D5206" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        <Label Text="{Binding Email}" TextColor="#6D5206" Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        <Label Text="{Binding Age}" TextColor="#6D5206" Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        <Label Text="{Binding Phone}" TextColor="#6D5206" Grid.Column="3" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        <Label Text="{Binding EmployeeType}" TextColor="#6D5206" Grid.Column="4" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </ScrollView>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <HorizontalStackLayout Spacing="9" HorizontalOptions="Center" Grid.Row="1">
+            <Button 
+                Text="Back"
+                Clicked="OnBackClicked"
+                BackgroundColor="#FBE7B3"
+                BorderColor="#6D5206"
+                BorderWidth="2"
+                TextColor="#6D5206"
+                CornerRadius="20"
+                HeightRequest="40"
+                HorizontalOptions="Center"
+                WidthRequest="62"
+                Margin="0,10,0,10" />
+            <Button 
+                Text="Edit Employees" 
+                BackgroundColor="#FBE7B3"
+                BorderColor="#6D5206"
+                BorderWidth="2"
+                TextColor="#6D5206"
+                CornerRadius="20"
+                HeightRequest="40"
+                HorizontalOptions="Center"
+                WidthRequest="132"
+                Margin="0,10,0,10"
+                Command="{Binding EditCommand}"/>
+        </HorizontalStackLayout>
+    </Grid>
 </ContentPage>

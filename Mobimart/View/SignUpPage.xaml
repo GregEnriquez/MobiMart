@@ -14,7 +14,7 @@
         <Grid>
             <Label 
             Text="MobiMart"
-            HorizontalOptions="Start"
+            HorizontalOptions="Center"
             VerticalOptions="Center"
             TextColor="White"
             FontSize="20"
@@ -23,84 +23,103 @@
     </Shell.TitleView>
 
     <Grid>
-    <VerticalStackLayout Padding="30" Spacing="20">
-        <Label 
-            Text="Sign Up" 
-            FontSize="28" 
-            FontAttributes="Bold" 
-            HorizontalOptions="Center" 
-            TextColor="#D99B2B" />
+        <VerticalStackLayout Padding="30" Spacing="20">
+            <Label 
+                Text="Sign Up" 
+                FontSize="28" 
+                FontAttributes="Bold" 
+                HorizontalOptions="Center" 
+                TextColor="#6D5206" />
 
-        <Entry
-            Text = "{Binding Email}" 
-            Placeholder="Email"
-            Keyboard="Email"
-            BackgroundColor="White"
-            HeightRequest="50"
-            TextColor="Black"/>
-        <Label
-            Text = "*Email is already registered"
-            TextColor = "red"
-            FontSize = "12"
-            Margin = "0, -15, 0, -5"
-            IsVisible = "{Binding EmailHasError}"/>
+            <Border Stroke="#6D5206" 
+                    StrokeThickness="1" 
+                    StrokeShape="RoundRectangle 10,10,10,10">
+                
+                <Entry
+                    Text = "{Binding Email}" 
+                    Placeholder="Email"
+                    Keyboard="Email"
+                    BackgroundColor="White"
+                    HeightRequest="50"
+                    TextColor="#6D5206"/>
+            </Border>
+            
+            <Label
+                Text = "*Email is already registered"
+                TextColor = "red"
+                FontSize = "12"
+                Margin = "0, -15, 0, -5"
+                IsVisible = "{Binding EmailHasError}"/>
 
-        <Entry
-            Text ="{Binding Password}"
-            Placeholder="Password"
-            IsPassword="True"
-            BackgroundColor="White"
-            HeightRequest="50"
-            TextColor="Black"/>
-        <Label
-            Text = "*Password must contain atleast 8 characters"
-            TextColor = "red"
-            FontSize = "12"
-            Margin = "0, -15, 0, -5"
-            IsVisible = "{Binding PasswordHasError}"/>
+            <Border Stroke="#6D5206" 
+                    StrokeThickness="1" 
+                    StrokeShape="RoundRectangle 10,10,10,10">
+                
+                <Entry
+                    Text ="{Binding Password}"
+                    Placeholder="Password"
+                    IsPassword="True"
+                    BackgroundColor="White"
+                    HeightRequest="50"
+                    TextColor="#6D5206"/>
+            </Border>
+            
+            <Label
+                Text = "*Password must contain atleast 8 characters"
+                TextColor = "red"
+                FontSize = "12"
+                Margin = "0, -15, 0, -5"
+                IsVisible = "{Binding PasswordHasError}"/>
 
-        <Entry 
-            Text = "{Binding ConfirmPassword}"
-            Placeholder="Confirm Password"
-            IsPassword="True"
-            BackgroundColor="White"
-            HeightRequest="50"
-            TextColor="Black"/>
-        <Label
-            Text = "*Passwords do not match"
-            TextColor = "red"
-            FontSize = "12"
-            Margin = "0, -15, 0, -5"
-            IsVisible = "{Binding ConfirmPasswordHasError}"/>
+            <Border Stroke="#6D5206" 
+                    StrokeThickness="1" 
+                    StrokeShape="RoundRectangle 10,10,10,10">
+                
+                <Entry 
+                    Text = "{Binding ConfirmPassword}"
+                    Placeholder="Confirm Password"
+                    IsPassword="True"
+                    BackgroundColor="White"
+                    HeightRequest="50"
+                    TextColor="#6D5206"/>
+            </Border>
+            
+            <Label
+                Text = "*Passwords do not match"
+                TextColor = "red"
+                FontSize = "12"
+                Margin = "0, -15, 0, -5"
+                IsVisible = "{Binding ConfirmPasswordHasError}"/>
 
+            <Button 
+                Text="Sign Up"
+                BackgroundColor="#6D5206"
+                TextColor="White"
+                CornerRadius="10"
+                HeightRequest="50" 
+                Command="{Binding RegisterUserCommand}"
+                IsEnabled="{Binding IsNotBusy}"/>
 
-        <Button 
-            Text="Sign Up"
-            BackgroundColor="#D99B2B"
-            TextColor="White"
-            CornerRadius="10"
-            HeightRequest="50" 
-            Command="{Binding RegisterUserCommand}"
-            IsEnabled="{Binding IsNotBusy}"/>
+            <Label 
+                Text="Already have an account? Login"
+                HorizontalOptions="Center"
+                TextDecorations="Underline"
+                TextColor="#6D5206">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnLoginTapped" />
+                </Label.GestureRecognizers>
+            </Label>
+            
+        </VerticalStackLayout>
 
-        <Label 
-            Text="Already have an account? Login"
-            HorizontalOptions="Center"
-            TextColor="#D99B2B">
-            <Label.GestureRecognizers>
-                <TapGestureRecognizer Tapped="OnLoginTapped" />
-            </Label.GestureRecognizers>
-        </Label>
-    </VerticalStackLayout>
-    
-    <Border BackgroundColor="#66000000"
-                StrokeThickness="0"
-                IsVisible="{Binding IsBusy}" 
-                InputTransparent="{Binding IsBusy}">
-        <ActivityIndicator IsRunning="{Binding IsBusy}" 
-                            Color="#D99B2B" 
-                            VerticalOptions="Center" 
-                            HorizontalOptions="Center" />
-    </Border>
+        <Border BackgroundColor="#66000000"
+                    StrokeThickness="0"
+                    IsVisible="{Binding IsBusy}" 
+                    InputTransparent="{Binding IsBusy}">
+            <ActivityIndicator IsRunning="{Binding IsBusy}" 
+                                Color="#6D5206" 
+                                VerticalOptions="Center" 
+                                HorizontalOptions="Center" />
+        </Border>
     </Grid>
 </ContentPage>

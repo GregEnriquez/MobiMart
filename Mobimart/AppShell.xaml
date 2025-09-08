@@ -5,31 +5,127 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:view="clr-namespace:MobiMart.View"
     Shell.FlyoutBehavior="Flyout"
-    Shell.TabBarIsVisible="False"
     Title="MobiMart"
-    Shell.NavBarHasShadow="False"
-    Shell.BackgroundColor="#D99B2B"
-    Shell.TitleColor="White"
-    Shell.ForegroundColor="White">
+    Shell.NavBarHasShadow="True"
+    Shell.BackgroundColor="#C2910B"
+    Shell.TitleColor="Black"
+    Shell.ForegroundColor="White"
+    FlyoutWidth="250"
+    FlyoutBackgroundColor="#FBE7B3">
 
-    <ShellContent
-        FlyoutItemIsVisible="False"
-        Title="Home"
-        ContentTemplate="{DataTemplate view:MainPage}"
-        Route="MainPage"/>
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False" />
+    </Shell.BackButtonBehavior>
 
-    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
+    <Shell.FlyoutHeader>
+        <Grid Padding="20">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Frame Grid.RowSpan="2"
+                   WidthRequest="60"
+                   HeightRequest="60"
+                   CornerRadius="30"
+                   IsClippedToBounds="True"
+                   VerticalOptions="Center"
+                   Margin="0,0,10,0">
+
+                <Image Source="profile_avatar.png" Aspect="AspectFill">
+                </Image>
+            </Frame>
+
+            <Label Grid.Column="1"
+                   Text="business name"
+                   FontAttributes="Bold"
+                   FontSize="18"
+                   TextColor="#6D5206"
+                   VerticalOptions="Center">
+            </Label>
+
+            <Label Grid.Row="1" Grid.Column="1"
+                   Text="username"
+                   FontSize="14"
+                   TextColor="#6D5206"
+                   VerticalOptions="Center">
+            </Label>
+
+            <BoxView Grid.Row="2" Grid.ColumnSpan="2"
+                     HeightRequest="1"
+                     Margin="0,10,0,0"
+                     BackgroundColor="#6D5206"
+                     HorizontalOptions="FillAndExpand"/>
+
+        </Grid>
+    </Shell.FlyoutHeader>
+
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <Grid Padding="5">
+                <Label Text="{Binding Title}" 
+                       TextColor="#6D5206"
+                       FontSize="15"
+                       FontAttributes="Bold">
+                </Label>
+            </Grid>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+
+    <FlyoutItem Title="Profile">
         <ShellContent
-            Title="User Page"
+            Title="Profile"
             ContentTemplate="{DataTemplate view:UserPage}"
-            Icon="dotnet_bot.png"
-            Route="UserPage"/>
-        <ShellContent
-            Title="Business Page"
-            ContentTemplate="{DataTemplate view:BusinessPage}"
-            Icon="dotnet_bot.png"
-            Route="BusinessPage"/>
+            Route="UserPage" />
     </FlyoutItem>
 
+    <FlyoutItem Title="Inventory" Route="InventoryListPage">
+        <ShellContent
+            Title="Inventory"
+            ContentTemplate="{DataTemplate view:InventoryListPage}"
+            Route="InventoryListPage" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Transaction">
+        <ShellContent
+            Title="Transaction"
+            ContentTemplate="{DataTemplate view:TransactionPage}"
+            Route="TransactionPage" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Sales History">
+        <ShellContent
+            Title="Sales History"
+            ContentTemplate="{DataTemplate view:SalesHistory}"
+            Route="SalesHistory" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Supplier List">
+        <ShellContent
+        Title="Supplier List"
+        ContentTemplate="{DataTemplate view:SupplierList}"
+        Route="SupplierList" />
+    </FlyoutItem>
+
+    <Shell.FlyoutFooter>
+        <Grid Padding="10">
+            <VerticalStackLayout Spacing="10">
+                <BoxView HeightRequest="1" Color="#6D5206" />
+
+                <Button 
+                    Text="Logout"
+                    TextColor="White"
+                    BackgroundColor="#6D5206"
+                    CornerRadius="10" />
+                <!--Clicked="OnLogoutClicked" />-->
+            </VerticalStackLayout>
+        </Grid>
+    </Shell.FlyoutFooter>
 
 </Shell>

@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Net.Http.Headers;
 using System.Text;
-using Android.Icu.Text;
+
 using MobiMart.Model;
 using Newtonsoft.Json;
 using SQLite;

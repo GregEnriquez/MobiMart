@@ -1,8 +1,8 @@
 namespace MobiMart.View;
 
-public partial class EmployeeTablePage : ContentPage
+public partial class MessageSupplier : ContentPage
 {
-	public EmployeeTablePage()
+	public MessageSupplier()
 	{
 		InitializeComponent();
 	}
