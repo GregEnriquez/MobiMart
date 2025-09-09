@@ -1,11 +1,10 @@
 namespace MobiMart.View;
 
-public partial class EmployeeTablePage : ContentPage
+public partial class EditSupplierInventory : ContentPage
 {
-	public EmployeeTablePage()
+	public EditSupplierInventory()
 	{
 		InitializeComponent();
-		Routing.RegisterRoute("EmployeeTablePage", typeof(EmployeeTablePage));
 	}
 
     private void OnHamburgerClicked(object sender, EventArgs e)

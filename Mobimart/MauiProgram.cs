@@ -2,6 +2,7 @@
 using MobiMart.Service;
 using MobiMart.View;
 using MobiMart.ViewModel;
+using CommunityToolkit.Mvvm;
 
 namespace MobiMart
 {
@@ -22,11 +23,16 @@ namespace MobiMart
             builder.Services.AddSingleton<LoginViewModel>();
             builder.Services.AddSingleton<SignUpViewModel>();
             builder.Services.AddSingleton<UserPageViewModel>();
+            builder.Services.AddSingleton<BusinessPageViewModel>();
 
             builder.Services.AddSingleton<SignUpPage>();
             builder.Services.AddSingleton<UserPage>();
             builder.Services.AddSingleton<BusinessPage>();
             builder.Services.AddSingleton<EmployeeTablePage>();
+            builder.Services.AddSingleton<InventoryListPage>();
+            builder.Services.AddSingleton<TransactionPage>();
+            builder.Services.AddSingleton<SalesHistory>();
+            builder.Services.AddSingleton<SupplierList>();
         
 
 #if DEBUG

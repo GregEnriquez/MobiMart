@@ -7,7 +7,8 @@
              x:DataType="viewmodel:LoginViewModel"
              Shell.FlyoutBehavior="Disabled"
              x:Class="MobiMart.View.MainPage"
-             BackgroundColor="#FDF4DC">
+             BackgroundColor="#FDF4DC"
+             Title="{Binding Title}">
 
     <Shell.TitleView>
         <Grid>
@@ -29,26 +30,36 @@
             FontSize="32" 
             FontAttributes="Bold" 
             HorizontalOptions="Center" 
-            TextColor="#D99B2B" />
+            TextColor="#6D5206" />
 
-        <Entry 
-            Text = "{Binding Email}"
-            Placeholder="Email"
-            BackgroundColor="White"
-            HeightRequest="50"
-            TextColor="Black" />
+        <Border Stroke="#6D5206" 
+                StrokeThickness="1" 
+                StrokeShape="RoundRectangle 10,10,10,10">
+            
+            <Entry 
+                Text = "{Binding Email}"
+                Placeholder="Email"
+                BackgroundColor="White"
+                HeightRequest="50"
+                TextColor="Black" />
+        </Border>
 
-        <Entry 
-            Text = "{Binding Password}"
-            Placeholder="Password"
-            IsPassword="True"
-            BackgroundColor="White"
-            HeightRequest="50"
-            TextColor="Black" />
+        <Border Stroke="#6D5206" 
+                StrokeThickness="1" 
+                StrokeShape="RoundRectangle 10,10,10,10">
+
+            <Entry 
+                Text = "{Binding Password}"
+                Placeholder="Password"
+                IsPassword="True"
+                BackgroundColor="White"
+                HeightRequest="50"
+                TextColor="Black" />
+        </Border>
 
         <Button 
             Text="Login"
-            BackgroundColor="#D99B2B"
+            BackgroundColor="#6D5206"
             TextColor="White"
             CornerRadius="10"
             HeightRequest="50"
@@ -57,7 +68,8 @@
         <Label 
             Text="Don't have an account? Sign Up" 
             HorizontalOptions="Center"
-            TextColor="#D99B2B">
+            TextDecorations="Underline"
+            TextColor="#6D5206">
             <Label.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding GoToSignupCommand}" />
             </Label.GestureRecognizers>

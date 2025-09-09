@@ -7,6 +7,6 @@ public partial class BusinessPage : ContentPage
 	public BusinessPage(BusinessPageViewModel viewModel)
 	{
 		InitializeComponent();
-		this.BindingContext = viewModel;
+		BindingContext = viewModel;
 	}
 }
