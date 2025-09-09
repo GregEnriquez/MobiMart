@@ -1,131 +1,223 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:view="clr-namespace:MobiMart.View"
              x:Class="MobiMart.View.SupplierInventory"
+             xmlns:view="clr-namespace:MobiMart.View"
              BackgroundColor="#FDF4DC"
              Title="SupplierInventory">
+    
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
 
-    <Shell.TitleView>
-        <Grid ColumnDefinitions="Auto, *">
-            <ImageButton
-                Grid.Column="0"
-                Source="hamburger_icon.png"
-                HeightRequest="24"
-                WidthRequest="24"
-                Clicked="OnHamburgerClicked" />
+            <Grid 
+                ColumnDefinitions="Auto, *"
+                RowDefinitions="Auto, Auto"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center">
+                <Image 
+                    Source="avatar_placeholder.png" 
+                    WidthRequest="100" HeightRequest="100"
+                    HorizontalOptions="Center"
+                    Aspect="AspectFill"
+                    BackgroundColor="LightGray">
+                    <Image.Clip>
+                        <EllipseGeometry Center="50,50" RadiusX="50" RadiusY="50" />
+                    </Image.Clip>
+                </Image>
 
-            <Label
-                Grid.ColumnSpan="2"
-                Text="MobiMart"
-                HorizontalOptions="Center"
-                VerticalOptions="Center"
-                FontSize="20"
-                TextColor="White"
-                FontAttributes="Bold" />
-        </Grid>
-    </Shell.TitleView>
+            </Grid>
 
-    <Grid RowDefinitions="*, Auto">
-        <ScrollView Grid.Row="0">
-            <VerticalStackLayout Padding="10" Spacing="15">
+            <Label 
+                Text="Supplier Name" 
+                FontAttributes="Bold" 
+                TextColor="#6F4E37" 
+                HorizontalTextAlignment="Center"
+                FontSize="22"/>
 
-                <Frame Grid.RowSpan="2"
-                       WidthRequest="80"
-                       HeightRequest="80"
-                       CornerRadius="38"
-                       IsClippedToBounds="True"
-                       VerticalOptions="Center"
-                       Margin="0,20,10,0">
+            <Label 
+                Text="Inventory for Wholesale" 
+                FontAttributes="Bold" 
+                TextColor="#6F4E37" 
+                HorizontalTextAlignment="Center"
+                FontSize="20"/>
 
-                    <Image Source="profile_avatar.png" Aspect="AspectFill">
-                    </Image>
-                </Frame>
+            <BoxView HeightRequest="1" BackgroundColor="#D99B2B" />
 
-                <Label 
-                    Text="Supplier Name" 
-                    FontAttributes="Bold" 
-                    TextColor="#6D5206" 
-                    HorizontalTextAlignment="Center"
-                    FontSize="18"/>
+            <CollectionView>
+                <CollectionView.Header>
+                    <Grid ColumnDefinitions="Auto, *, *, *, *, *, *, *, *"
+                          Padding="5"
+                          BackgroundColor="#A9882D">
 
-                <Label 
-                    Text="Inventory for Wholesale" 
-                    FontAttributes="Bold" 
-                    TextColor="#6D5206" 
-                    HorizontalTextAlignment="Center"
-                    FontSize="15"/>
+                        <Border
+                            BackgroundColor="Green"
+                            StrokeShape="RoundRectangle 10,10,10,10"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            Grid.Column="0">
 
-                <BoxView HeightRequest="1" BackgroundColor="#6D5206" />
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="editTapped"/>
+                            </Border.GestureRecognizers>
 
-                <ScrollView Orientation="Horizontal">
-                    <VerticalStackLayout>
-                        <Grid ColumnDefinitions="Auto, *, *, *, *, *, *, *, *"
-                              ColumnSpacing="10"
-                              Padding="10"
-                              BackgroundColor="#6D5206">
+                            <HorizontalStackLayout 
+                                Spacing="10"
+                                BackgroundColor="Green">
 
-                            <Button 
-                                Text="Edit"
-                                FontSize="13"
-                                BackgroundColor="#FBE7B3"
-                                TextColor="#6D5206"
-                                CornerRadius="15"
-                                HeightRequest="20"
-                                WidthRequest="30"
-                                HorizontalOptions="End"
-                                VerticalOptions="Center"
-                                Padding="0"
-                                Grid.Column="0"
+                                <ImageButton
+                                Source="edit.png"
+                                WidthRequest="5" HeightRequest="5"
+                                Padding="10"
                                 Clicked="editTapped"/>
 
-                            <Label Text="Delivery Id" TextColor="White" Grid.Column="1" FontSize="15" HorizontalTextAlignment="Center" FontAttributes="Bold" VerticalOptions="Center"/>
-                            <Label Text="Item Name" TextColor="White" Grid.Column="2" FontSize="15" HorizontalTextAlignment="Center" FontAttributes="Bold" VerticalOptions="Center"/>
-                            <Label Text="Delivery Amount" TextColor="White" Grid.Column="3" FontSize="15" HorizontalTextAlignment="Center" FontAttributes="Bold" VerticalOptions="Center"/>
-                            <Label Text="Date Delivered" TextColor="White" Grid.Column="4" FontSize="15" HorizontalTextAlignment="Center" FontAttributes="Bold" VerticalOptions="Center"/>
-                            <Label Text="Expiration Date" TextColor="White" Grid.Column="5" FontSize="15" HorizontalTextAlignment="Center" FontAttributes="Bold" VerticalOptions="Center"/>
-                            <Label Text="Batch Worth" TextColor="White" Grid.Column="6" FontSize="15" HorizontalTextAlignment="Center" FontAttributes="Bold" VerticalOptions="Center"/>
-                            <Label Text="Item Type" TextColor="White" Grid.Column="7" FontSize="15" HorizontalTextAlignment="Center" FontAttributes="Bold" VerticalOptions="Center"/>
-                            <Label Text="Item Description" TextColor="White" Grid.Column="8" FontSize="15" HorizontalTextAlignment="Center" FontAttributes="Bold" VerticalOptions="Center"/>
+                                <Label 
+                                    Text="Edit" 
+                                    TextColor="White" 
+                                    HorizontalTextAlignment="Center"
+                                    VerticalTextAlignment="Center"
+                                    FontSize="17"
+                                    Margin="0,0,15,0"/>
+                            </HorizontalStackLayout>
+                        </Border>
+
+
+                        <Label 
+                            Text="Delivery Id" 
+                            TextColor="White" 
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            FontSize="17"
+                            Grid.Column="1"/>
+
+                        <Label 
+                            Text="Item Name" 
+                            TextColor="White" 
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            FontSize="17"
+                            Grid.Column="2"/>
+
+                        <Label 
+                            Text="Delivery Amount" 
+                            TextColor="White" 
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            FontSize="17"
+                            Grid.Column="3"/>
+
+                        <Label 
+                            Text="Date Delivered" 
+                            TextColor="White" 
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            FontSize="17"
+                            Grid.Column="4"/>
+
+                        <Label 
+                            Text="Expiration Date" 
+                            TextColor="White" 
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            FontSize="17"
+                            Grid.Column="5"/>
+
+                        <Label 
+                            Text="Batch Worth" 
+                            TextColor="White" 
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            FontSize="17"
+                            Grid.Column="6"/>
+
+                        <Label 
+                            Text="Item Type" 
+                            TextColor="White" 
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            FontSize="17"
+                            Grid.Column="7"/>
+
+                        <Label 
+                            Text="Item Description" 
+                            TextColor="White" 
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            FontSize="17"
+                            Grid.Column="8"/>
+
+
+                    </Grid>
+                </CollectionView.Header>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="*, *, *, *, *, *, *, *"
+                              Padding="5"
+                              BackgroundColor="#CFBC5D"
+                              Margin="0,1">
+
+                            <Label 
+                                Text="Example ID" 
+                                TextColor="White" 
+                                HorizontalTextAlignment="Center"
+                                FontSize="18"
+                                Grid.Column="0"/>
+
+                            <Label 
+                                Text="Example Name" 
+                                TextColor="White" 
+                                HorizontalTextAlignment="Center"
+                                FontSize="18"
+                                Grid.Column="1"/>
+
+                            <Label 
+                                Text="Example Amount" 
+                                TextColor="White" 
+                                HorizontalTextAlignment="Center"
+                                FontSize="18"
+                                Grid.Column="2"/>
+
+                            <Label 
+                                Text="Example Date Delivered" 
+                                TextColor="White" 
+                                HorizontalTextAlignment="Center"
+                                FontSize="18"
+                                Grid.Column="3"/>
+
+                            <Label 
+                                Text="Example Expiration Date" 
+                                TextColor="White" 
+                                HorizontalTextAlignment="Center"
+                                FontSize="18"
+                                Grid.Column="4"/>
+
+                            <Label 
+                                Text="Example Batch Worth" 
+                                TextColor="White" 
+                                HorizontalTextAlignment="Center"
+                                FontSize="18"
+                                Grid.Column="5"/>
+
+                            <Label 
+                                Text="Example Item Type" 
+                                TextColor="White" 
+                                HorizontalTextAlignment="Center"
+                                FontSize="18"
+                                Grid.Column="6"/>
+
+                            <Label 
+                                Text="Example Item Description" 
+                                TextColor="White" 
+                                HorizontalTextAlignment="Center"
+                                FontSize="18"
+                                Grid.Column="7"/>
+
+
                         </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
-                        <CollectionView>
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid ColumnDefinitions="Auto, *, *, *, *, *, *, *"
-                                          Padding="10"
-                                          BackgroundColor="#F6CD5E"
-                                          Margin="0,1">
-
-                                        <Label Text="Example ID" TextColor="#6D5206" Grid.Column="0" FontSize="14" HorizontalTextAlignment="Center"/>
-                                        <Label Text="Example Name" TextColor="#6D5206" Grid.Column="1" FontSize="14" HorizontalTextAlignment="Center"/>
-                                        <Label Text="Example Amount" TextColor="#6D5206" Grid.Column="2" FontSize="14" HorizontalTextAlignment="Center"/>
-                                        <Label Text="Example Date Delivered" TextColor="#6D5206" Grid.Column="3" FontSize="14" HorizontalTextAlignment="Center"/>
-                                        <Label Text="Example Expiration Date" TextColor="#6D5206" Grid.Column="4" FontSize="14" HorizontalTextAlignment="Center"/>
-                                        <Label Text="Example Batch Worth" TextColor="#6D5206" Grid.Column="5" FontSize="14" HorizontalTextAlignment="Center"/>
-                                        <Label Text="Example Item Type" TextColor="#6D5206" Grid.Column="6" FontSize="14" HorizontalTextAlignment="Center"/>
-                                        <Label Text="Example Item Description" TextColor="#6D5206" Grid.Column="7" FontSize="14" HorizontalTextAlignment="Center"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                    </VerticalStackLayout>
-                </ScrollView>
-            </VerticalStackLayout>
-        </ScrollView>
-
-        <Button
-            Grid.Row="1"
-            Text="Back" 
-            Clicked="OnBackClicked"
-            BackgroundColor="#FBE7B3"
-            BorderColor="#6D5206"
-            BorderWidth="2"
-            TextColor="#6D5206"
-            CornerRadius="20"
-            HeightRequest="40"
-            HorizontalOptions="Center"
-            WidthRequest="62"
-            Margin="0,10,0,10" />
-    </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

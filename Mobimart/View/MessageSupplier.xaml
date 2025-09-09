@@ -1,145 +1,124 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MobiMart.View.MessageSupplier"
              xmlns:view="clr-namespace:MobiMart.View"
-            x:Class="MobiMart.View.MessageSupplier"
              BackgroundColor="#FDF4DC"
              Title="MessageSupplier">
-
-    <Shell.TitleView>
-        <Grid ColumnDefinitions="Auto, *">
-            <ImageButton
-                Grid.Column="0"
-                Source="hamburger_icon.png"
-                HeightRequest="24"
-                WidthRequest="24"
-                Clicked="OnHamburgerClicked" />
-
-            <Label
-                Grid.ColumnSpan="2"
-                Text="MobiMart"
-                HorizontalOptions="Center"
-                VerticalOptions="Center"
-                FontSize="20"
-                TextColor="White"
-                FontAttributes="Bold" />
-        </Grid>
-    </Shell.TitleView>
-
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="15">
 
             <Label 
                 Text="Items to Request" 
                 FontAttributes="Bold" 
-                TextColor="#6D5206" 
+                TextColor="#6F4E37" 
                 HorizontalTextAlignment="Center"
                 FontSize="22"/>
 
-            <BoxView HeightRequest="1" BackgroundColor="#6D5206" />
+            <BoxView HeightRequest="1" BackgroundColor="#D99B2B" />
 
             <Grid
                 RowDefinitions="Auto, *, *, *"
-                ColumnDefinitions="Auto, Auto, Auto"
+                ColumnDefinitions="Auto, *, *"
                 VerticalOptions="Center"
                 HorizontalOptions="Center"
-                ColumnSpacing="5"
+                ColumnSpacing="50"
                 RowSpacing="10">
 
                 <Label 
                     Text="Item Name: " 
                     FontAttributes="Bold" 
-                    TextColor="#6D5206"
+                    TextColor="#6F4E37"
                     Grid.Row="0" Grid.Column="0"
-                    FontSize="15"
+                    FontSize="18"
                     HorizontalTextAlignment="Center"/>
 
                 <Label 
                     Text="Quantity: " 
                     FontAttributes="Bold" 
-                    TextColor="#6D5206"
+                    TextColor="#6F4E37"
                     Grid.Row="0" Grid.Column="1"
-                    FontSize="15"
+                    FontSize="18"
                     HorizontalTextAlignment="Center"/>
 
                 <Label 
                     Text="Price: " 
                     FontAttributes="Bold" 
-                    TextColor="#6D5206"
+                    TextColor="#6F4E37"
                     Grid.Row="0" Grid.Column="2"
-                    FontSize="15"
+                    FontSize="18"
                     HorizontalTextAlignment="Center"/>
 
                 <Border
-                    Stroke="#6D5206"
-                    StrokeThickness="1"
-                    StrokeShape="RoundRectangle 10,10,10,10"
-                    Grid.Row="1" Grid.Column="0">
-                    <Entry Placeholder="Enter item" BackgroundColor="White" TextColor="#6D5206" />
-                </Border>
-
-                <Border
-                    Stroke="#6D5206"
-                    StrokeThickness="1"
+                    Stroke="#A9882D"
+                    StrokeThickness="1.5"
                     StrokeShape="RoundRectangle 10,10,10,10"
                     Grid.Row="2" Grid.Column="0">
-                    <Entry Placeholder="Enter item" BackgroundColor="White" TextColor="#6D5206" />
+                    <Entry Placeholder="Example Item" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
                 </Border>
 
                 <Border
-                    Stroke="#6D5206"
-                    StrokeThickness="1"
+                    Stroke="#A9882D"
+                    StrokeThickness="1.5"
                     StrokeShape="RoundRectangle 10,10,10,10"
                     Grid.Row="3" Grid.Column="0">
-                    <Entry Placeholder="Enter item" BackgroundColor="White" TextColor="#6D5206" />
+                    <Entry Placeholder="Example Item" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
                 </Border>
 
                 <Border
-                    Stroke="#6D5206"
-                    StrokeThickness="1"
+                    Stroke="#A9882D"
+                    StrokeThickness="1.5"
+                    StrokeShape="RoundRectangle 10,10,10,10"
+                    Grid.Row="1" Grid.Column="0">
+                    <Entry Placeholder="Example Item" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                </Border>
+
+                <Border
+                    Stroke="#A9882D"
+                    StrokeThickness="1.5"
                     StrokeShape="RoundRectangle 10,10,10,10"
                     Grid.Row="1" Grid.Column="1">
-                    <Entry Placeholder="" BackgroundColor="White" TextColor="#6D5206" />
+                    <Entry Placeholder="Example Quantity" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
                 </Border>
 
                 <Border
-                    Stroke="#6D5206"
-                    StrokeThickness="1"
+                    Stroke="#A9882D"
+                    StrokeThickness="1.5"
                     StrokeShape="RoundRectangle 10,10,10,10"
                     Grid.Row="2" Grid.Column="1">
-                    <Entry Placeholder="" BackgroundColor="White" TextColor="#6D5206" />
+                    <Entry Placeholder="Example Quantity" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
                 </Border>
 
                 <Border
-                    Stroke="#6D5206"
-                    StrokeThickness="1"
+                    Stroke="#A9882D"
+                    StrokeThickness="1.5"
                     StrokeShape="RoundRectangle 10,10,10,10"
                     Grid.Row="3" Grid.Column="1">
-                    <Entry Placeholder="" BackgroundColor="White" TextColor="#6D5206" />
+                    <Entry Placeholder="Example Quantity" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
                 </Border>
 
                 <Border
-                    Stroke="#6D5206"
-                    StrokeThickness="1"
+                    Stroke="#A9882D"
+                    StrokeThickness="1.5"
                     StrokeShape="RoundRectangle 10,10,10,10"
                     Grid.Row="1" Grid.Column="2">
-                    <Entry Placeholder="" BackgroundColor="White" TextColor="#6D5206" />
+                    <Entry Placeholder="Example Price" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
                 </Border>
 
                 <Border
-                    Stroke="#6D5206"
-                    StrokeThickness="1"
+                    Stroke="#A9882D"
+                    StrokeThickness="1.5"
                     StrokeShape="RoundRectangle 10,10,10,10"
                     Grid.Row="2" Grid.Column="2">
-                    <Entry Placeholder="" BackgroundColor="White" TextColor="#6D5206" />
+                    <Entry Placeholder="Example Price" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
                 </Border>
 
                 <Border
-                    Stroke="#6D5206"
-                    StrokeThickness="1"
+                    Stroke="#A9882D"
+                    StrokeThickness="1.5"
                     StrokeShape="RoundRectangle 10,10,10,10"
                     Grid.Row="3" Grid.Column="2">
-                    <Entry Placeholder="" BackgroundColor="White" TextColor="#6D5206" />
+                    <Entry Placeholder="Example Price" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
                 </Border>
 
             </Grid>
@@ -149,53 +128,33 @@
                 Spacing="5">
 
                 <Image 
-                   Source="add_icon.png" 
+                   Source="plus.png" 
                    WidthRequest="15" HeightRequest="15"
                    VerticalOptions="Center" />
-                <Label Text="Add More" FontAttributes="Bold" TextColor="#6D5206"/>
+                <Label Text="Add More" FontAttributes="Bold" TextColor="#6F4E37"/>
             </HorizontalStackLayout>
 
             <Border
-                Stroke="#6D5206"
-                StrokeThickness="1"
+                Stroke="#E1B53E"
+                StrokeThickness="1.5"
                 StrokeShape="RoundRectangle 10,10,10,10"
-                Margin="0,30,0,0">
+                Margin="0,100,0,0">
 
                 <Editor 
                     Text="Example premade message." 
-                    TextColor="#6D5206"
-                    BackgroundColor="White"
-                    FontSize="15"
+                    TextColor="#A9882D"
+                    BackgroundColor="#F8ECC6"
+                    FontSize="16"
                     AutoSize="TextChanges"
                     HeightRequest="100"/>
             </Border>
 
-            <HorizontalStackLayout Spacing="9" HorizontalOptions="Center">
-                <Button 
-                    Text="Back"
-                    Clicked="OnBackClicked"
-                    BackgroundColor="#FBE7B3"
-                    BorderColor="#6D5206"
-                    BorderWidth="2"
-                    TextColor="#6D5206"
-                    CornerRadius="20"
-                    HeightRequest="40"
-                    HorizontalOptions="Center"
-                    WidthRequest="62"
-                    Margin="0,10,0,10" />
-                
-                <Button 
-                    Text="Send Message" 
-                    BackgroundColor="#FBE7B3"
-                    BorderColor="#6D5206"
-                    BorderWidth="2"
-                    TextColor="#6D5206"
-                    CornerRadius="20"
-                    HeightRequest="40"
-                    HorizontalOptions="Center"
-                    WidthRequest="125"
-                    Margin="0,10,0,10"/>
-            </HorizontalStackLayout>
+            <Button 
+                Text="Send" 
+                BackgroundColor="#D99B2B" 
+                TextColor="White"
+                CornerRadius="10"
+                HeightRequest="45"/>
 
         </VerticalStackLayout>
     </ScrollView>

@@ -5,108 +5,76 @@
              x:Class="MobiMart.View.SupplierList"
              BackgroundColor="#FDF4DC"
              Title="SupplierList">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
 
-    <Shell.TitleView>
-        <Grid ColumnDefinitions="Auto, *">
-            <ImageButton
-            Grid.Column="0"
-            Source="hamburger_icon.png"
-            HeightRequest="24"
-            WidthRequest="24"
-            Clicked="OnHamburgerClicked" />
+            <Grid ColumnDefinitions="Auto, *" 
+                  VerticalOptions="Center"
+                  RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto"
+                  ColumnSpacing="10">
 
-            <Label
-            Grid.ColumnSpan="2"
-            Text="MobiMart"
-            HorizontalOptions="Center"
-            VerticalOptions="Center"
-            FontSize="20"
-            TextColor="White"
-            FontAttributes="Bold" />
-        </Grid>
-    </Shell.TitleView>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="onSupplierTap"></TapGestureRecognizer>
+                </Grid.GestureRecognizers>
+                
+                <Image 
+                Source="avatar_placeholder.png" 
+                WidthRequest="100" HeightRequest="100"
+                HorizontalOptions="Center"
+                Aspect="AspectFill"
+                BackgroundColor="LightGray"
+                Grid.RowSpan="6">
+                    <Image.Clip>
+                        <EllipseGeometry Center="50,50" RadiusX="50" RadiusY="50" />
+                    </Image.Clip>
+                </Image>
+                <Label 
+                    Text="Placeholder Corporation Name" 
+                    FontAttributes="Bold" 
+                    TextColor="#6F4E37"
+                    Grid.Row="0" Grid.Column="1"/>
+                <BoxView 
+                    Grid.Row="1" Grid.Column="1" 
+                    HorizontalOptions="Fill" 
+                    BackgroundColor="#D28D2C" 
+                    HeightRequest="1"
+                    />
+                <Label 
+                    Text="Sample Supplier Type" 
+                    FontAttributes="Bold" 
+                    TextColor="#6F4E37"
+                    Grid.Row="2" Grid.Column="1"/>
+                <Label 
+                    Text="Sample Number" 
+                    TextColor="#6F4E37"
+                    Grid.Row="3" Grid.Column="1"/>
+                <Label 
+                    Text="Sample Email" 
+                    TextColor="#6F4E37"
+                    Grid.Row="4" Grid.Column="1"/>
+                <Label 
+                    Text="Sample Socials" 
+                    TextColor="#6F4E37"
+                    Grid.Row="5" Grid.Column="1"/>
+                <BoxView 
+                    Grid.Row="6" Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="10"
+                    HorizontalOptions="Fill" 
+                    BackgroundColor="#D28D2C" 
+                    HeightRequest="1"
+                    />
+            </Grid>
 
-    <Grid RowDefinitions="Auto,* ,Auto" Padding="10">
-        <ScrollView Grid.Row="1">
-            <VerticalStackLayout Spacing="15">
+            <Button 
+                Text="Add Supplier" 
+                BackgroundColor="#D99B2B" 
+                TextColor="White"
+                CornerRadius="10"
+                HeightRequest="45"
+                Margin="0,20,0,0" 
+                Clicked="onButtonClicked"/>
 
-                <Label Text="Supplier List"
-                     HorizontalOptions="Center"
-                     VerticalOptions="Center"
-                     TextColor="#6D5206"
-                     FontSize="18"
-                     FontAttributes="Bold" />
-
-                <Grid ColumnDefinitions="Auto, *" 
-                      VerticalOptions="Center"
-                      RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto"
-                      ColumnSpacing="10">
-                    
-                    <Grid.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="onSupplierTap"></TapGestureRecognizer>
-                    </Grid.GestureRecognizers>
-    
-                    <Image 
-                        Source="avatar_placeholder.png" 
-                        WidthRequest="100" HeightRequest="100"
-                        HorizontalOptions="Center"
-                        Aspect="AspectFill"
-                        BackgroundColor="LightGray"
-                        Grid.RowSpan="6">
-                        <Image.Clip>
-                            <EllipseGeometry Center="50,50" RadiusX="50" RadiusY="50" />
-                        </Image.Clip>
-                    </Image>
-                    <Label 
-                        Text="Placeholder Corporation Name" 
-                        FontAttributes="Bold" 
-                        TextColor="#6D5206"
-                        FontSize="15"
-                        Grid.Row="0" Grid.Column="1"/>
-                    <BoxView 
-                        Grid.Row="1" Grid.Column="1"
-                        BackgroundColor="#6D5206" 
-                        HeightRequest="1"/>
-                    <Label 
-                        Text="Sample Supplier Type" 
-                        FontAttributes="Bold" 
-                        TextColor="#6D5206"
-                        Grid.Row="2" Grid.Column="1"/>
-                    <Label 
-                        Text="Sample Number" 
-                        TextColor="#6D5206"
-                        Grid.Row="3" Grid.Column="1"/>
-                    <Label 
-                        Text="Sample Email" 
-                        TextColor="#6D5206"
-                        Grid.Row="4" Grid.Column="1"/>
-                    <Label 
-                        Text="Sample Socials" 
-                        TextColor="#6D5206"
-                        Grid.Row="5" Grid.Column="1"/>
-                    <BoxView 
-                        Grid.Row="6" Grid.Column="0"
-                        Grid.ColumnSpan="2"
-                        Margin="5"
-                        HorizontalOptions="Fill" 
-                        BackgroundColor="#6D5206" 
-                        HeightRequest="1"/>
-                </Grid>
-            </VerticalStackLayout>
-        </ScrollView>
-
-        <Button 
-            Grid.Row="2"
-            Text="Add Supplier" 
-            BackgroundColor="#FBE7B3"
-            BorderColor="#6D5206"
-            BorderWidth="2"
-            TextColor="#6D5206"
-            CornerRadius="20"
-            HeightRequest="0"
-            HorizontalOptions="Center"
-            WidthRequest="200"
-            Margin="0,10,0,10"
-            Clicked="onButtonClicked"/>
-    </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
