@@ -12,6 +12,11 @@
                   VerticalOptions="Center"
                   RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto"
                   ColumnSpacing="10">
+
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="onSupplierTap"></TapGestureRecognizer>
+                </Grid.GestureRecognizers>
+                
                 <Image 
                 Source="avatar_placeholder.png" 
                 WidthRequest="100" HeightRequest="100"
@@ -60,6 +65,15 @@
                     HeightRequest="1"
                     />
             </Grid>
+
+            <Button 
+                Text="Add Supplier" 
+                BackgroundColor="#D99B2B" 
+                TextColor="White"
+                CornerRadius="10"
+                HeightRequest="45"
+                Margin="0,20,0,0" 
+                Clicked="onButtonClicked"/>
 
         </VerticalStackLayout>
     </ScrollView>

@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MobiMart.View.SupplierInformation"
+             xmlns:view="clr-namespace:MobiMart.View"
+             BackgroundColor="#FDF4DC"
+             Title="SupplierInformation">
+    
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Grid 
+                ColumnDefinitions="Auto, *"
+                RowDefinitions="Auto, Auto"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center">
+                <Image 
+                    Source="avatar_placeholder.png" 
+                    WidthRequest="100" HeightRequest="100"
+                    HorizontalOptions="Center"
+                    Aspect="AspectFill"
+                    BackgroundColor="LightGray">
+                    <Image.Clip>
+                        <EllipseGeometry Center="50,50" RadiusX="50" RadiusY="50" />
+                    </Image.Clip>
+                </Image>
+
+            </Grid>
+
+            <Label 
+                Text="Supplier Name" 
+                FontAttributes="Bold" 
+                TextColor="#6F4E37" 
+                HorizontalTextAlignment="Center"
+                FontSize="22"/>
+
+            <BoxView HeightRequest="1" BackgroundColor="#D99B2B" />
+
+            <Grid
+                RowDefinitions="Auto, Auto, Auto"
+                ColumnDefinitions="Auto, *"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                ColumnSpacing="50"
+                RowSpacing="10">
+
+                <Label 
+                    Text="Contact Number: " 
+                    FontAttributes="Bold" 
+                    TextColor="#6F4E37"
+                    Grid.Row="0" Grid.Column="0"
+                    FontSize="18"/>
+
+                <Label 
+                    Text="Email: " 
+                    FontAttributes="Bold" 
+                    TextColor="#6F4E37"
+                    Grid.Row="1" Grid.Column="0"
+                    FontSize="18"/>
+
+                <Label 
+                    Text="Social Links: " 
+                    FontAttributes="Bold" 
+                    TextColor="#6F4E37"
+                    Grid.Row="2" Grid.Column="0"
+                    FontSize="18"/>
+
+                <Label 
+                    Text="Sample Number" 
+                    FontAttributes="None" 
+                    TextColor="#6F4E37"
+                    Grid.Row="0" Grid.Column="1"
+                    FontSize="14"
+                    VerticalOptions="Center"/>
+
+                <Label 
+                    Text="Sample Email" 
+                    FontAttributes="None" 
+                    TextColor="#6F4E37"
+                    Grid.Row="1" Grid.Column="1"
+                    FontSize="14"
+                    VerticalOptions="Center"/>
+
+                <Label 
+                    Text="Sample Socials" 
+                    FontAttributes="None" 
+                    TextColor="#6F4E37"
+                    Grid.Row="2" Grid.Column="1"
+                    FontSize="14"
+                    VerticalOptions="Center"/>
+
+            </Grid>
+
+            <Label 
+                Text="Items in Inventory" 
+                FontAttributes="Bold" 
+                TextColor="#6F4E37" 
+                HorizontalTextAlignment="Center"
+                FontSize="20"
+                Margin="0,40,0,0"/>
+
+            <BoxView HeightRequest="1" BackgroundColor="#D99B2B" />
+
+            <Button 
+                 Text="Check Inventory" 
+                 BackgroundColor="#D99B2B" 
+                 TextColor="White"
+                 CornerRadius="10"
+                 HeightRequest="45"
+                 Margin="0,0,0,50"
+                 Clicked="suppInventoryClick"/>
+
+            <Label 
+                Text="Contact Persons" 
+                FontAttributes="Bold" 
+                TextColor="#6F4E37" 
+                HorizontalTextAlignment="Center"
+                FontSize="20"/>
+
+            <BoxView HeightRequest="1" BackgroundColor="#D99B2B" />
+
+            <Grid
+                RowDefinitions="Auto, *"
+                ColumnDefinitions="Auto, *"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                ColumnSpacing="50"
+                >
+
+                <VerticalStackLayout
+                    Grid.Column="0" Grid.Row="0"
+                    Spacing="1">
+
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer></TapGestureRecognizer>
+                    </VerticalStackLayout.GestureRecognizers>
+
+                    <Label 
+                        Text="Sample Name" 
+                        FontAttributes="Bold" 
+                        TextColor="#6F4E37"
+                        Grid.Row="0"
+                        FontSize="16"/>
+
+                    <BoxView 
+                        Grid.Row="1" 
+                        HorizontalOptions="Fill" 
+                        BackgroundColor="#FFDB45" 
+                        HeightRequest="1"
+                        />
+
+                    <Label 
+                        Text="Sample Number" 
+                        TextColor="#6F4E37"
+                        Grid.Row="2"
+                        FontSize="14"/>
+
+                    <Label 
+                        Text="Sample Email" 
+                        TextColor="#6F4E37"
+                        Grid.Row="3"
+                        FontSize="14"/>
+
+                    <Label 
+                        Text="Sample Socials" 
+                        TextColor="#6F4E37"
+                        Grid.Row="4"
+                        FontSize="14"/>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout
+                    Grid.Column="1" Grid.Row="0"
+                    Spacing="1">
+
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer></TapGestureRecognizer>
+                    </VerticalStackLayout.GestureRecognizers>
+
+                    <Label 
+                        Text="Sample Name" 
+                        FontAttributes="Bold" 
+                        TextColor="#6F4E37"
+                        Grid.Row="0"
+                        FontSize="16"/>
+
+                    <BoxView 
+                        Grid.Row="1" 
+                        HorizontalOptions="Fill" 
+                        BackgroundColor="#FFDB45" 
+                        HeightRequest="1"
+                        />
+
+                    <Label 
+                        Text="Sample Number" 
+                        TextColor="#6F4E37"
+                        Grid.Row="2"
+                        FontSize="14"/>
+
+                    <Label 
+                        Text="Sample Email" 
+                        TextColor="#6F4E37"
+                        Grid.Row="3"
+                        FontSize="14"/>
+
+                    <Label 
+                        Text="Sample Socials" 
+                        TextColor="#6F4E37"
+                        Grid.Row="4"
+                        FontSize="14"/>
+                </VerticalStackLayout>
+
+            </Grid>
+
+            <Button 
+                Text="Message Supplier" 
+                BackgroundColor="#D99B2B" 
+                TextColor="White"
+                CornerRadius="10"
+                HeightRequest="45"
+                Margin="0,20,0,0"
+                Clicked="messageSuppClick"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

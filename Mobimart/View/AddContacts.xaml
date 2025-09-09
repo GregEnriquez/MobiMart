@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MobiMart.View.AddContacts"
+             xmlns:view="clr-namespace:MobiMart.View"
+             BackgroundColor="#FDF4DC"
+             Title="AddContacts">
+    
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Label Text="Contact Persons Name" FontAttributes="Bold" TextColor="#6F4E37" />
+            <Border
+                Stroke="#A9882D"
+                StrokeThickness="1.5"
+                StrokeShape="RoundRectangle 10,10,10,10">
+                <Entry Placeholder="Enter Contact Persons Name" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                    
+            </Border>
+
+            <Label Text="Contact Number" FontAttributes="Bold" TextColor="#6F4E37" />
+            <Border
+                Stroke="#A9882D"
+                StrokeThickness="1.5"
+                StrokeShape="RoundRectangle 10,10,10,10">
+                <Entry Placeholder="Enter Contact Number" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+            </Border>
+
+            <Label Text="Contact Email" FontAttributes="Bold" TextColor="#6F4E37" />
+            <Border
+                Stroke="#A9882D"
+                StrokeThickness="1.5"
+                StrokeShape="RoundRectangle 10,10,10,10">
+                <Entry Placeholder="Enter Contact Email" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+            </Border>
+
+            <Label Text="Contact Socials" FontAttributes="Bold" TextColor="#6F4E37" />
+            <Border
+                Stroke="#A9882D"
+                StrokeThickness="1.5"
+                StrokeShape="RoundRectangle 10,10,10,10">
+                <Entry Placeholder="Enter Contact Socials" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+            </Border>
+            
+            <Button 
+                Text="Add More" 
+                BackgroundColor="#D99B2B" 
+                TextColor="White"
+                CornerRadius="10"
+                HeightRequest="45"
+                Margin="0,20,0,0" />
+
+            <BoxView HeightRequest="1" BackgroundColor="#D99B2B" />
+
+            <Button 
+                Text="Save Changes" 
+                BackgroundColor="#D99B2B" 
+                TextColor="White"
+                CornerRadius="10"
+                HeightRequest="45"
+                Margin="0,20,0,0" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
