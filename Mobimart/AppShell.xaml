@@ -12,21 +12,14 @@
     Shell.TitleColor="Black"
     Shell.ForegroundColor="White"
     FlyoutWidth="250"
-    FlyoutBackgroundColor="#FBE7B3" >
-
-
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate view:MainPage}"
-        Route="MainPage" 
-        IsVisible="False"/>
+    FlyoutBackgroundColor="#FBE7B3">
     
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
-        <!-- <ShellContent
-            Title="User Page"
-            ContentTemplate="{DataTemplate view:UserPage}"
-            Icon="dotnet_bot.png"
-            Route="UserPage"/> -->
+        <ShellContent
+            Title="Home"
+            ContentTemplate="{DataTemplate view:MainPage}"
+            Route="MainPage" 
+            IsVisible="True"/>
         <ShellContent
             Title="Profile"
             ContentTemplate="{DataTemplate view:UserPage}"

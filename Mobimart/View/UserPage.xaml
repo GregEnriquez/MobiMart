@@ -12,11 +12,11 @@
 
     <Shell.TitleView>
         <Grid ColumnDefinitions="Auto, *">
-            <ImageButton
+            <!-- <ImageButton
                 Grid.Column="0"
                 Source="hamburger_icon.png"
                 HeightRequest="24"
-                WidthRequest="24"/>
+                WidthRequest="24"/> -->
 
             <Label
                 Grid.ColumnSpan="2"
