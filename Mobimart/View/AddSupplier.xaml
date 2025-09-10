@@ -74,18 +74,6 @@
                 <Entry Placeholder="Enter Supplier Socials" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
             </Border>
 
-            <HorizontalStackLayout
-                HorizontalOptions="Center"
-                Spacing="5">
-
-                <Image 
-                   Source="plus.png" 
-                   WidthRequest="15" HeightRequest="15"
-                   VerticalOptions="Center" />
-                <Label Text="Add More" FontAttributes="Bold" TextColor="#6F4E37"/>
-            </HorizontalStackLayout>
-            
-
             <Button 
                 Text="Add Contact" 
                 BackgroundColor="#D99B2B" 
