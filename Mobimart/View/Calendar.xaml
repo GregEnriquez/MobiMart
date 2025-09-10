@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MobiMart.View.Calendar"
+             Title="Calendar"
+             BackgroundColor="#FFFBE9">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- title -->
+        <Grid BackgroundColor="#D18800"
+              Padding="10"
+              Row="0"
+              HeightRequest="90">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+
+            <!-- title -->
+            <VerticalStackLayout Grid.Column="1"
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="Center">
+                <Label Text="App Name"
+                       FontSize="18"
+                       TextColor="White"
+                       HorizontalOptions="Center"
+                       FontAttributes="Bold"/>
+                <Label Text="Calendar"
+                        BackgroundColor="#FFD54F"
+                        TextColor="White"
+                        Padding="15,3"
+                     
+                        FontAttributes="Bold"
+                        FontSize="14"
+                        HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- Calendar Content -->
+        <ScrollView Grid.Row="1" Padding="15">
+            <VerticalStackLayout Spacing="20">
+
+                <!-- Month Navigation -->
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
+                    <Button Text="◀ Prev"
+                            Clicked="OnPrevMonthClicked"
+                            BackgroundColor="#FFD54F"
+                            TextColor="White"
+                            CornerRadius="15"
+                            Padding="10,3"/>
+
+                    <Label x:Name="MonthLabel"
+                           FontAttributes="Bold"
+                           FontSize="20"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           TextColor="Black"/>
+
+                    <Button Text="Next ▶"
+                            Clicked="OnNextMonthClicked"
+                            BackgroundColor="#FFD54F"
+                            TextColor="White"
+                            CornerRadius="15"
+                            Padding="10,3"/>
+                </HorizontalStackLayout>
+
+                <!-- Calendar Grid (di ko alam pano gawing pavertical) -->
+                <Grid x:Name="CalendarGrid"
+                      ColumnDefinitions="*,*,*,*,*,*,*"
+                      RowSpacing="10"
+                      ColumnSpacing="10" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

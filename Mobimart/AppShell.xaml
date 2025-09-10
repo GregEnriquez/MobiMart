@@ -52,6 +52,22 @@
             Title="Supplier List"
             ContentTemplate="{DataTemplate view:SupplierList}"
             Route="SupplierList" />
+        <ShellContent
+            Title="DailySales"
+            ContentTemplate="{DataTemplate view:DailySales}"
+            Route="DailySales" />
+        <ShellContent
+            Title="IncomeSummary"
+            ContentTemplate="{DataTemplate view:IncomeSummary}"
+            Route="IncomeSummary" />
+        <ShellContent
+            Title="SalesForecast"
+            ContentTemplate="{DataTemplate view:SalesForecast}"
+            Route="SalesForecast" />
+        <ShellContent
+            Title="Calendar"
+            ContentTemplate="{DataTemplate view:Calendar}"
+            Route="Calendar" /> 
     </FlyoutItem>
 
     <!-- <FlyoutItem Title="Profile">
