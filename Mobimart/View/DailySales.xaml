@@ -4,6 +4,7 @@
              x:Class="MobiMart.View.DailySales"
              Title="DailySales"
              BackgroundColor="#FFFBE9">
+
     <ContentPage.Content>
         <ScrollView>
             <VerticalStackLayout Padding="10" Spacing="15">
@@ -35,10 +36,9 @@
                             BackgroundColor="Transparent"
                             HorizontalOptions="Center"
                             VerticalOptions="Center"
-                            Clicked="OnPreviousDayClicked"/>
+                            Command="{Binding PreviousDayCommand}"/>
 
-                    <Label x:Name="CurrentDateLabel"
-                           Text="June 15, 2025"
+                    <Label Text="{Binding CurrentDate, StringFormat='{0:MMMM dd, yyyy}'}"
                            FontSize="18"
                            FontAttributes="Bold"
                            TextColor="Black"
@@ -46,7 +46,7 @@
                            VerticalOptions="Center"
                            Grid.Column="1">
                         <Label.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnDateTapped"/>
+                            <TapGestureRecognizer Command="{Binding SelectDateCommand}"/>
                         </Label.GestureRecognizers>
                     </Label>
 
@@ -56,11 +56,11 @@
                             HorizontalOptions="Center"
                             VerticalOptions="Center"
                             Grid.Column="2"
-                            Clicked="OnNextDayClicked"/>
+                            Command="{Binding NextDayCommand}"/>
                 </Grid>
 
                 <!-- Previous Balance -->
-                <Label Text="Previous Balance: "
+                <Label Text="{Binding PreviousBalance, StringFormat='Previous Balance: {0:C}'}"
                        FontAttributes="Bold"
                        FontSize="16"
                        TextColor="Black"
@@ -79,7 +79,7 @@
                 </Border>
 
                 <!-- Today's Income -->
-                <Label Text="Today's Income: "
+                <Label Text="{Binding TodaysIncome, StringFormat='Today\'s Income: {0:C}'}"
                        FontSize="16"
                        FontAttributes="Bold"
                        TextColor="Black"
@@ -97,7 +97,7 @@
                 </Border>
 
                 <!-- Today's Expenses -->
-                <Label Text="Today's Expenses: "
+                <Label Text="{Binding TodaysExpenses, StringFormat='Today\'s Expenses: {0:C}'}"
                        FontSize="16"
                        FontAttributes="Bold"
                        TextColor="Black"

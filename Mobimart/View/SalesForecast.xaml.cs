@@ -1,9 +1,12 @@
+using MobiMart.ViewModel;
+
 namespace MobiMart.View;
 
 public partial class SalesForecast : ContentPage
 {
-	public SalesForecast()
-	{
-		InitializeComponent();
-	}
+    public SalesForecast(SalesForecastViewModel viewModel)
+    {
+        InitializeComponent();
+        BindingContext = viewModel;
+    }
 }

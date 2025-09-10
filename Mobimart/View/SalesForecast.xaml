@@ -4,19 +4,18 @@
              x:Class="MobiMart.View.SalesForecast"
              Title="SalesForecast"
              BackgroundColor="#FFFBE9">
+
     <Grid RowDefinitions="Auto, *" ColumnDefinitions="*">
 
-        <!-- title -->
+        <!-- Header -->
         <Grid BackgroundColor="#D18E2D" Padding="15">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-
-            <!-- app title -->
+            <!-- App Title -->
             <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center">
-
                 <Label Text="App Name"
                        FontSize="20"
                        TextColor="White"
@@ -34,7 +33,7 @@
             </VerticalStackLayout>
         </Grid>
 
-
+        <!-- Content -->
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Padding="15" Spacing="20">
 
@@ -61,21 +60,22 @@
                     </VerticalStackLayout>
                 </Frame>
 
-                <!-- for revenue placeholders -->
+                <!-- Forecasted Revenue -->
                 <Label FontSize="16" TextColor="Black">
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="Forecasted Revenue: " FontAttributes="Bold" TextColor="Black"/>
-                            <Span Text="________" FontAttributes="Italic" TextColor="Black"/>
+                            <Span Text="{Binding ForecastedRevenue}" FontAttributes="Italic" TextColor="Black"/>
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
 
+                <!-- Current Revenue -->
                 <Label FontSize="16" TextColor="Black">
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="Current Revenue: " FontAttributes="Bold" TextColor="Black"/>
-                            <Span Text="________" FontAttributes="Italic" TextColor="Black"/>
+                            <Span Text="{Binding CurrentRevenue}" FontAttributes="Italic" TextColor="Black"/>
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
@@ -98,7 +98,7 @@
                                FontAttributes="Bold"
                                FontSize="14"
                                TextColor="Black"/>
-                        <Label Text="• Start of new School Year: This month is the usual start of a new school year. Sales regarding school supplies or snacks will be on the Rise."
+                        <Label Text="{Binding Recommendation}"
                                FontSize="13"
                                TextColor="Black"/>
                     </VerticalStackLayout>
