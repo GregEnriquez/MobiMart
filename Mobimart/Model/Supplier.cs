@@ -13,7 +13,7 @@ public class Supplier
     public string Type { get; set; } = "";
     public string Name { get; set; } = "";
     public string Email { get; set; } = "";
-    [ForeignKey(nameof(Socials))]
-    public int SocialsId { get; set; }
+    public string Socials { get; set; } = "";
+    public string Number { get; set; } = "";
     public required string LastModified { get; set; }
 }
