@@ -17,7 +17,9 @@
                             ColumnSpacing="10">
 
                     <Grid.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="onSupplierTap"></TapGestureRecognizer>
+                        <TapGestureRecognizer 
+                            Tapped="onSupplierTap"
+                            CommandParameter="{Binding}"/>
                     </Grid.GestureRecognizers>
 
                     <Image 

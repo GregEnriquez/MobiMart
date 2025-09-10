@@ -15,5 +15,7 @@ public class Supplier
     public string Email { get; set; } = "";
     public string Socials { get; set; } = "";
     public string Number { get; set; } = "";
+    [ForeignKey(nameof(ContactInfo))]
+    public int sContactId { get; set; }
     public required string LastModified { get; set; }
 }
