@@ -19,7 +19,7 @@
         Title="Home"
         ContentTemplate="{DataTemplate view:MainPage}"
         Route="MainPage" 
-        IsVisible="False"/>
+        IsVisible="True"/>
     
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
         <!-- <ShellContent
