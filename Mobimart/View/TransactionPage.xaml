@@ -6,7 +6,7 @@
              BackgroundColor="#FDF4DC"
              Title="TransactionPage">
 
-    <Shell.TitleView>
+    <!-- <Shell.TitleView>
         <Grid ColumnDefinitions="Auto, *">
             <ImageButton
                 Grid.Column="0"
@@ -24,7 +24,7 @@
                 TextColor="White"
                 FontAttributes="Bold" />
         </Grid>
-    </Shell.TitleView>
+    </Shell.TitleView> -->
 
     <Grid RowDefinitions="Auto, Auto, *, Auto, Auto">
         

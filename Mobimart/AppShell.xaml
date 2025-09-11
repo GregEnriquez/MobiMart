@@ -34,6 +34,10 @@
             Icon="dotnet_bot.png"
             Route="BusinessPage"/>
         <ShellContent
+            Title="Supplier List"
+            ContentTemplate="{DataTemplate view:SupplierList}"
+            Route="SupplierList" />
+        <ShellContent
             Title="Inventory"
             ContentTemplate="{DataTemplate view:InventoryListPage}"
             Route="InventoryListPage" />
@@ -45,10 +49,6 @@
             Title="Sales History"
             ContentTemplate="{DataTemplate view:SalesHistory}"
             Route="SalesHistory" />
-        <ShellContent
-            Title="Supplier List"
-            ContentTemplate="{DataTemplate view:SupplierList}"
-            Route="SupplierList" />
     </FlyoutItem>
 
     <!-- <FlyoutItem Title="Profile">

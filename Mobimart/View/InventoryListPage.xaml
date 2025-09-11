@@ -7,7 +7,7 @@
     BackgroundColor="#FDF4DC"
     Title="InventoryListPage">
 
-    <Shell.TitleView>
+    <!-- <Shell.TitleView>
         <Grid ColumnDefinitions="Auto, *, Auto">
             <ImageButton
                 Grid.Column="0"
@@ -33,7 +33,7 @@
                 HorizontalOptions="End"
                 Margin="0,0,10,0" />
         </Grid>
-    </Shell.TitleView>
+    </Shell.TitleView> -->
 
     <AbsoluteLayout>
         <Grid AbsoluteLayout.LayoutBounds="0,0,1,1"

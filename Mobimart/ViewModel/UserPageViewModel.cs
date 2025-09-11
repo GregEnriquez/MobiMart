@@ -111,6 +111,7 @@ public partial class UserPageViewModel : BaseViewModel
         Birthday = DateOnly.MinValue.ToDateTime(TimeOnly.MinValue);
         PhoneNumber = "";
         BusinessCode = "";
+        NotJoinedBusiness = true;
 
         FullName = user.FirstName + " " + user.LastName;
         Email = user.Email;
