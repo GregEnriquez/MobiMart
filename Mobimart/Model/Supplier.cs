@@ -17,5 +17,5 @@ public class Supplier
     public string Number { get; set; } = "";
     [ForeignKey(nameof(ContactInfo))]
     public int sContactId { get; set; }
-    public required string LastModified { get; set; }
+    public string LastModified { get; set; }
 }

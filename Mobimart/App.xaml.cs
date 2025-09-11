@@ -9,7 +9,9 @@
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            return new Window(new AppShell());
+            var services = IPlatformApplication.Current.Services;
+            var appShell = services.GetRequiredService<AppShell>();
+            return new Window(appShell);
         }
     }
 }

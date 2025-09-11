@@ -24,31 +24,35 @@ public partial class UserPageViewModel : BaseViewModel
     string phoneNumber = "";
     [ObservableProperty]
     string businessCode = "";
+    [ObservableProperty]
+    bool notJoinedBusiness = true;
 
     UserService userService;
+    BusinessService businessService;
 
-    public UserPageViewModel(UserService userService)
+    public UserPageViewModel(UserService userService, BusinessService businessService)
     {
         Title = "User Page";
         this.userService = userService;
+        this.businessService = businessService;
 
-        Task.Run(async () =>
-        {
-            IsBusy = true;
-            
-            var userInstance = await userService.GetUserInstanceAsync();
-            var user = await userService.GetUserAsync(userInstance.UserId);
+        // Task.Run(async () =>
+        // {
+        //     IsBusy = true;
 
-            FullName = user.FirstName + " " + user.LastName;
-            Email = user.Email;
-            Password = "********";
-            Age = user.Age;
-            // Birthday = DateOnly.ParseExact(user.BirthDate, "yyyy-MM-dd");
-            Birthday = DateOnly.ParseExact(user.BirthDate, "yyyy-MM-dd").ToDateTime(TimeOnly.MinValue);
-            PhoneNumber = user.PhoneNumber;
-        
-            IsBusy = false;
-        });
+        //     var userInstance = await userService.GetUserInstanceAsync();
+        //     var user = await userService.GetUserAsync(userInstance.UserId);
+
+        //     FullName = user.FirstName + " " + user.LastName;
+        //     Email = user.Email;
+        //     Password = "********";
+        //     Age = user.Age;
+        //     // Birthday = DateOnly.ParseExact(user.BirthDate, "yyyy-MM-dd");
+        //     Birthday = DateOnly.ParseExact(user.BirthDate, "yyyy-MM-dd").ToDateTime(TimeOnly.MinValue);
+        //     PhoneNumber = user.PhoneNumber;
+
+        //     IsBusy = false;
+        // });
 
     }
 
@@ -82,7 +86,7 @@ public partial class UserPageViewModel : BaseViewModel
             user.BirthDate = birthday;
 
         if (user.PhoneNumber != PhoneNumber)
-                user.PhoneNumber = PhoneNumber;
+            user.PhoneNumber = PhoneNumber;
 
         // business code
 
@@ -90,6 +94,82 @@ public partial class UserPageViewModel : BaseViewModel
 
 
         await userService.UpdateUserAsync(user);
+        IsBusy = false;
+    }
+
+
+    public async Task UpdateInfo()
+    {
+        var userInstance = await userService.GetUserInstanceAsync();
+        var user = await userService.GetUserAsync(userInstance.UserId);
+
+        IsBusy = true;
+        FullName = "";
+        Email = "";
+        Password = "";
+        Age = 0;
+        Birthday = DateOnly.MinValue.ToDateTime(TimeOnly.MinValue);
+        PhoneNumber = "";
+        BusinessCode = "";
+
+        FullName = user.FirstName + " " + user.LastName;
+        Email = user.Email;
+        Password = "********";
+        Age = user.Age;
+        // Birthday = DateOnly.ParseExact(user.BirthDate, "yyyy-MM-dd");
+        Birthday = DateOnly.ParseExact(user.BirthDate, "yyyy-MM-dd").ToDateTime(TimeOnly.MinValue);
+        PhoneNumber = user.PhoneNumber;
+
+        var business = await businessService.GetBusinessAsync(user.BusinessRefId);
+        if (business is not null)
+        {
+            BusinessCode = business.Code;
+            NotJoinedBusiness = false;
+        }
+
+        IsBusy = false;
+    }
+
+
+    [RelayCommand]
+    public async Task JoinBusiness()
+    {
+        if (IsBusy) return;
+        IsBusy = true;
+
+        if (BusinessCode is null || !NotJoinedBusiness)
+        {
+            IsBusy = false;
+            return;
+        }
+
+        var userInstance = await userService.GetUserInstanceAsync();
+        var user = await userService.GetUserAsync(userInstance.UserId);
+        var business = await businessService.GetBusinessAsync(BusinessCode);
+
+        if (business is null)
+        {
+            await Shell.Current.DisplayAlert("Error", "Business Code does not exist.", "OK");
+            IsBusy = false;
+            return;
+        }
+
+        bool confirm = await Shell.Current.DisplayAlert(
+            "Confirm Join",
+            $"Are you sure you want to join the the business named {business.Name}?",
+            "Yes", "No"
+        );
+
+        if (!confirm)
+        {
+            IsBusy = false;
+            return;
+        }
+
+        user.BusinessRefId = business.Id;
+        user.EmployeeType = "employee";
+        await userService.UpdateUserAsync(user);
+        await UpdateInfo();
         IsBusy = false;
     }
 }

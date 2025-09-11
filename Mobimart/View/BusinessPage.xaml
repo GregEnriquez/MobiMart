@@ -9,12 +9,12 @@
              BackgroundColor="#FDF4DC">
 
     <Shell.TitleView>
-        <Grid ColumnDefinitions="Auto, *">
-            <ImageButton
+        <Grid ColumnDefinitions="*">
+            <!-- <ImageButton
                 Grid.Column="0"
                 Source="hamburger_icon.png"
                 HeightRequest="24"
-                WidthRequest="24"/>
+                WidthRequest="24"/> -->
 
             <Label
                 Grid.ColumnSpan="2"
@@ -72,14 +72,14 @@
             <Border Stroke="#6D5206" 
                     StrokeThickness="1" 
                     StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter business name" BackgroundColor="White" TextColor="#6D5206" FontSize="12"/>
+                <Entry Text="{Binding BusinessName}" Placeholder="Enter business name" BackgroundColor="White" TextColor="#6D5206" FontSize="12" IsEnabled="{Binding IsOwner}"/>
             </Border>
 
             <Label Text="Business Address" FontAttributes="Bold" TextColor="#6D5206" FontSize="13"/>
             <Border Stroke="#6D5206" 
                     StrokeThickness="1" 
                     StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter business address" BackgroundColor="White" TextColor="#6D5206" FontSize="12"/>
+                <Entry Text="{Binding BusinessAddress}" Placeholder="Enter business address" BackgroundColor="White" TextColor="#6D5206" FontSize="12" IsEnabled="{Binding IsOwner}"/>
             </Border>
 
             <Label Text="Business Code" FontAttributes="Bold" TextColor="#6D5206" FontSize="13"/>
@@ -90,7 +90,7 @@
                         StrokeShape="RoundRectangle 10,10,10,10"
                         HeightRequest="50"
                         WidthRequest="80">
-                    <Entry Placeholder="Code" BackgroundColor="White" TextColor="#6D5206" FontSize="12" WidthRequest="75" HeightRequest="45" HorizontalTextAlignment="Center"/>
+                    <Entry Text="{Binding BusinessCode}" Placeholder="Code" BackgroundColor="White" TextColor="#6D5206" FontSize="12" WidthRequest="75" HeightRequest="45" HorizontalTextAlignment="Center" IsEnabled="False"/>
                 </Border>
 
                 <VerticalStackLayout>
@@ -106,7 +106,8 @@
                         WidthRequest="70"
                         Margin="0,0,0,5" 
                         FontSize="10"
-                        Padding="5,0"/>
+                        Padding="5,0"
+                        Command="{Binding CopyCodeCommand}"/>
                 </VerticalStackLayout>
             </HorizontalStackLayout>
 
@@ -133,7 +134,8 @@
                     HeightRequest="40"
                     HorizontalOptions="Center"
                     WidthRequest="121"
-                    Margin="0,10,0,10" />
+                    Margin="0,10,0,10" 
+                    Command="{Binding SaveChangesCommand}"/>
             </HorizontalStackLayout>
 
             <Button 
@@ -146,7 +148,9 @@
                 HeightRequest="40"
                 HorizontalOptions="Center"
                 WidthRequest="200"
-                Margin="0,10,0,10" />
+                Margin="0,10,0,10" 
+                IsVisible="{Binding CanViewEmployees}"
+                Clicked="onViewEmployeesClicked"/>
 
         </VerticalStackLayout>
     </ScrollView>

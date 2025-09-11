@@ -4,6 +4,8 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:view="clr-namespace:MobiMart.View"
+    xmlns:viewmoedl="clr-namespace:MobiMart.ViewModel"
+    x:DataType="viewmoedl:FlyoutMenuViewModel"
     Shell.FlyoutBehavior="Flyout"
     Shell.TabBarIsVisible="False"
     Title="MobiMart"
@@ -14,12 +16,14 @@
     FlyoutWidth="250"
     FlyoutBackgroundColor="#FBE7B3">
     
-    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
+    <FlyoutItem FlyoutItemIsVisible="False">
         <ShellContent
             Title="Home"
             ContentTemplate="{DataTemplate view:MainPage}"
-            Route="MainPage" 
-            IsVisible="True"/>
+            Route="MainPage" />
+    </FlyoutItem>
+
+    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems" Title="Navbar">
         <ShellContent
             Title="Profile"
             ContentTemplate="{DataTemplate view:UserPage}"
@@ -108,7 +112,7 @@
             </Frame>
 
             <Label Grid.Column="1"
-                   Text="business name"
+                   Text="{Binding BusinessName}"
                    FontAttributes="Bold"
                    FontSize="18"
                    TextColor="#6D5206"
@@ -116,7 +120,7 @@
             </Label>
 
             <Label Grid.Row="1" Grid.Column="1"
-                   Text="username"
+                   Text="{Binding Username}"
                    FontSize="14"
                    TextColor="#6D5206"
                    VerticalOptions="Center">
@@ -134,7 +138,7 @@
     <Shell.ItemTemplate>
         <DataTemplate>
             <Grid Padding="5">
-                <Label Text="{Binding Title}" 
+                <Label Text="{Binding Source={RelativeSource AncestorType={x:Type ShellContent}}, Path=Title}" 
                        TextColor="#6D5206"
                        FontSize="15"
                        FontAttributes="Bold">
@@ -152,8 +156,8 @@
                     Text="Logout"
                     TextColor="White"
                     BackgroundColor="#6D5206"
-                    CornerRadius="10" />
-                <!--Clicked="OnLogoutClicked" />-->
+                    CornerRadius="10"
+                    Command="{Binding LogoutCommand}"/>
             </VerticalStackLayout>
         </Grid>
     </Shell.FlyoutFooter>

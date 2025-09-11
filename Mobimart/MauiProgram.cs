@@ -3,6 +3,7 @@ using MobiMart.Service;
 using MobiMart.View;
 using MobiMart.ViewModel;
 using CommunityToolkit.Mvvm;
+using CommunityToolkit.Maui;
 
 namespace MobiMart
 {
@@ -13,18 +14,29 @@ namespace MobiMart
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
-            builder.Services.AddSingleton<UserService>();
+            builder.Services.AddSingleton<AppShell>();
 
+            // inject services
+            builder.Services.AddSingleton<UserService>();
+            builder.Services.AddSingleton<BusinessService>();
+            builder.Services.AddSingleton<UserService>();
+            builder.Services.AddSingleton<SupplierService>();
+
+            // inject viewmodels
             builder.Services.AddSingleton<LoginViewModel>();
             builder.Services.AddSingleton<SignUpViewModel>();
             builder.Services.AddSingleton<UserPageViewModel>();
             builder.Services.AddSingleton<BusinessPageViewModel>();
+            builder.Services.AddSingleton<FlyoutMenuViewModel>();
+            builder.Services.AddSingleton<AddSupplierViewModel>();
 
+            // inject views
             builder.Services.AddSingleton<SignUpPage>();
             builder.Services.AddSingleton<UserPage>();
             builder.Services.AddSingleton<BusinessPage>();

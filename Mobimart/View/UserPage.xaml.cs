@@ -9,4 +9,19 @@ public partial class UserPage : ContentPage
 		InitializeComponent();
 		BindingContext = viewModel;
 	}
+
+	private async void onCreateClicked(object sender, EventArgs args)
+	{
+		await Shell.Current.GoToAsync("//BusinessPage", true);
+	}
+
+	protected override void OnAppearing()
+	{
+		base.OnAppearing();
+		
+		if (BindingContext is UserPageViewModel vm)
+		{
+			vm.UpdateInfo();
+		}
+    }
 }

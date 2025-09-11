@@ -61,8 +61,9 @@ public partial class LoginViewModel : BaseViewModel
         }
 
         // login is succesful (do something)
-        // await Shell.Current.GoToAsync("//UserPage", true);
-        await Shell.Current.GoToAsync($"{nameof(UserPage)}", true);
+        Email = "";
+        Password = "";
+        await Shell.Current.GoToAsync("//UserPage", true);
         IsBusy = false;
     }
 

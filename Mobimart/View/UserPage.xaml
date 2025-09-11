@@ -75,42 +75,43 @@
             <Border Stroke="#6D5206" 
                     StrokeThickness="1" 
                     StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter full name" BackgroundColor="White" TextColor="#6D5206" FontSize="12"/>
+                <Entry Text="{Binding FullName}" Placeholder="Enter full name" BackgroundColor="White" TextColor="#6D5206" FontSize="12"/>
             </Border>
 
             <Label Text="Email" FontAttributes="Bold" TextColor="#6D5206" FontSize="13"/>
             <Border Stroke="#6D5206" 
                     StrokeThickness="1" 
                     StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter email" BackgroundColor="White" TextColor="#6D5206" Keyboard="Email" FontSize="12"/>
+                <Entry Text="{Binding Email}" Placeholder="Enter email" BackgroundColor="White" TextColor="#6D5206" Keyboard="Email" FontSize="12"/>
             </Border>
 
             <Label Text="Password" FontAttributes="Bold" TextColor="#6D5206" FontSize="13"/>
             <Border Stroke="#6D5206" 
                     StrokeThickness="1" 
                     StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter password" IsPassword="True" BackgroundColor="White" TextColor="#6D5206" FontSize="12"/>
+                <Entry Text="********" Placeholder="Enter password" IsPassword="True" BackgroundColor="White" TextColor="#6D5206" FontSize="12" IsEnabled="False"/>
             </Border>
 
             <Label Text="Age" FontAttributes="Bold" TextColor="#6D5206" FontSize="13"/>
             <Border Stroke="#6D5206" 
                     StrokeThickness="1" 
                     StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter age" BackgroundColor="White" TextColor="#6D5206" Keyboard="Numeric" FontSize="12"/>
+                <Entry Text="{Binding Age}" Placeholder="Enter age" BackgroundColor="White" TextColor="#6D5206" Keyboard="Numeric" FontSize="12"/>
             </Border>
 
             <Label Text="Birthday" FontAttributes="Bold" TextColor="#6D5206" FontSize="13"/>
             <Border Stroke="#6D5206" 
                     StrokeThickness="1" 
                     StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="MM/DD/YYYY" BackgroundColor="White" TextColor="#6D5206" FontSize="12"/>
+                <!-- <Entry Text="{Binding Birthday}" Placeholder="MM/DD/YYYY" BackgroundColor="White" TextColor="#6D5206" FontSize="12"/> -->
+                <DatePicker Date="{Binding Birthday}" BackgroundColor="White" TextColor="#6D5206" FontSize="12"/>
             </Border>
 
             <Label Text="Phone Number" FontAttributes="Bold" TextColor="#6D5206" FontSize="13"/>
             <Border Stroke="#6D5206" 
                     StrokeThickness="1" 
                     StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter phone number" BackgroundColor="White" TextColor="#6D5206" Keyboard="Telephone" FontSize="12"/>
+                <Entry Text="{Binding PhoneNumber}" Placeholder="Enter phone number" BackgroundColor="White" TextColor="#6D5206" Keyboard="Telephone" FontSize="12"/>
             </Border>
 
 
@@ -122,7 +123,7 @@
                         StrokeShape="RoundRectangle 10,10,10,10"
                         HeightRequest="50"
                         WidthRequest="80">
-                    <Entry Placeholder="Code" BackgroundColor="White" TextColor="#6D5206" FontSize="12" WidthRequest="75" HeightRequest="45" HorizontalTextAlignment="Center"/>
+                    <Entry Text="{Binding BusinessCode}" Placeholder="Code" BackgroundColor="White" TextColor="#6D5206" FontSize="12" WidthRequest="75" HeightRequest="45" HorizontalTextAlignment="Center" IsEnabled="{Binding NotJoinedBusiness}"/>
                 </Border>
 
                 <VerticalStackLayout>
@@ -138,7 +139,8 @@
                         WidthRequest="70"
                         Margin="0,0,0,5" 
                         FontSize="10"
-                        Padding="5,0"/>
+                        Padding="5,0"
+                        Clicked="onCreateClicked"/>
                     <Button 
                         Text="Join" 
                         BackgroundColor="#FBE7B3"
@@ -151,7 +153,8 @@
                         WidthRequest="70"
                         Margin="0,0,0,5" 
                         FontSize="10"
-                        Padding="5,0"/>
+                        Padding="5,0"
+                        Command="{Binding JoinBusinessCommand}"/>
                 </VerticalStackLayout>
             </HorizontalStackLayout>
 
@@ -165,7 +168,8 @@
                 HeightRequest="40"
                 HorizontalOptions="Center"
                 WidthRequest="200"
-                Margin="0,10,0,10" />
+                Margin="0,10,0,10" 
+                Command="{Binding SaveChangesCommand}"/>
 
         </VerticalStackLayout>
     </ScrollView>

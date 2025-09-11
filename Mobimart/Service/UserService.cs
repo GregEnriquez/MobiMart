@@ -217,7 +217,7 @@ public class UserService
     }
 
 
-    private async Task LogoutUserAsync()
+    public async Task LogoutUserAsync()
     {
         await Init();
 

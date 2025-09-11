@@ -1,14 +1,20 @@
-﻿using MobiMart.View;
+﻿using System.ComponentModel;
+using MobiMart.Service;
+using MobiMart.View;
+using MobiMart.ViewModel;
 
 namespace MobiMart
 {
     public partial class AppShell : Shell
     {
-        public AppShell()
+        public AppShell(FlyoutMenuViewModel viewModel)
         {
             InitializeComponent();
 
+            BindingContext = viewModel;
+
             // this.Loaded += OnShellLoaded!;
+            this.PropertyChanged += OnShellPropertyChanged;
             // Routing.RegisterRoute(nameof(UserPage), typeof(UserPage));
             // Routing.RegisterRoute(nameof(BusinessPage), typeof(BusinessPage));
 
@@ -34,5 +40,12 @@ namespace MobiMart
         // {
         //     await Shell.Current.GoToAsync("//InventoryListPage");
         // }
+        private void OnShellPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (BindingContext is FlyoutMenuViewModel vm)
+		{
+			vm.UpdateInfo();
+		}
+        }
     }
 }
