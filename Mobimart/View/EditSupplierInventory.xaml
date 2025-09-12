@@ -23,7 +23,7 @@
                Stroke="#A9882D"
                StrokeThickness="1.5"
                StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter Supplier Name" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                <Entry Placeholder="Enter Delivery ID" Text="{Binding DeliveryId}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
             </Border>
 
 
@@ -32,7 +32,7 @@
                Stroke="#A9882D"
                StrokeThickness="1.5"
                StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter Supplier Type" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                <Entry Placeholder="Enter Item Name" Text="{Binding WItemName}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
             </Border>
 
             <Label Text="Delivery Amount" FontAttributes="Bold" TextColor="#6F4E37" />
@@ -40,7 +40,7 @@
                Stroke="#A9882D"
                StrokeThickness="1.5"
                StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter Supplier Number" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                <Entry Placeholder="Enter Delivery Quantity" Text="{Binding WDelivQuantity}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
             </Border>
 
             <Label Text="Date Delivered" FontAttributes="Bold" TextColor="#6F4E37" />
@@ -48,7 +48,7 @@
                Stroke="#A9882D"
                StrokeThickness="1.5"
                StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter Supplier Email" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                <Entry Placeholder="Enter Date Delivered" Text="{Binding WDateDelivered}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
             </Border>
 
             <Label Text="Expiration Date" FontAttributes="Bold" TextColor="#6F4E37" />
@@ -56,7 +56,7 @@
                Stroke="#A9882D"
                StrokeThickness="1.5"
                StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter Supplier Socials" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                <Entry Placeholder="Enter Expiration Date" Text="{Binding WDateExpire}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
             </Border>
 
             <Label Text="Batch Worth" FontAttributes="Bold" TextColor="#6F4E37" />
@@ -64,7 +64,7 @@
                Stroke="#A9882D"
                StrokeThickness="1.5"
                StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter Supplier Socials" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                <Entry Placeholder="Enter Batch Worth" Text="{Binding WBatchWorth}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
             </Border>
 
             <Label Text="Item Type" FontAttributes="Bold" TextColor="#6F4E37" />
@@ -72,7 +72,7 @@
                Stroke="#A9882D"
                StrokeThickness="1.5"
                StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter Supplier Socials" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                <Entry Placeholder="Enter Item Type" Text="{Binding WItemType}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
             </Border>
 
             <Label Text="Item Description" FontAttributes="Bold" TextColor="#6F4E37" />
@@ -80,7 +80,7 @@
                Stroke="#A9882D"
                StrokeThickness="1.5"
                StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter Supplier Socials" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                <Entry Placeholder="Enter Item Description" Text="{Binding WItemDesc}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
             </Border>
 
             <Button 
@@ -89,7 +89,8 @@
                TextColor="White"
                CornerRadius="10"
                HeightRequest="45"
-               Margin="0,20,0,0" />
+               Margin="0,20,0,0" 
+               Command="{Binding SaveChangesCommand}" />
 
         </VerticalStackLayout>
     </ScrollView>

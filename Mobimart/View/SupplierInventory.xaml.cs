@@ -1,3 +1,4 @@
+using MobiMart.Model;
 using MobiMart.ViewModel;
 
 namespace MobiMart.View;
@@ -12,6 +13,14 @@ public partial class SupplierInventory : ContentPage
 
 	private async void editTapped(object sender, EventArgs args)
 	{
-		await Shell.Current.GoToAsync(nameof(EditSupplierInventory));
+		if ( sender is Element element && element.BindingContext is WholesaleInventory item)
+		{
+			var navParam = new Dictionary<string, object>
+			{
+				{ "InventoryItem", item }
+			};
+
+            await Shell.Current.GoToAsync(nameof(EditSupplierInventory), navParam);
+        }
 	}
 }
