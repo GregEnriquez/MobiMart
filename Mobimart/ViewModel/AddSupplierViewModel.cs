@@ -30,11 +30,6 @@ public partial class AddSupplierViewModel : ObservableObject
     [ObservableProperty]
     string number = "";
 
-    public AddSupplierViewModel()
-    {
-
-    }
-
     [RelayCommand]
     async Task saveChanges()
     {
