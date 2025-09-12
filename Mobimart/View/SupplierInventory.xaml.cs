@@ -23,4 +23,9 @@ public partial class SupplierInventory : ContentPage
             await Shell.Current.GoToAsync(nameof(EditSupplierInventory), navParam);
         }
 	}
+
+	private async void addTapped(object sender, EventArgs args)
+	{
+        await Shell.Current.GoToAsync(nameof(AddSupplierItem));
+    }
 }
