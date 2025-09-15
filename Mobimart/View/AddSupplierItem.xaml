@@ -43,18 +43,36 @@
 
             <Label Text="Date Delivered" FontAttributes="Bold" TextColor="#6F4E37" />
             <Border
-               Stroke="#A9882D"
-               StrokeThickness="1.5"
-               StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter Date Delivered" Text="{Binding WDateDelivered}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                Stroke="#A9882D"
+                StrokeThickness="1.5"
+                StrokeShape="RoundRectangle 10,10,10,10"
+                WidthRequest="125"
+                HorizontalOptions="Start">
+                <DatePicker 
+                    Date="{Binding WDateDelivered}" 
+                    BackgroundColor="#F8ECC6" 
+                    TextColor="#A9882D"
+                    Format="MM/dd/yyyy"
+                    HorizontalOptions="Center"
+                    MinimumDate="01/01/2025"
+                    />
             </Border>
 
             <Label Text="Expiration Date" FontAttributes="Bold" TextColor="#6F4E37" />
             <Border
-               Stroke="#A9882D"
-               StrokeThickness="1.5"
-               StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter Expiration Date" Text="{Binding WDateExpire}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                Stroke="#A9882D"
+                StrokeThickness="1.5"
+                StrokeShape="RoundRectangle 10,10,10,10"
+                WidthRequest="125"
+                HorizontalOptions="Start">
+                <DatePicker 
+                    Date="{Binding WDateExpire}" 
+                    BackgroundColor="#F8ECC6" 
+                    TextColor="#A9882D"
+                    Format="MM/dd/yyyy"
+                    HorizontalOptions="Center"
+                    MinimumDate="01/01/2025"
+                />
             </Border>
 
             <Label Text="Batch Worth" FontAttributes="Bold" TextColor="#6F4E37" />
