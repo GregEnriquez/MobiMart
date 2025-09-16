@@ -54,7 +54,13 @@
                     FontSize="13"
                     FontAttributes="Bold"
                     Text="x"
-                    TextColor="#6D5206"/>
+                    TextColor="#6D5206">
+                    
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnDateLabelTapped"/>
+                    </Label.GestureRecognizers>
+                    
+                </Label>
                 <ImageButton 
                     Grid.Column="2"
                     Source="next_icon.png"

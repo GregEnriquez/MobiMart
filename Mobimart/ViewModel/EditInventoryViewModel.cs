@@ -1,11 +1,13 @@
-﻿using System;
+﻿using CommunityToolkit.Maui.Extensions;
+using Microsoft.Maui.Controls;
+using MobiMart.Model;
+using MobiMart.View;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using MobiMart.Model;
-using Microsoft.Maui.Controls;
 
 namespace MobiMart.ViewModel
 {
@@ -43,7 +45,8 @@ namespace MobiMart.ViewModel
 
         private async Task Save()
         {
-            await Application.Current.MainPage.DisplayAlert("Saved", $"{Item.ItemName} updated!", "OK");
+            var popup = new SaveInventoryPopup($"{Item.ItemName} updated!");
+            var result = await Application.Current.MainPage.ShowPopupAsync(popup);
             await Application.Current.MainPage.Navigation.PopAsync();
         }
     }

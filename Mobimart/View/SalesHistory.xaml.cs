@@ -1,4 +1,6 @@
+using CommunityToolkit.Maui.Extensions;
 using MobiMart.Model;
+using System;
 
 namespace MobiMart.View;
 
@@ -60,6 +62,26 @@ public partial class SalesHistory : ContentPage
     {
         base.OnAppearing();
         UpdateTransactionList();
+    }
+
+    private async void OnDateLabelTapped(object sender, EventArgs e)
+    {
+        var popup = new DatePickerPopup();
+        await this.ShowPopupAsync(popup); // show the popup
+
+        var selectedDate = await popup.GetResultAsync(); // get the result
+
+        if (selectedDate.HasValue)
+        {
+            _currentDate = selectedDate.Value;
+            DateLabel.Text = _currentDate.ToString("MMMM dd, yyyy");
+
+            var filtered = TransactionStore.Records
+                .Where(r => r.Date.Date == _currentDate.Date)
+                .ToList();
+
+            TransactionList.ItemsSource = filtered;
+        }
     }
 
 }

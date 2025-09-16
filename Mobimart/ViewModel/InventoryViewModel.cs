@@ -40,6 +40,7 @@ namespace MobiMart.ViewModel
 
             //_allItems.Add(newItemFromDb);
             //InventoryItems.Add(newItemFromDb);
+
             // sample data (for testing UI)
             _allItems.Add(new Inventory
             {
@@ -84,10 +85,7 @@ namespace MobiMart.ViewModel
             var newItem = new Inventory
             {
                 Id = _allItems.Count + 1,
-                ItemName = "New Item",
-                TotalAmount = 0,
-                RetailPrice = 0,
-                ItemType = "Unknown",
+                
                 LastModified = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             };
 

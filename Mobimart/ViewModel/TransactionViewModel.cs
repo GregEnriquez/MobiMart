@@ -1,4 +1,6 @@
-﻿using MobiMart.Model;
+﻿using CommunityToolkit.Maui.Extensions;
+using MobiMart.Model;
+using MobiMart.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,8 +25,25 @@ namespace MobiMart.ViewModel
             {
                 totalPrice = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(Change));
             }
         }
+
+        private decimal payment;
+        public decimal Payment
+        {
+            get => payment;
+            set
+            {
+                if (payment != value)
+                {
+                    payment = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Change));
+                }
+            }
+        }
+        public decimal Change => Payment - TotalPrice;
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = "") =>
@@ -55,7 +74,8 @@ namespace MobiMart.ViewModel
         {
             if (Items.Count == 0)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "No items to save.", "OK");
+                var notsuccessPopup = new NoItemsPopup();
+                Application.Current.MainPage.ShowPopup(notsuccessPopup);
                 return;
             }
 
@@ -70,17 +90,21 @@ namespace MobiMart.ViewModel
                     ItemName = item.ItemName,
                     Quantity = item.Quantity,
                     Price = item.Price
-                }).ToList() // Copy into a new list
+                }).ToList(),
+                Payment = this.Payment,
+                Change = this.Change
             };
 
             TransactionStore.Records.Add(record);
 
             // Show success popup
-            await Application.Current.MainPage.DisplayAlert("Success", "Transaction saved!", "OK");
+            var successPopup = new SaveInventoryPopup("Transaction saved!");
+            Application.Current.MainPage.ShowPopup(successPopup);
 
             // Clear transaction form
             Items.Clear();
             TotalPrice = 0;
+            Payment = 0;
         });
 
     }

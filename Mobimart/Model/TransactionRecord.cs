@@ -11,6 +11,8 @@ namespace MobiMart.Model
         public string Name { get; set; }
         public DateTime Date { get; set; }
         public decimal TotalPrice { get; set; }
+        public decimal Payment { get; set; }
+        public decimal Change { get; set; }
 
         public List<Transaction> Items { get; set; } = new List<Transaction>();
     }

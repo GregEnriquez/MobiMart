@@ -29,10 +29,11 @@ public partial class ViewTransaction : ContentPage
         // DateLabel.Text = _record.Date.ToString("f");
         // TotalLabel.Text = _record.TotalPrice.ToString("C");
 
-        // If you have a CollectionView inside ViewTransaction.xaml, bind the items
         // ItemsList.ItemsSource = _record.Items;
         ItemsList.ItemsSource = _record.Items;
-        TotalLabel.Text = $"{_record.TotalPrice:N2}";
+        TotalLabel.Text = $"Total Price: Php {_record.TotalPrice:N2}";
+        PaymentLabel.Text = $"Payment: Php {_record.Payment:N2}";
+        ChangeLabel.Text = $"Change: Php {_record.Change:N2}";
     }
 
     private void OnHamburgerClicked(object sender, EventArgs e)

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup  xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+                x:Class="MobiMart.View.SaveInventoryPopup"
+                Margin="0,0,0,0"
+                Padding="3">
+
+    <Frame
+        Padding="20"
+        BorderColor="#6D5206"
+        CornerRadius="15"
+        BackgroundColor="#FBE7B3"
+        VerticalOptions="Center"
+        HorizontalOptions="Center"
+        WidthRequest="200">
+
+        <VerticalStackLayout Spacing="10" Padding="0" HorizontalOptions="Center">
+            <Label Text="Saved!"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   TextColor="#6D5206"
+                   Margin="0,0,0,10"/>
+
+            <Grid ColumnDefinitions="200" Margin="0">
+                <BoxView HeightRequest="2"
+                         Grid.Column="0"
+                         Color="#6D5206"
+                         VerticalOptions="Center"
+                         Margin="0,0,0,10"/>
+            </Grid>
+
+            <Button Text="Close"
+                BackgroundColor="#6D5206"
+                TextColor="White"
+                CornerRadius="6"
+                WidthRequest="70"
+                HeightRequest="28"
+                Padding="0"
+                Clicked="OnCloseClicked"/>
+        </VerticalStackLayout>
+    </Frame>
+
+</toolkit:Popup>

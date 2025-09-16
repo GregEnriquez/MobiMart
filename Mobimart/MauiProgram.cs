@@ -1,8 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Mvvm;
+using Microsoft.Extensions.Logging;
 using MobiMart.Service;
 using MobiMart.View;
 using MobiMart.ViewModel;
-using CommunityToolkit.Mvvm;
 
 namespace MobiMart
 {
@@ -13,6 +14,7 @@ namespace MobiMart
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
