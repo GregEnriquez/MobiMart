@@ -14,7 +14,7 @@
                 Stroke="#A9882D"
                 StrokeThickness="1.5"
                 StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter Contact Persons Name" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                <Entry Placeholder="Enter Contact Persons Name" Text="{Binding CName}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
                     
             </Border>
 
@@ -23,7 +23,7 @@
                 Stroke="#A9882D"
                 StrokeThickness="1.5"
                 StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter Contact Number" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                <Entry Placeholder="Enter Contact Number" Text="{Binding CNumber}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
             </Border>
 
             <Label Text="Contact Email" FontAttributes="Bold" TextColor="#6F4E37" />
@@ -31,7 +31,7 @@
                 Stroke="#A9882D"
                 StrokeThickness="1.5"
                 StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter Contact Email" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                <Entry Placeholder="Enter Contact Email" Text="{Binding CEmail}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
             </Border>
 
             <Label Text="Contact Socials" FontAttributes="Bold" TextColor="#6F4E37" />
@@ -39,7 +39,7 @@
                 Stroke="#A9882D"
                 StrokeThickness="1.5"
                 StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter Contact Socials" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                <Entry Placeholder="Enter Contact Socials" Text="{Binding CSocials}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
             </Border>
             
             <Button 
@@ -58,8 +58,9 @@
                 TextColor="White"
                 CornerRadius="10"
                 HeightRequest="45"
-                Margin="0,20,0,0" />
-
+                Margin="0,20,0,0" 
+                Command="{Binding saveChangesCommand}"/>
+            
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
