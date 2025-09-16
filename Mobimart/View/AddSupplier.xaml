@@ -40,7 +40,7 @@
                 Stroke="#A9882D"
                 StrokeThickness="1.5"
                 StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Text="{Binding Name}" Placeholder="Enter Supplier Name" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                <Entry Placeholder="Enter Supplier Name" Text="{Binding Name}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
             </Border>
             
 
@@ -49,7 +49,7 @@
                 Stroke="#A9882D"
                 StrokeThickness="1.5"
                 StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Text="{Binding Type}" Placeholder="Enter Supplier Type" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                <Entry Placeholder="Enter Supplier Type" Text="{Binding Type}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
             </Border>
 
             <Label Text="Supplier Number" FontAttributes="Bold" TextColor="#6F4E37" />
@@ -57,7 +57,7 @@
                 Stroke="#A9882D"
                 StrokeThickness="1.5"
                 StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Text="{Binding Number}" Placeholder="Enter Supplier Number" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                <Entry Placeholder="Enter Supplier Number" Text="{Binding Number}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
             </Border>
 
             <Label Text="Supplier Email" FontAttributes="Bold" TextColor="#6F4E37" />
@@ -65,7 +65,7 @@
                 Stroke="#A9882D"
                 StrokeThickness="1.5"
                 StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Text="{Binding Email}" Placeholder="Enter Supplier Email" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                <Entry Placeholder="Enter Supplier Email" Text="{Binding Email}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
             </Border>
 
             <Label Text="Supplier Socials" FontAttributes="Bold" TextColor="#6F4E37" />
@@ -73,7 +73,7 @@
                 Stroke="#A9882D"
                 StrokeThickness="1.5"
                 StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Text="{Binding Socials}" Placeholder="Enter Supplier Socials" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                <Entry Placeholder="Enter Supplier Socials" Text="{Binding Socials}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
             </Border>
 
             <Button 

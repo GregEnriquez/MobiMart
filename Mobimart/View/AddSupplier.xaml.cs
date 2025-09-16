@@ -1,6 +1,7 @@
 using MobiMart.ViewModel;
 
 namespace MobiMart.View;
+using MobiMart.ViewModel;
 
 public partial class AddSupplier : ContentPage
 {
