@@ -1,3 +1,7 @@
+using CommunityToolkit.Maui.Extensions;
+using MobiMart.Model;
+using System;
+
 namespace MobiMart.View;
 
 public partial class SalesHistory : ContentPage
@@ -17,6 +21,7 @@ public partial class SalesHistory : ContentPage
     private void UpdateDateLabel()
     {
         DateLabel.Text = _currentDate.ToString("MMMM dd, yyyy");
+        UpdateTransactionList();
     }
 
     private void OnPreviousDateClicked(object sender, EventArgs e)
@@ -33,6 +38,50 @@ public partial class SalesHistory : ContentPage
 
     private async void OnTransactionClicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync(nameof(ViewTransaction), true);
+        if (sender is Frame frame && frame.BindingContext is TransactionRecord record)
+        {
+            // Pass the transaction record as navigation data
+            await Shell.Current.GoToAsync(nameof(ViewTransaction), true,
+                new Dictionary<string, object>
+                {
+                { "TransactionRecord", record }
+                });
+        }
     }
+
+    private void UpdateTransactionList()
+    {
+        var filtered = TransactionStore.Records
+            .Where(r => r.Date.Date == _currentDate.Date)
+            .ToList();
+
+        TransactionList.ItemsSource = filtered;
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        UpdateTransactionList();
+    }
+
+    private async void OnDateLabelTapped(object sender, EventArgs e)
+    {
+        var popup = new DatePickerPopup();
+        await this.ShowPopupAsync(popup); // show the popup
+
+        var selectedDate = await popup.GetResultAsync(); // get the result
+
+        if (selectedDate.HasValue)
+        {
+            _currentDate = selectedDate.Value;
+            DateLabel.Text = _currentDate.ToString("MMMM dd, yyyy");
+
+            var filtered = TransactionStore.Records
+                .Where(r => r.Date.Date == _currentDate.Date)
+                .ToList();
+
+            TransactionList.ItemsSource = filtered;
+        }
+    }
+
 }

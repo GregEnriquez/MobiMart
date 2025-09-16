@@ -54,7 +54,13 @@
                     FontSize="13"
                     FontAttributes="Bold"
                     Text="x"
-                    TextColor="#6D5206"/>
+                    TextColor="#6D5206">
+                    
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnDateLabelTapped"/>
+                    </Label.GestureRecognizers>
+                    
+                </Label>
                 <ImageButton 
                     Grid.Column="2"
                     Source="next_icon.png"
@@ -67,9 +73,29 @@
                     Clicked="OnNextDateClicked" />
             </Grid>
 
-            <VerticalStackLayout x:Name="TransactionList" Spacing="10">
-
-                <!-- Example -->
+            <CollectionView x:Name="TransactionList" ItemsSource="{Binding}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame HasShadow="True" BorderColor="#6D5206" CornerRadius="10" Padding="10" BackgroundColor="#FBE7B3" Margin="0,0,0,10">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding Name}" FontAttributes="Bold" TextColor="#6D5206"/>
+                                <BoxView HeightRequest="1" BackgroundColor="#6D5206" VerticalOptions="Start" />
+                                <Grid ColumnDefinitions="*,*">
+                                    <Label Text="{Binding Date, StringFormat='{0:hh:mm tt}'}" 
+                                            Grid.Column="0" TextColor="#6D5206"/>
+                                    <Label Text="{Binding TotalPrice, StringFormat='Total Price: {0} php'}" 
+                                            Grid.Column="1" TextColor="#6D5206"
+                                            HorizontalOptions="End"/>
+                                </Grid>
+                            </VerticalStackLayout>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnTransactionClicked"/>
+                            </Frame.GestureRecognizers>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <!-- Example 
                 <Frame HasShadow="True" BorderColor="#6D5206" CornerRadius="10" Padding="10" BackgroundColor="#FBE7B3">
                     <VerticalStackLayout>
                         <Label Text="Transaction 1" FontAttributes="Bold" TextColor="#6D5206"/>
@@ -87,8 +113,7 @@
                         <TapGestureRecognizer Tapped="OnTransactionClicked"/>
                     </Frame.GestureRecognizers>
                     
-                </Frame>
-            </VerticalStackLayout>
+                </Frame>-->
 
         </VerticalStackLayout>
     </ScrollView>

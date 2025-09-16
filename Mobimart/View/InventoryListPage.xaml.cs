@@ -1,3 +1,5 @@
+using MobiMart.ViewModel;
+
 namespace MobiMart.View;
 
 public partial class InventoryListPage : ContentPage
@@ -5,7 +7,8 @@ public partial class InventoryListPage : ContentPage
 	public InventoryListPage()
 	{
 		InitializeComponent();
-	}
+        BindingContext = new InventoryViewModel();
+    }
 
     // private void OnHamburgerClicked(object sender, EventArgs e)
     // {

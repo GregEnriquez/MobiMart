@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:view="clr-namespace:MobiMart.View"
+    xmlns:viewmodel="clr-namespace:MobiMart.ViewModel"
     x:Class="MobiMart.View.InventoryListPage"
     BackgroundColor="#FDF4DC"
     Title="InventoryListPage">
@@ -35,11 +36,9 @@
         </Grid>
     </Shell.TitleView> -->
 
-    <AbsoluteLayout>
-        <Grid AbsoluteLayout.LayoutBounds="0,0,1,1"
-              AbsoluteLayout.LayoutFlags="All"
-              RowDefinitions="Auto, *, Auto">
-            <VerticalStackLayout Grid.Row="0" Padding="10" Spacing="15">
+    <ScrollView >
+        <Grid RowDefinitions="Auto, *" Padding="10">
+            <VerticalStackLayout Grid.Row="0" Padding="7" Spacing="15">
 
                 <Label Text="Inventory List"
                         HorizontalOptions="Center"
@@ -53,45 +52,67 @@
                         StrokeShape="RoundRectangle 10,10,10,10">
 
                     <SearchBar Placeholder="Search"
-                                BackgroundColor="White"
-                                TextColor="#6D5206"
-                                HeightRequest="40" />
+                               BackgroundColor="White"
+                               TextColor="#6D5206"
+                               HeightRequest="40" 
+                               Text="{Binding SearchText}"/>
                 </Border>
 
-                <Grid ColumnDefinitions="*, Auto, *, *, *" BackgroundColor="#6D5206" Padding="5">
-                    <Label Text="Item Name" TextColor="White" FontAttributes="Bold" />
-                    <Label Grid.Column="1" Text="Quantity" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
-                    <Label Grid.Column="2" Text="Price" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
-                    <Label Grid.Column="3" Text="Type" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
-                    <Label Grid.Column="4" Text="Desc" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
-                </Grid>
+                <ScrollView Orientation="Both">
+                    <VerticalStackLayout>
+                        <Grid ColumnDefinitions="100, 80, 50, 100, 100, 50" BackgroundColor="#6D5206" Padding="5">
+                            <Label Text="Item Name" TextColor="White" FontAttributes="Bold" />
+                            <Label Grid.Column="1" Text="Quantity" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+                            <Label Grid.Column="2" Text="Price" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+                            <Label Grid.Column="3" Text="Type" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+                            <Label Grid.Column="4" Text="Desc" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+                            <Label Grid.Column="5" Text="Action" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+                        </Grid>
 
-                <CollectionView ItemsSource="{Binding InventoryItems}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid ColumnDefinitions="*, Auto, *, *, *" Padding="5" BackgroundColor="#F6CD5E">
-                                <Label Text="{Binding Name}" TextColor="#6D5206" />
-                                <Label Grid.Column="1" Text="{Binding Quantity}" TextColor="#6D5206" HorizontalOptions="Center" />
-                                <Label Grid.Column="2" Text="{Binding Price}" TextColor="#6D5206" HorizontalOptions="Center" />
-                                <Label Grid.Column="3" Text="{Binding Type}" TextColor="#6D5206" HorizontalOptions="Center" />
-                                <Label Grid.Column="4" Text="{Binding Desc}" TextColor="#6D5206" HorizontalOptions="Center" />
-                            </Grid>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-                <Button Text="Sample Popup"
-                        BackgroundColor="#FBE7B3"
-                        BorderColor="#6D5206"
-                        BorderWidth="2"
-                        TextColor="#6D5206"
-                        CornerRadius="20"
-                        HeightRequest="0"
-                        HorizontalOptions="Center"
-                        WidthRequest="200"
-                        Margin="0,10,0,10"/>
+                        <CollectionView ItemsSource="{Binding InventoryItems}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="100, 80, 50, 100, 100, 50" Padding="5" BackgroundColor="#F6CD5E">
+                                        <Label Text="{Binding ItemName}" TextColor="#6D5206" />
+                                        <Label Grid.Column="1" Text="{Binding TotalAmount}" TextColor="#6D5206" HorizontalOptions="Center" />
+                                        <Label Grid.Column="2" Text="{Binding RetailPrice}" TextColor="#6D5206" HorizontalOptions="Center" />
+                                        <Label Grid.Column="3" Text="{Binding ItemType}" TextColor="#6D5206" HorizontalOptions="Center" />
+                                        <Label Grid.Column="4" Text="" TextColor="#6D5206" HorizontalOptions="Center" />
+                                        <Button Grid.Column="5"
+                                                Text="Edit"
+                                                BackgroundColor="#FBE7B3"
+                                                TextColor="#6D5206"
+                                                CornerRadius="10"
+                                                Padding="5,0"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:InventoryViewModel}}, Path=EditCommand}"
+                                                CommandParameter="{Binding .}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </ScrollView>
+
+                <HorizontalStackLayout Padding="1" HorizontalOptions="Center">
+                    <Frame Padding="5" HasShadow="False" BackgroundColor="Transparent" BorderColor="Transparent">
+                        <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                            <Image Source="add_icon.png" WidthRequest="24" HeightRequest="24"/>
+                            <Label Text="Add Item"
+                                   VerticalOptions="Center"
+                                   TextColor="#6D5206"
+                                   FontAttributes="Bold"/>
+                        </HorizontalStackLayout>
+
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding AddItemCommand}" />
+                        </Frame.GestureRecognizers>
+                    </Frame>
+                </HorizontalStackLayout>
+
+
             </VerticalStackLayout>
 
-            <Button Grid.Row="2"
+            <Button Grid.Row="1"
                     Text="Barcode Scanner"
                     BackgroundColor="#FBE7B3"
                     BorderColor="#6D5206"
@@ -101,13 +122,8 @@
                     HeightRequest="0"
                     HorizontalOptions="Center"
                     WidthRequest="200"
-                    Margin="0,10,0,10" />
+                    Margin="0,0,0,0" />
         </Grid>
-        <view:ViewItem x:Name="ItemPopup"
-                        IsVisible="False"
-                        AbsoluteLayout.LayoutBounds="0.5,0.5,AutoSize,AutoSize"
-                        AbsoluteLayout.LayoutFlags="PositionProportional"
-                        ZIndex="10"/>
-    </AbsoluteLayout>
+    </ScrollView>
 
 </ContentPage>
