@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Mvvm;
+using Microsoft.Extensions.Logging;
 using MobiMart.Service;
 using MobiMart.View;
 using MobiMart.ViewModel;
