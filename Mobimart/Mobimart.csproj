@@ -82,6 +82,8 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\AddSupplierItem.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="View\Barcode.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
