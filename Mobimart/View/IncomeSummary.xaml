@@ -30,7 +30,6 @@
 
 
         <ScrollView Grid.Row="1" Padding="20">
-
             <VerticalStackLayout Spacing="20">
 
                 <!-- Today's Income placeholder -->
@@ -43,7 +42,8 @@
                                FontAttributes="Bold" 
                                FontSize="18" 
                                TextColor="#7A5C1A"/>
-                        <Entry Placeholder="Enter today's income"
+                        <Entry Text="{Binding TodaysIncome}"
+                               Placeholder="Enter today's income"
                                FontSize="18"
                                TextColor="#7A5C1A"
                                Margin="10,0,0,0"
@@ -68,7 +68,7 @@
                        TextColor="#7A5C1A"/>
 
                 <!-- Table with Borders -->
-                <CollectionView>
+                <CollectionView ItemsSource="{Binding ItemsSold}">
                     <CollectionView.Header>
                         <Grid ColumnDefinitions="2*,1*,1*,1*,1.5*" Padding="5" BackgroundColor="#C07A2A">
                             <Label Text="Item Name" Grid.Column="0" TextColor="White"/>
@@ -96,7 +96,7 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
-                <!-- table input (di ko sure if need toh) -->
+                <!-- table input (optional future use) -->
                 <Grid ColumnDefinitions="2*,1*,1*,1*,1.5*" Padding="5" BackgroundColor="#EEE">
                     <Entry Placeholder="Item Name" Grid.Column="0"/>
                     <Entry Placeholder="Amount" Grid.Column="1" Keyboard="Numeric" HorizontalTextAlignment="Center"/>
@@ -106,8 +106,6 @@
                 </Grid>
 
             </VerticalStackLayout>
-
         </ScrollView>
-
     </Grid>
 </ContentPage>
