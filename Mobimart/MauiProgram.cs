@@ -37,6 +37,10 @@ namespace MobiMart
             builder.Services.AddSingleton<BusinessPageViewModel>();
             builder.Services.AddSingleton<FlyoutMenuViewModel>();
             builder.Services.AddSingleton<AddSupplierViewModel>();
+            builder.Services.AddSingleton<CalendarViewModel>();
+            builder.Services.AddSingleton<DailySalesViewModel>();
+            builder.Services.AddSingleton<IncomeSummaryViewModel>();
+            builder.Services.AddSingleton<SalesForecastViewModel>();
 
             // inject views
             builder.Services.AddSingleton<SignUpPage>();
