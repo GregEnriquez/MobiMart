@@ -72,6 +72,18 @@
 	  <Compile Update="View\AddSupplier.xaml.cs">
 	    <DependentUpon>AddSupplier.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="View\Calendar.xaml.cs">
+	    <DependentUpon>Calendar.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="View\IncomeSummary.xaml.cs">
+	    <DependentUpon>IncomeSummary.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="View\DailySales.xaml.cs">
+	    <DependentUpon>DailySales.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="View\SalesForecast.xaml.cs">
+	    <DependentUpon>SalesForecast.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -109,6 +121,18 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\SaveInventoryPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\Calendar.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\IncomeSummary.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\DailySales.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\SalesForecast.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\SupplierInformation.xaml">
