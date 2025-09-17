@@ -2,12 +2,15 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:view="clr-namespace:MobiMart.View"
+             xmlns:model="clr-namespace:MobiMart.Model"
              x:Class="MobiMart.View.EmployeeTablePage"
+             x:DataType="viewmodel:EmployeeTablePageViewModel"
              xmlns:viewmodel="clr-namespace:MobiMart.ViewModel"
              Title="{Binding Title}"
+             x:Name="EmployeePage"
              BackgroundColor="#FDF4DC">
 
-    <Shell.TitleView>
+    <!-- <Shell.TitleView>
         <Grid ColumnDefinitions="Auto, *">
             <ImageButton
                 Grid.Column="0"
@@ -25,9 +28,9 @@
                 TextColor="White"
                 FontAttributes="Bold" />
         </Grid>
-    </Shell.TitleView>
+    </Shell.TitleView> -->
 
-    <Grid RowDefinitions="*,Auto">
+    <!-- <Grid RowDefinitions="*,Auto">
         <ScrollView Grid.Row="0">
             <VerticalStackLayout Padding="10" Spacing="15">
                 <Label Text="Employee Table"
@@ -37,7 +40,7 @@
                         FontSize="18"
                         FontAttributes="Bold" />
                 <ScrollView Orientation="Horizontal">
-                    <VerticalStackLayout Spacing="0">
+                    <VerticalStackLayout Spacing="0" HorizontalOptions="Fill" VerticalOptions="Fill">
                         <Grid ColumnDefinitions="*,*,*,*,*" Padding="5" BackgroundColor="#6D5206">
                             <Label Text="Name" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center"/>
                             <Label Text="Email" TextColor="White" FontAttributes="Bold" Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Center"/>
@@ -48,13 +51,13 @@
 
                         <CollectionView x:Name="EmployeeList" ItemsSource="{Binding Employees}">
                             <CollectionView.ItemTemplate>
-                                <DataTemplate>
+                                <DataTemplate x:DataType="model:User">
                                     <Grid ColumnDefinitions="*,*,*,*,*" Padding="5" BackgroundColor="#F6CD5E">
-                                        <Label Text="{Binding Name}" TextColor="#6D5206" HorizontalOptions="Center" VerticalOptions="Center"/>
-                                        <Label Text="{Binding Email}" TextColor="#6D5206" Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Center"/>
-                                        <Label Text="{Binding Age}" TextColor="#6D5206" Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Center"/>
-                                        <Label Text="{Binding Phone}" TextColor="#6D5206" Grid.Column="3" HorizontalOptions="Center" VerticalOptions="Center"/>
-                                        <Label Text="{Binding EmployeeType}" TextColor="#6D5206" Grid.Column="4" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        <Label Text="{Binding LastName}" TextColor="#6D5206" Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        <Label Text="{Binding Email}" TextColor="#6D5206" Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        <Label Text="{Binding Age}" TextColor="#6D5206" Grid.Column="3" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        <Label Text="{Binding PhoneNumber}" TextColor="#6D5206" Grid.Column="4" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        <Label Text="{Binding EmployeeType}" TextColor="#6D5206" Grid.Column="5" HorizontalOptions="Center" VerticalOptions="Center"/>
                                     </Grid>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
@@ -90,5 +93,168 @@
                 Margin="0,10,0,10"
                 Command="{Binding EditCommand}"/>
         </HorizontalStackLayout>
-    </Grid>
+    </Grid> -->
+
+    <VerticalStackLayout Padding="10"
+                     HorizontalOptions="Fill"
+                     VerticalOptions="Fill">
+
+        <Label Text="Employee Table"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                TextColor="#6D5206"
+                FontSize="18"
+                FontAttributes="Bold" 
+                Margin="0,10,0,20"/>
+
+        <!-- Header Row -->
+        <Grid ColumnDefinitions="*,*,*,Auto"
+            BackgroundColor="#6D5206"
+            Padding="5"
+            HorizontalOptions="FillAndExpand">
+            <Label Text="Last Name" 
+                FontAttributes="Bold" 
+                Grid.Column="0" 
+                HorizontalOptions="Center"
+                TextColor="White"/>
+            <Label Text="First Name" 
+                FontAttributes="Bold" 
+                Grid.Column="1" 
+                HorizontalOptions="Center"
+                TextColor="White"/>
+            <Label Text="Employee Type" 
+                FontAttributes="Bold" 
+                Grid.Column="2" 
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                TextColor="White"/>
+            <Label Text="Action" 
+                FontAttributes="Bold" 
+                Grid.Column="3" 
+                HorizontalOptions="Center"
+                TextColor="White"
+                IsVisible="{Binding ShowActions}"/>
+
+            <Grid.Triggers>
+                <DataTrigger TargetType="Grid"
+                            Binding="{Binding ShowActions}"
+                            Value="True">
+                    <Setter Property="ColumnDefinitions" Value="*,*,*,*" />
+                </DataTrigger>
+            </Grid.Triggers>
+        </Grid>
+
+        
+
+        <!-- CollectionView for rows -->
+        <CollectionView ItemsSource="{Binding Employees}"
+                        HorizontalOptions="FillAndExpand">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:User">
+                    <Grid ColumnDefinitions="*,*,*,Auto"
+                        Padding="5"
+                        HorizontalOptions="FillAndExpand"
+                        BackgroundColor="#F6CD5E">
+                        <Label Text="{Binding LastName}" 
+                            Grid.Column="0"
+                            HorizontalOptions="Center"
+                            TextColor="#6D5206"/>
+                        <Label Text="{Binding FirstName}" 
+                            Grid.Column="1"
+                            HorizontalOptions="Center"
+                            TextColor="#6D5206"/>
+                        <Label Text="{Binding EmployeeType}" 
+                            Grid.Column="2"
+                            HorizontalOptions="Center"
+                            TextColor="#6D5206"/>
+                        <!-- Actions Column -->
+                        <HorizontalStackLayout Grid.Column="3" 
+                                            IsVisible="{Binding Source={x:Reference EmployeePage}, Path=BindingContext.ShowActions}">
+                            <Button Text="Edit" 
+                                    FontSize="12" 
+                                    Padding="5"
+                                    BackgroundColor="#FBE7B3"
+                                    BorderColor="#6D5206"
+                                    BorderWidth="2"
+                                    TextColor="#6D5206"
+                                    CornerRadius="20">
+                                <Button.Triggers>
+                                    <DataTrigger TargetType="Button"
+                                                Binding="{Binding EmployeeType}"
+                                                Value="pending">
+                                        <Setter Property="Text" Value="Accept" />
+                                        <Setter Property="Command" Value="{Binding Source={x:Reference EmployeePage}, Path=BindingContext.ConfirmAcceptCommand}"/>
+                                        <Setter Property="CommandParameter" Value="{Binding Id}"/>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Button"
+                                                Binding="{Binding EmployeeType}"
+                                                Value="employee">
+                                        <Setter Property="Text" Value="Edit" />
+                                        <Setter Property="Command" Value=""/>
+                                        <Setter Property="CommandParameter" Value=""/>
+                                    </DataTrigger>
+                                </Button.Triggers>
+                            </Button>
+                            <Button Text="Delete" 
+                                    FontSize="12" 
+                                    Padding="5" 
+                                    BackgroundColor="#FBE7B3"
+                                    BorderColor="#6D5206"
+                                    BorderWidth="2"
+                                    TextColor="#6D5206"
+                                    CornerRadius="20"
+                                    Command="{Binding Source={x:Reference EmployeePage}, Path=BindingContext.DeleteEmployeeCommand}"
+                                    CommandParameter="{Binding Id}">
+                                <Button.Triggers>
+                                    <DataTrigger TargetType="Button"
+                                                Binding="{Binding EmployeeType}"
+                                                Value="owner">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                        <Setter Property="BackgroundColor" Value="#FFE4D1A3" />
+                                    </DataTrigger>
+                                </Button.Triggers>
+                            </Button>
+                        </HorizontalStackLayout>
+
+                        <Grid.Triggers>
+                            <DataTrigger TargetType="Grid"
+                                        Binding="{Binding ShowActions}"
+                                        Value="True">
+                                <Setter Property="ColumnDefinitions" Value="*,*,*,*" />
+                            </DataTrigger>
+                        </Grid.Triggers>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    <HorizontalStackLayout Spacing="9" HorizontalOptions="Center" Grid.Row="1">
+        <Button 
+            Text="Back"
+            Clicked="OnBackClicked"
+            BackgroundColor="#FBE7B3"
+            BorderColor="#6D5206"
+            BorderWidth="2"
+            TextColor="#6D5206"
+            CornerRadius="20"
+            HeightRequest="40"
+            HorizontalOptions="Center"
+            WidthRequest="62"
+            Margin="0,10,0,10" />
+        <Button 
+            Text="Edit Employees" 
+            BackgroundColor="#FBE7B3"
+            BorderColor="#6D5206"
+            BorderWidth="2"
+            TextColor="#6D5206"
+            CornerRadius="20"
+            HeightRequest="40"
+            HorizontalOptions="Center"
+            WidthRequest="132"
+            Margin="0,10,0,10"
+            Command="{Binding EditCommand}"/>
+    </HorizontalStackLayout>
+
+    </VerticalStackLayout>
+
 </ContentPage>

@@ -251,4 +251,13 @@ public class UserService
         await Init();
         await db!.UpdateAsync(updatedUser);
     }
+
+
+    public async Task<List<User>> GetEmployees(int businessId)
+    {
+        await Init();
+        return await db!.Table<User>()
+                        .Where(x => x.BusinessRefId == businessId)
+                        .ToListAsync();
+    }
 }

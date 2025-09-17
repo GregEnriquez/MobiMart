@@ -168,9 +168,11 @@ public partial class UserPageViewModel : BaseViewModel
         }
 
         user.BusinessRefId = business.Id;
-        user.EmployeeType = "employee";
+        user.EmployeeType = "pending";
         await userService.UpdateUserAsync(user);
         await UpdateInfo();
+
+
         IsBusy = false;
     }
 }
