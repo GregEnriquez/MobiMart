@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MobiMart.View.SupplierInformation"
              xmlns:view="clr-namespace:MobiMart.View"
+             xmlns:viewmodel="clr-namespace:MobiMart.ViewModel"
+             x:DataType="viewmodel:SupplierInfoViewModel"
              BackgroundColor="#FDF4DC"
              Title="SupplierInformation">
     
@@ -27,7 +29,7 @@
             </Grid>
 
             <Label 
-                Text="{Binding Name}" 
+                Text="{Binding Supplier.Name}" 
                 FontAttributes="Bold" 
                 TextColor="#6F4E37" 
                 HorizontalTextAlignment="Center"
@@ -65,7 +67,7 @@
                     FontSize="18"/>
 
                 <Label 
-                    Text="{Binding Number}" 
+                    Text="{Binding Supplier.Number}" 
                     FontAttributes="None" 
                     TextColor="#6F4E37"
                     Grid.Row="0" Grid.Column="1"
@@ -73,7 +75,7 @@
                     VerticalOptions="Center"/>
 
                 <Label 
-                    Text="{Binding Email}" 
+                    Text="{Binding Supplier.Email}" 
                     FontAttributes="None" 
                     TextColor="#6F4E37"
                     Grid.Row="1" Grid.Column="1"
@@ -81,14 +83,21 @@
                     VerticalOptions="Center"/>
 
                 <Label 
-                    Text="{Binding Socials}" 
+                    Text="{Binding Supplier.Socials}" 
                     FontAttributes="None" 
                     TextColor="#6F4E37"
                     Grid.Row="2" Grid.Column="1"
                     FontSize="14"
                     VerticalOptions="Center"/>
-
             </Grid>
+
+            <Button Text="Edit Supplier"
+                    BackgroundColor="#D99B2B" 
+                    TextColor="White"
+                    CornerRadius="10"
+                    HeightRequest="45"
+                    Margin="0,0,0,20"
+                    Command = "{Binding EditSupplierCommand}"/>
 
             <Label 
                 Text="Items in Inventory" 

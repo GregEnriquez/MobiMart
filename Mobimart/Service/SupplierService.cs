@@ -39,6 +39,21 @@ public class SupplierService
 
     public async Task AddSupplierAsync(Supplier s)
     {
+        await Init();
         await db!.InsertAsync(s);
+    }
+
+
+    public async Task<Supplier> GetSupplierAsync(int id)
+    {
+        await Init();
+        return await db!.Table<Supplier>().Where(x => x.Id == id).FirstOrDefaultAsync();
+    }
+
+
+    public async Task UpdateSupplierAsync(Supplier updatedSupplier)
+    {
+        await Init();
+        await db!.UpdateAsync(updatedSupplier);
     }
 }

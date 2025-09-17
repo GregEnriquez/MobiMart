@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using MobiMart.Model;
 using MobiMart.ViewModel;
 
@@ -5,10 +6,10 @@ namespace MobiMart.View;
 
 public partial class SupplierList : ContentPage
 {
-	public SupplierList()
-	{
-		InitializeComponent();
-        BindingContext = new SupplierListViewModel();
+    public SupplierList(SupplierListViewModel viewModel)
+    {
+        InitializeComponent();
+        BindingContext = viewModel;
     }
 
     private async void onButtonClicked(object sender, EventArgs args)
@@ -18,14 +19,25 @@ public partial class SupplierList : ContentPage
 
     private async void onSupplierTap(object sender, TappedEventArgs args)
     {
-        if (args.Parameter is Supplier supplier)
-        {
-            var navParameter = new Dictionary<string, object>()
-            {
-                {"Supplier", supplier }
-            };
+        // if (args.Parameter is Supplier supplier)
+        // {
+        //     var navParameter = new Dictionary<string, object>()
+        //     {
+        //         {"Supplier", supplier }
+        //     };
 
-            await Shell.Current.GoToAsync(nameof(SupplierInformation), navParameter);
+        //     await Shell.Current.GoToAsync(nameof(SupplierInformation), navParameter);
+        // }
+    }
+
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (BindingContext is SupplierListViewModel vm)
+        {
+            vm.RefreshSuppliers();
         }
     }
 }

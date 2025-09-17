@@ -2,7 +2,11 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:view="clr-namespace:MobiMart.View"
+             xmlns:viewmodel="clr-namespace:MobiMart.ViewModel"
+             xmlns:model="clr-namespace:MobiMart.Model"
+             x:DataType="viewmodel:SupplierListViewModel"
              x:Class="MobiMart.View.SupplierList"
+             x:Name="SupplierListPage"
              BackgroundColor="#FDF4DC"
              Title="SupplierList">
 
@@ -10,16 +14,16 @@
 
     <CollectionView ItemsSource="{Binding Suppliers}">
         <CollectionView.ItemTemplate>
-            <DataTemplate>
+            <DataTemplate x:DataType="model:Supplier">
                 <Grid ColumnDefinitions="Auto, *" 
                             VerticalOptions="Center"
                             RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto"
                             ColumnSpacing="10">
 
                     <Grid.GestureRecognizers>
-                        <TapGestureRecognizer 
-                            Tapped="onSupplierTap"
-                            CommandParameter="{Binding}"/>
+                        <TapGestureRecognizer
+                            Command="{Binding Source={x:Reference SupplierListPage}, Path=BindingContext.SupplierTappedCommand}"
+                            CommandParameter="{Binding .}"/>
                     </Grid.GestureRecognizers>
 
                     <Image 

@@ -12,13 +12,17 @@ public partial class SupplierInformation : ContentPage
         set
         {
             supplierInfo = value;
-            BindingContext = supplierInfo;
-            contactsOfSupplier();
+            if (BindingContext is SupplierInfoViewModel vm)
+            {
+                vm.Supplier = value!;
+            }
+            // contactsOfSupplier();
         }
     }
-	public SupplierInformation()
-	{
-		InitializeComponent();
+    public SupplierInformation(SupplierInfoViewModel viewModel)
+    {
+        InitializeComponent();
+        BindingContext = viewModel;
     }
 
     private async void messageSuppClick(object sender, EventArgs args)
@@ -34,10 +38,10 @@ public partial class SupplierInformation : ContentPage
     {
         if (supplierInfo == null) return;
 
-        var allContacts = new SupplierInfoViewModel().contacts;
+        // var allContacts = new SupplierInfoViewModel().contacts;
 
-        var filtered = allContacts.Where(c => c.supplierId == supplierInfo.Id).ToList();
+        // var filtered = allContacts.Where(c => c.supplierId == supplierInfo.Id).ToList();
 
-        ContactsSection.ItemsSource = filtered;
+        // ContactsSection.ItemsSource = filtered;
     }
 }
