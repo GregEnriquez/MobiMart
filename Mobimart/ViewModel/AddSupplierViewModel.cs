@@ -29,6 +29,8 @@ public partial class AddSupplierViewModel : BaseViewModel
     string socials;
     [ObservableProperty]
     Supplier supplier;
+    [ObservableProperty]
+    bool editingExisting = false;
 
     public AddSupplierViewModel(UserService userService, BusinessService businessService, SupplierService supplierService)
     {
@@ -99,6 +101,7 @@ public partial class AddSupplierViewModel : BaseViewModel
         Number = Supplier.Number;
         Email = Supplier.Email;
         Socials = Supplier.Socials;
+        EditingExisting = true;
     }
 }
 

@@ -91,8 +91,22 @@
                 CornerRadius="10"
                 HeightRequest="45"
                 Margin="0,20,0,0" 
-                Command="{Binding SaveChangesCommand}"/>
+                Command="{Binding SaveChangesCommand}">
 
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button"
+                                Binding="{Binding EditingExisting}"
+                                Value="false">
+                        <Setter Property="Text" Value="Add Supplier"/>
+                    </DataTrigger>
+                    <DataTrigger TargetType="Button"
+                                Binding="{Binding EditingExisting}"
+                                Value="true">
+                        <Setter Property="Text" Value="Save Current Changes"/>
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>
         </VerticalStackLayout>
     </ScrollView>
+    
 </ContentPage>

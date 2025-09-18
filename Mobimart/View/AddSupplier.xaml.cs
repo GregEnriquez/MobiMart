@@ -2,7 +2,6 @@ using MobiMart.ViewModel;
 
 namespace MobiMart.View;
 
-using Android.Systems;
 using MobiMart.Model;
 using MobiMart.ViewModel;
 
