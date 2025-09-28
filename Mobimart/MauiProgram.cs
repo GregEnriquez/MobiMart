@@ -32,6 +32,7 @@ namespace MobiMart
             builder.Services.AddSingleton<UserService>();
             builder.Services.AddSingleton<SupplierService>();
             builder.Services.AddSingleton<InventoryService>();
+            builder.Services.AddSingleton<SalesService>();
 
             // inject viewmodels
             builder.Services.AddSingleton<LoginViewModel>();
@@ -52,6 +53,7 @@ namespace MobiMart
             builder.Services.AddSingleton<InventoryViewModel>();
             builder.Services.AddSingleton<EditInventoryPopupViewModel>();
             builder.Services.AddSingleton<EditSuppInventoryViewModel>();
+            builder.Services.AddSingleton<TransactionViewModel>();
 
             // inject views
             builder.Services.AddSingleton<SignUpPage>();

@@ -51,6 +51,13 @@ public class InventoryService
     }
 
 
+    public async Task<List<Item>> GetAllItemsAsync()
+    {
+        await Init();
+        return await db!.Table<Item>().ToListAsync();
+    }
+
+
     public async Task<Description> GetItemDescAsync(string barcode)
     {
         await Init();
