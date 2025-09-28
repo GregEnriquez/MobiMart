@@ -4,10 +4,10 @@ namespace MobiMart.View;
 
 public partial class InventoryListPage : ContentPage
 {
-	public InventoryListPage()
-	{
-		InitializeComponent();
-        BindingContext = new InventoryViewModel();
+    public InventoryListPage(InventoryViewModel viewModel)
+    {
+        InitializeComponent();
+        BindingContext = viewModel;
     }
 
     // private void OnHamburgerClicked(object sender, EventArgs e)
@@ -15,10 +15,21 @@ public partial class InventoryListPage : ContentPage
     //     Shell.Current.FlyoutIsPresented = true;
     // }
 
-    
+
     // private void PopupClicked(object sender, EventArgs e)
     // {
     //     ItemPopup.SetItemInfo("Milk", "5", "50", "Dairy", "Fresh cow�s milk");
     //     ItemPopup.IsVisible = true;
     // }
+
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (BindingContext is InventoryViewModel vm)
+        {
+            await vm.RefreshInventoryRecords();
+        }
+    }
 }

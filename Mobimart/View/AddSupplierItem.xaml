@@ -2,112 +2,268 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MobiMart.View.AddSupplierItem"
+             xmlns:viewmodel="clr-namespace:MobiMart.ViewModel"
+             x:DataType="viewmodel:AddSupplierItemViewModel"
+             xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls"
              BackgroundColor="#FDF4DC"
              Title="AddSupplierItem">
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="15">
+    <Grid>
+        <ScrollView>
+            <VerticalStackLayout Padding="20" Spacing="15">
 
-            <Label 
-                Text="Sample Item Batch" 
-                FontAttributes="Bold" 
-                TextColor="#6F4E37" 
-                HorizontalTextAlignment="Center"
-                FontSize="22"/>
+                <Label 
+                    Text="Item Details" 
+                    FontAttributes="Bold" 
+                    TextColor="#6F4E37" 
+                    HorizontalTextAlignment="Center"
+                    FontSize="22"/>
+                <BoxView HeightRequest="1" BackgroundColor="#6F4E37" />
 
-            <BoxView HeightRequest="1" BackgroundColor="#6F4E37" />
+                <Label Text="Item Barcode" FontAttributes="Bold" TextColor="#6F4E37" />
 
-            <Label Text="Delivery ID" FontAttributes="Bold" TextColor="#6F4E37" />
-            <Border
-               Stroke="#A9882D"
-               StrokeThickness="1.5"
-               StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter Delivery ID" Text="{Binding DeliveryId}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
-            </Border>
+                <Border
+                    Stroke="#A9882D"
+                    StrokeThickness="1.5"
+                    StrokeShape="RoundRectangle 10,10,10,10">
 
+                    <Grid ColumnDefinitions="*,Auto" 
+                        VerticalOptions="Center" 
+                        Padding="5">
 
-            <Label Text="Item Name" FontAttributes="Bold" TextColor="#6F4E37" />
-            <Border
-               Stroke="#A9882D"
-               StrokeThickness="1.5"
-               StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter Item Name" Text="{Binding WItemName}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
-            </Border>
+                        <!-- Entry for manual input -->
+                        <Entry Grid.Column="0"
+                            Placeholder="Enter Item Barcode" 
+                            Keyboard="Numeric"
+                            Text="{Binding BarcodeId}"
+                            TextChanged="OnBarcodeEntryTextChanged"
+                            BackgroundColor="#F8ECC6" 
+                            TextColor="#A9882D"
+                            Margin="0,0,5,0" />
 
-            <Label Text="Delivery Amount" FontAttributes="Bold" TextColor="#6F4E37" />
-            <Border
-               Stroke="#A9882D"
-               StrokeThickness="1.5"
-               StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter Delivery Quantity" Text="{Binding WDelivQuantity}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
-            </Border>
+                        <!-- Button to scan barcode -->
+                        <ImageButton Grid.Column="1"
+                                    Source="scan_icon.png" 
+                                    BackgroundColor="Transparent" 
+                                    WidthRequest="10" 
+                                    HeightRequest="10"
+                                    Command="{Binding ShowScannerCommand}" 
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"/>
+                    </Grid>
+                </Border>
 
-            <Label Text="Date Delivered" FontAttributes="Bold" TextColor="#6F4E37" />
-            <Border
+                <Label Text="Item Name" FontAttributes="Bold" TextColor="#6F4E37" />
+                <Border
                 Stroke="#A9882D"
                 StrokeThickness="1.5"
-                StrokeShape="RoundRectangle 10,10,10,10"
-                WidthRequest="125"
-                HorizontalOptions="Start">
-                <DatePicker 
-                    Date="{Binding WDateDelivered}" 
-                    BackgroundColor="#F8ECC6" 
-                    TextColor="#A9882D"
-                    Format="MM/dd/yyyy"
-                    HorizontalOptions="Center"
-                    MinimumDate="01/01/2025"
+                StrokeShape="RoundRectangle 10,10,10,10">
+                    <Entry Placeholder="Enter Item Name" Text="{Binding WItemName}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                </Border>
+
+                <Label Text="Item Description" FontAttributes="Bold" TextColor="#6F4E37" />
+                <Border
+                Stroke="#A9882D"
+                StrokeThickness="1.5"
+                StrokeShape="RoundRectangle 10,10,10,10">
+                    <Entry Placeholder="Enter Item Description" Text="{Binding WItemDesc}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                </Border>
+
+                <Label Text="Item Type" FontAttributes="Bold" TextColor="#6F4E37" />
+                <Border
+                Stroke="#A9882D"
+                StrokeThickness="1.5"
+                StrokeShape="RoundRectangle 10,10,10,10">
+                    <Entry Placeholder="Enter Item Type" Text="{Binding WItemType}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                </Border>
+
+                <Label Text="Retail Price" FontAttributes="Bold" TextColor="#6F4E37" />
+                <Border
+                Stroke="#A9882D"
+                StrokeThickness="1.5"
+                StrokeShape="RoundRectangle 10,10,10,10">
+                    <Entry Placeholder="Enter Retail Price" Text="{Binding WRetailPrice}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                </Border>
+
+                <Label Text="Expiration Date" FontAttributes="Bold" TextColor="#6F4E37" />
+                <Border
+                    Stroke="#A9882D"
+                    StrokeThickness="1.5"
+                    StrokeShape="RoundRectangle 10,10,10,10"
+                    WidthRequest="125"
+                    HorizontalOptions="Start">
+                    <DatePicker 
+                        Date="{Binding WDateExpire}" 
+                        BackgroundColor="#F8ECC6" 
+                        TextColor="#A9882D"
+                        Format="MM/dd/yyyy"
+                        HorizontalOptions="Center"
+                        MinimumDate="01/01/2025"
                     />
-            </Border>
+                </Border>
 
-            <Label Text="Expiration Date" FontAttributes="Bold" TextColor="#6F4E37" />
-            <Border
+
+                <!-- ================================================================================ -->
+                <VerticalStackLayout Margin="0,20,0,0" Spacing="15">
+                    
+                    <VerticalStackLayout.Triggers>
+                        <DataTrigger TargetType="VerticalStackLayout"
+                                    Binding="{Binding IsFromInventory}"
+                                    Value="True">
+                            <Setter Property="IsVisible" Value="False"/>
+                        </DataTrigger>
+                        <DataTrigger TargetType="VerticalStackLayout"
+                                    Binding="{Binding IsFromInventory}"
+                                    Value="False">
+                            <Setter Property="IsVisible" Value="True"/>
+                        </DataTrigger>
+                    </VerticalStackLayout.Triggers>
+
+                    <Label 
+                        Text="Delivery Details" 
+                        FontAttributes="Bold" 
+                        TextColor="#6F4E37" 
+                        HorizontalTextAlignment="Center"
+                        FontSize="22"/>
+                    <BoxView HeightRequest="1" BackgroundColor="#6F4E37" />
+
+
+                    <Label Text="Date Delivered" FontAttributes="Bold" TextColor="#6F4E37" />
+                    <Border
+                        Stroke="#A9882D"
+                        StrokeThickness="1.5"
+                        StrokeShape="RoundRectangle 10,10,10,10"
+                        WidthRequest="125"
+                        HorizontalOptions="Start">
+                        <DatePicker 
+                            Date="{Binding WDateDelivered}" 
+                            BackgroundColor="#F8ECC6" 
+                            TextColor="#A9882D"
+                            Format="MM/dd/yyyy"
+                            HorizontalOptions="Center"
+                            MinimumDate="01/01/2025"
+                            />
+                    </Border>
+                </VerticalStackLayout>
+
+                <Label Text="Delivery Quantity" FontAttributes="Bold" TextColor="#6F4E37" />
+                <Border
                 Stroke="#A9882D"
                 StrokeThickness="1.5"
-                StrokeShape="RoundRectangle 10,10,10,10"
-                WidthRequest="125"
-                HorizontalOptions="Start">
-                <DatePicker 
-                    Date="{Binding WDateExpire}" 
-                    BackgroundColor="#F8ECC6" 
-                    TextColor="#A9882D"
-                    Format="MM/dd/yyyy"
+                StrokeShape="RoundRectangle 10,10,10,10">
+                    <Entry Placeholder="Enter Delivery Quantity" Text="{Binding WDelivQuantity}" Keyboard="Numeric" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                </Border>
+
+                <Label Text="Batch Cost Price" FontAttributes="Bold" TextColor="#6F4E37">
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label"
+                                    Binding="{Binding IsBatchCost}"
+                                    Value="True">
+                            <Setter Property="Text" Value="Batch Cost Price"/>
+                        </DataTrigger>
+                        <DataTrigger TargetType="Label"
+                                    Binding="{Binding IsBatchCost}"
+                                    Value="False">
+                            <Setter Property="Text" Value="Unit Cost Price"/>
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+                <Border Stroke="#A9882D"
+                        StrokeThickness="1.5"
+                        StrokeShape="RoundRectangle 10,10,10,10"
+                        IsVisible="{Binding IsBatchCost}">
+                    <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                        <Entry Placeholder="Enter Batch Cost" 
+                            Text="{Binding WBatchCost}" 
+                            BackgroundColor="#F8ECC6" 
+                            TextColor="#A9882D"/>
+                        <Button Text="⇆"
+                            BackgroundColor="Transparent"
+                            Grid.Column="1"
+                            TextColor="#A9882D"
+                            WidthRequest="30"
+                            HeightRequest="30"
+                            Command="{Binding ToggleCostCommand}" />
+                    </Grid>
+                </Border>
+                <Border Stroke="#A9882D"
+                        StrokeThickness="1.5"
+                        StrokeShape="RoundRectangle 10,10,10,10"
+                        IsVisible="False">
+                    <Border.Triggers>
+                        <DataTrigger TargetType="Border"
+                                    Binding="{Binding IsBatchCost}"
+                                    Value="False">
+                            <Setter Property="IsVisible" Value="True"/>
+                        </DataTrigger>
+                    </Border.Triggers>
+                    <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                        <Entry Placeholder="Enter Unit Cost" 
+                            Text="{Binding WUnitCost}" 
+                            BackgroundColor="#F8ECC6" 
+                            TextColor="#A9882D"/>
+                        <Button Text="⇆"
+                            BackgroundColor="Transparent"
+                            Grid.Column="1"
+                            TextColor="#A9882D"
+                            WidthRequest="30"
+                            HeightRequest="30"
+                            Command="{Binding ToggleCostCommand}" />
+                    </Grid>
+                </Border>
+
+
+                <Button 
+                Text="Add Item/s to Inventory"
+                BackgroundColor="#D99B2B" 
+                TextColor="White"
+                CornerRadius="10"
+                HeightRequest="45"
+                Margin="0,20,0,0" 
+                Command="{Binding SaveChangesCommand}" />
+            </VerticalStackLayout>
+        </ScrollView>
+
+
+        <Grid x:Name="ScannerOverlay"
+            BackgroundColor="#80000000"
+            IsVisible="{Binding IsScannerVisible}"
+            InputTransparent="False"
+            AbsoluteLayout.LayoutFlags="All"
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            ZIndex="10">
+
+            <VerticalStackLayout
+                VerticalOptions="Center"
+                HorizontalOptions="Center">
+                <zxing:CameraBarcodeReaderView
+                    x:Name="barcodeReader"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Fill"
+                    HeightRequest="250"
+                    WidthRequest="350"
+                    BarcodesDetected="barcodeReader_BarcodesDetected"/>
+                <HorizontalStackLayout 
+                    Margin="0,50,0,0"
                     HorizontalOptions="Center"
-                    MinimumDate="01/01/2025"
-                />
-            </Border>
+                    VerticalOptions="Center"
+                    Spacing="10">
 
-            <Label Text="Batch Worth" FontAttributes="Bold" TextColor="#6F4E37" />
-            <Border
-               Stroke="#A9882D"
-               StrokeThickness="1.5"
-               StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter Batch Worth" Text="{Binding WBatchWorth}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
-            </Border>
-
-            <Label Text="Item Type" FontAttributes="Bold" TextColor="#6F4E37" />
-            <Border
-               Stroke="#A9882D"
-               StrokeThickness="1.5"
-               StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter Item Type" Text="{Binding WItemType}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
-            </Border>
-
-            <Label Text="Item Description" FontAttributes="Bold" TextColor="#6F4E37" />
-            <Border
-               Stroke="#A9882D"
-               StrokeThickness="1.5"
-               StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter Item Description" Text="{Binding WItemDesc}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
-            </Border>
-
-            <Button 
-               Text="Save Changes" 
-               BackgroundColor="#D99B2B" 
-               TextColor="White"
-               CornerRadius="10"
-               HeightRequest="45"
-               Margin="0,20,0,0" 
-               Command="{Binding SaveChangesCommand}" />
-
-        </VerticalStackLayout>
-    </ScrollView>
+                    <Button Text="X"
+                            BackgroundColor="Red"
+                            TextColor="White"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            CornerRadius="20"
+                            Command="{Binding HideScannerCommand}"/>
+                    <Button Text="T"
+                            BackgroundColor="Green"
+                            TextColor="White"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            CornerRadius="20"
+                            Pressed="onPressedTorchButton"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Grid>
+    </Grid>
 </ContentPage>

@@ -1,0 +1,60 @@
+using System;
+using System.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using MobiMart.Model;
+using MobiMart.Service;
+using MobiMart.View;
+
+namespace MobiMart.ViewModel;
+
+// [QueryProperty(nameof(ItemBarcode), "ItemBarcode")]
+public partial class EditInventoryPopupViewModel : BaseViewModel, IQueryAttributable
+{
+
+    [ObservableProperty]
+    public List<Delivery> deliveries;
+    [ObservableProperty]
+    public Item item;
+
+    public string ItemBarcode { get; set; }
+
+    InventoryService inventoryService;
+
+    public EditInventoryPopupViewModel(InventoryService inventoryService, string barcode)
+    {
+        this.inventoryService = inventoryService;
+        ItemBarcode = barcode;
+
+        RefreshRecords();
+    }
+
+
+    private async void RefreshRecords()
+    {
+        var DeliveriesDummy = new List<Delivery>();
+        Item = await inventoryService.GetItemAsync(ItemBarcode);
+        var inventoryList = await inventoryService.GetInventoriesAsync(ItemBarcode);
+        var deliveries = await inventoryService.GetDeliveriesAsync(ItemBarcode);
+
+        foreach (var inv in inventoryList)
+        {
+            var deliveryRecord = deliveries.Find(x => x.Id == inv.DeliveryId);
+            if (deliveryRecord is not null)
+            {
+                DeliveriesDummy.Add(deliveryRecord);
+                continue;
+            }
+        }
+
+        Deliveries = DeliveriesDummy;
+    }
+
+    public void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        if (query.ContainsKey("ItemBarcode"))
+        {
+            ItemBarcode = query["ItemBarcode"].ToString()!;
+        }
+    }
+}

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MobiMart.Model;
 using MobiMart.Service;
@@ -82,6 +76,21 @@ namespace MobiMart.ViewModel
             };
 
             await Shell.Current.GoToAsync(nameof(AddSupplier), navParameter);
+            IsBusy = false;
+        }
+
+
+        [RelayCommand]
+        public async Task CheckInventory()
+        {
+            if (IsBusy) return;
+
+            IsBusy = true;
+            var navParameter = new Dictionary<string, object>()
+            {
+                {"Supplier", Supplier }
+            };
+            await Shell.Current.GoToAsync(nameof(SupplierInventory), true, navParameter);
             IsBusy = false;
         }
     }

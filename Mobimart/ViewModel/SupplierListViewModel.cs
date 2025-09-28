@@ -20,11 +20,13 @@ namespace MobiMart.ViewModel
         // public ObservableCollection<Supplier> Suppliers { get; set; }
         [ObservableProperty]
         List<Supplier> suppliers;
+        [ObservableProperty]
+        bool isFromInventory;
 
         public SupplierListViewModel(SupplierService supplierService)
         {
             this.supplierService = supplierService;
-
+            IsFromInventory = false;
             // Suppliers = new ObservableCollection<Supplier>
             // {
             //     new Supplier
@@ -86,10 +88,11 @@ namespace MobiMart.ViewModel
 
             var navParameter = new Dictionary<string, object>()
             {
-                {"Supplier", supplier }
+                {"Supplier", supplier },
+                {"IsFromInventory", IsFromInventory}
             };
 
-            await Shell.Current.GoToAsync(nameof(SupplierInformation), navParameter);
+            await Shell.Current.GoToAsync(IsFromInventory ? nameof(AddSupplierItem) : nameof(SupplierInformation), navParameter);
             IsBusy = false;
         }
     }

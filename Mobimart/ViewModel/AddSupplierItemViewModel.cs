@@ -1,47 +1,247 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MobiMart.Model;
+using MobiMart.Service;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MobiMart.ViewModel
 {
-    public partial class AddSupplierItemViewModel : ObservableObject
+    public partial class AddSupplierItemViewModel : BaseViewModel
     {
         [ObservableProperty]
-        int deliveryId;
-
-        [ObservableProperty]
-        int wDelivQuantity;
-
+        string barcodeId = "";
         [ObservableProperty]
         string wItemName = "";
-
-        [ObservableProperty]
-        decimal wBatchWorth;
-
-        [ObservableProperty]
-        string wItemType = "";
-
         [ObservableProperty]
         string wItemDesc = "";
-
+        [ObservableProperty]
+        string wItemType = "";
+        [ObservableProperty]
+        float? wRetailPrice;
         [ObservableProperty]
         DateTime wDateDelivered;
+        [ObservableProperty]
+        DateTime? wDateExpire;
+        [ObservableProperty]
+        int? wDelivQuantity;
+        [ObservableProperty]
+        float? wBatchCost;
+        [ObservableProperty]
+        float? wUnitCost;
+        [ObservableProperty]
+        bool isBatchCost = true;
 
         [ObservableProperty]
-        DateTime wDateExpire;
+        bool isScannerVisible = false;
+        [ObservableProperty]
+        Supplier supplier;
+        [ObservableProperty]
+        bool isFromInventory = false;
+
+        InventoryService inventoryService;
+        UserService userService;
+        BusinessService businessService;
+
+        public AddSupplierItemViewModel(InventoryService inventoryService, UserService userService, BusinessService businessService)
+        {
+            this.inventoryService = inventoryService;
+            this.userService = userService;
+            this.businessService = businessService;
+
+            // BarcodeId = "4807770270017";
+            // WItemName = "Lucky Me Beef Noodles";
+            // WItemDesc = "Beef flavored instant mami noodle soup";
+            // WItemType = "Instant Noodle";
+            // WRetailPrice = 10;
+            // WDelivQuantity = 10;
+            // WUnitCost = 8.75f;
+        }
+
+
 
         [RelayCommand]
         async Task SaveChanges()
         {
-            await Shell.Current.DisplayAlert(
-               "Saved",
-               $"Item: {wItemName} \nQuantity: {wDelivQuantity} \nDelivered: {wDateDelivered:d} \nExpires: {wDateExpire:d} \nWorth: {wBatchWorth} \nType: {wItemType} \nDescription: {wItemDesc}",
-               "OK"
-           );
+            int emptyCount = 0;
+            if (BarcodeId.Equals("")) emptyCount += 1;
+            if (WItemName.Equals("")) emptyCount += 1;
+            if (WItemDesc.Equals("")) emptyCount += 1;
+            if (WItemType.Equals("")) emptyCount += 1;
+            if (WRetailPrice == null) emptyCount += 1;
+            if (WDelivQuantity == null) emptyCount += 1;
+            if (WBatchCost == null && WUnitCost == null) emptyCount += 1;
+            if (WDateExpire == null) emptyCount += 1;
+
+            if (emptyCount > 0)
+            {
+                await Toast.Make("Make sure to fill out all the details", ToastDuration.Short, 14).Show();
+                return;
+            }
+
+            // -- SAVE ITEM RECORD --
+            var userInstance = await userService.GetUserInstanceAsync();
+            var user = await userService.GetUserAsync(userInstance.UserId);
+            // check if item already has a record
+            var item = await inventoryService.GetItemAsync(BarcodeId);
+            // if no record, just create a new one
+            if (item is null)
+            {
+                item = new Item()
+                {
+                    Barcode = BarcodeId,
+                    BusinessId = user.BusinessRefId,
+                    Name = WItemName,
+                    Type = WItemType,
+                    RetailPrice = (float)WRetailPrice!
+                };
+                await inventoryService.AddItemAsync(item);
+                // description
+                var desc = new Description()
+                {
+                    ItemId = BarcodeId,
+                    Text = WItemDesc,
+                    LastModified = DateTime.Today.ToString()
+                };
+                await inventoryService.AddDescAsync(desc);
+            }
+            // else notify user that item description will be edited if there is any
+            else
+            {
+                var desc = await inventoryService.GetItemDescAsync(item.Barcode);
+                var editedFields = new List<string>();
+
+                if (!item.Name.Equals(WItemName)) editedFields.Add("Name");
+                if (!desc.Text.Equals(WItemDesc)) editedFields.Add("Description");
+                if (!item.Type.Equals(WItemType)) editedFields.Add("Type");
+                if (item.RetailPrice != WRetailPrice) editedFields.Add("Retail Price");
+
+                if (editedFields.Count > 0)
+                {
+                    string m = "These item details have been modified:\n\n";
+                    editedFields.ForEach(warning => m += "    - " + warning + "\n");
+                    m += "\n\nAre you sure you want to save these changes?";
+                    bool confirm = await Shell.Current.DisplayAlert(
+                        "Confirm Modify Item Details",
+                        m,
+                        "Yes", "No"
+                    );
+
+                    if (!confirm)
+                    {
+                        await FillItemDetails(item.Barcode);
+                        return;
+                    }
+                    else
+                    {
+                        if (editedFields.Contains("Description"))
+                        {
+                            desc.Text = WItemDesc;
+                            await inventoryService.UpdateDescAsync(desc);
+                        }
+                        item.Name = WItemName;
+                        item.Type = WItemType;
+                        item.RetailPrice = (float)WRetailPrice!;
+                        await inventoryService.UpdateItemAsync(item);
+                    }
+                }
+            }
+
+
+            // -- SAVE DELIVERY RECORD --
+            if (WBatchCost == null || !IsBatchCost)
+            {
+                WBatchCost = WUnitCost * WDelivQuantity;
+            }
+            var delivery = new Delivery()
+            {
+                SupplierId = Supplier.Id,
+                ItemBarcode = BarcodeId,
+                DeliveryAmount = (int)WDelivQuantity!,
+                DateDelivered = WDateDelivered.ToString(),
+                ExpirationDate = WDateExpire.ToString()!,
+                BatchWorth = (float)WBatchCost!
+            };
+
+            await inventoryService.AddDeliveryAsync(delivery);
+
+
+            // -- SAVE ITEM TO INVENTORY RECORD --
+            var inv = new Inventory()
+            {
+                BusinessId = user.BusinessRefId,
+                DeliveryId = delivery.Id,
+                ItemBarcode = BarcodeId,
+                TotalAmount = (int)WDelivQuantity!,
+            };
+            await inventoryService.AddInventoryAsync(inv);
+
+            // clear every entry and notify the user that delivery has been added
+            BarcodeId = "";
+            WItemName = "";
+            WItemDesc = "";
+            WItemType = "";
+            WRetailPrice = null;
+            WDelivQuantity = null;
+            WUnitCost = null;
+            string message = "item/s added to inventory";
+            if (!IsFromInventory) message = "Delivery recorded and " + message;
+            await Toast.Make(message, ToastDuration.Short, 14).Show();
+        }
+
+
+        [RelayCommand]
+        async Task ShowScanner()
+        {
+            IsScannerVisible = true;
+        }
+
+
+        [RelayCommand]
+        public async Task HideScanner()
+        {
+            IsScannerVisible = false;
+        }
+
+
+        public async Task<bool> FillItemDetails(string barcode)
+        {
+            BarcodeId = barcode;
+            WDateDelivered = DateTime.Today;
+
+            var item = await inventoryService.GetItemAsync(barcode);
+            var desc = await inventoryService.GetItemDescAsync(barcode);
+            if (item is null) return false;
+
+            WItemName = item.Name;
+            WItemDesc = desc.Text;
+            WItemType = item.Type;
+            WRetailPrice = item.RetailPrice;
+
+            return true;
+        }
+
+
+        public async Task ClearItemDetails()
+        {
+            WItemName = null;
+            WItemDesc = null;
+            WItemType = null;
+            WRetailPrice = null;
+        }
+
+
+
+        [RelayCommand]
+        public void ToggleCost()
+        {
+            IsBatchCost = !IsBatchCost;
         }
     }
 }

@@ -6,6 +6,7 @@ using MobiMart.View;
 using MobiMart.ViewModel;
 using CommunityToolkit.Mvvm;
 using CommunityToolkit.Maui;
+using ZXing.Net.Maui.Controls;
 
 namespace MobiMart
 {
@@ -21,7 +22,8 @@ namespace MobiMart
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+                })
+                .UseBarcodeReader();
             builder.Services.AddSingleton<AppShell>();
 
             // inject services
@@ -29,6 +31,7 @@ namespace MobiMart
             builder.Services.AddSingleton<BusinessService>();
             builder.Services.AddSingleton<UserService>();
             builder.Services.AddSingleton<SupplierService>();
+            builder.Services.AddSingleton<InventoryService>();
 
             // inject viewmodels
             builder.Services.AddSingleton<LoginViewModel>();
@@ -44,6 +47,11 @@ namespace MobiMart
             builder.Services.AddSingleton<EmployeeTablePageViewModel>();
             builder.Services.AddSingleton<SupplierListViewModel>();
             builder.Services.AddSingleton<SupplierInfoViewModel>();
+            builder.Services.AddSingleton<AddSupplierItemViewModel>();
+            builder.Services.AddSingleton<SupplierInventoryViewModel>();
+            builder.Services.AddSingleton<InventoryViewModel>();
+            builder.Services.AddSingleton<EditInventoryPopupViewModel>();
+            builder.Services.AddSingleton<EditSuppInventoryViewModel>();
 
             // inject views
             builder.Services.AddSingleton<SignUpPage>();
@@ -54,6 +62,8 @@ namespace MobiMart
             builder.Services.AddSingleton<TransactionPage>();
             builder.Services.AddSingleton<SalesHistory>();
             builder.Services.AddSingleton<SupplierList>();
+            builder.Services.AddTransient<EditInventoryPopup>();
+            builder.Services.AddTransient<EditSupplierInventory>();
         
 
 #if DEBUG

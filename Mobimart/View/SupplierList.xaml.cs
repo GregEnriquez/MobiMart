@@ -4,8 +4,25 @@ using MobiMart.ViewModel;
 
 namespace MobiMart.View;
 
+
+[QueryProperty(nameof(IsFromInventory), "IsFromInventory")]
 public partial class SupplierList : ContentPage
 {
+
+    private bool isFromInventory = false;
+    public bool IsFromInventory
+    {
+        get => isFromInventory;
+        set
+        {
+            isFromInventory = value;
+            if (BindingContext is SupplierListViewModel vm)
+            {
+                vm.IsFromInventory = value;
+            }
+        }
+    }
+
     public SupplierList(SupplierListViewModel viewModel)
     {
         InitializeComponent();
@@ -31,13 +48,15 @@ public partial class SupplierList : ContentPage
     }
 
 
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
 
+        Debug.WriteLine(IsFromInventory);
+
         if (BindingContext is SupplierListViewModel vm)
         {
-            vm.RefreshSuppliers();
+            await vm.RefreshSuppliers();
         }
     }
 }

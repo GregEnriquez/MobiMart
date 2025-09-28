@@ -8,95 +8,149 @@ using System.Windows.Input;
 using MobiMart.Model;
 using Microsoft.Maui.Controls;
 using MobiMart.View;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
+using System.Diagnostics;
+using MobiMart.Service;
+using CommunityToolkit.Maui.Extensions;
 
 namespace MobiMart.ViewModel
 {
-    class InventoryViewModel : BindableObject
+    public partial class InventoryViewModel : BaseViewModel
     {
-        public ObservableCollection<Inventory> InventoryItems { get; set; }
 
-        private ObservableCollection<Inventory> _allItems; // original list
+        // public ObservableCollection<Inventory> InventoryItems { get; set; }
+        [ObservableProperty]
+        List<InventoryRecord> inventoryItems;
 
-        private string _searchText;
-        public string SearchText
+        InventoryService inventoryService;
+
+        // private ObservableCollection<Inventory> _allItems; // original list
+
+        // private string _searchText;
+        // public string SearchText
+        // {
+        //     get => _searchText;
+        //     set
+        //     {
+        //         _searchText = value;
+        //         OnPropertyChanged();
+        //         FilterItems(_searchText);
+        //     }
+        // }
+
+        // public ICommand EditCommand { get; set; }
+
+        public InventoryViewModel(InventoryService inventoryService)
         {
-            get => _searchText;
-            set
-            {
-                _searchText = value;
-                OnPropertyChanged();
-                FilterItems(_searchText);
-            }
+            this.inventoryService = inventoryService;
+            // InventoryItems = new ObservableCollection<Inventory>();
+            // _allItems = new ObservableCollection<Inventory>();
+
+            // //_allItems.Add(newItemFromDb);
+            // //InventoryItems.Add(newItemFromDb);
+
+            // // sample data (for testing UI)
+            // _allItems.Add(new Inventory
+            // {
+            //     Id = 1,
+            //     ItemName = "Milk",
+            //     TotalAmount = 20,
+            //     RetailPrice = 50,
+            //     ItemType = "Dairy",
+            //     LastModified = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+            // });
+
+            // _allItems.Add(new Inventory
+            // {
+            //     Id = 2,
+            //     ItemName = "Bread",
+            //     TotalAmount = 15,
+            //     RetailPrice = 30,
+            //     ItemType = "Bakery",
+            //     LastModified = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+            // });
+
+            // foreach (var item in _allItems)
+            //     InventoryItems.Add(item);
+            // // command for adding item
+            // AddItemCommand = new Command(AddItem);
+            // EditCommand = new Command<Inventory>(async (item) => await EditItem(item));
         }
+        
 
-
-        public ICommand AddItemCommand { get; set; }
-        public ICommand EditCommand { get; set; }
-
-        public InventoryViewModel()
+        [RelayCommand]
+        public async Task AddItem()
         {
-            InventoryItems = new ObservableCollection<Inventory>();
-            _allItems = new ObservableCollection<Inventory>();
+            if (IsBusy) return;
+            IsBusy = true;
 
-            //_allItems.Add(newItemFromDb);
-            //InventoryItems.Add(newItemFromDb);
-
-            // sample data (for testing UI)
-            _allItems.Add(new Inventory
+            var navParameter = new Dictionary<string, object>()
             {
-                Id = 1,
-                ItemName = "Milk",
-                TotalAmount = 20,
-                RetailPrice = 50,
-                ItemType = "Dairy",
-                LastModified = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-            });
-
-            _allItems.Add(new Inventory
-            {
-                Id = 2,
-                ItemName = "Bread",
-                TotalAmount = 15,
-                RetailPrice = 30,
-                ItemType = "Bakery",
-                LastModified = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-            });
-
-            foreach (var item in _allItems)
-                InventoryItems.Add(item);
-            // command for adding item
-            AddItemCommand = new Command(AddItem);
-            EditCommand = new Command<Inventory>(async (item) => await EditItem(item));
-        }
-
-        private void FilterItems(string query)
-        {
-            InventoryItems.Clear();
-
-            var filtered = string.IsNullOrWhiteSpace(query)
-                ? _allItems
-                : _allItems.Where(i => i.ItemName.ToLower().Contains(query.ToLower()));
-
-            foreach (var item in filtered)
-                InventoryItems.Add(item);
-        }
-        private void AddItem()
-        {
-            var newItem = new Inventory
-            {
-                Id = _allItems.Count + 1,
-                
-                LastModified = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                {"IsFromInventory", true}
             };
-
-            _allItems.Add(newItem);
-            InventoryItems.Add(newItem);
+            try
+            {
+                await Shell.Current.GoToAsync($"{nameof(SupplierList)}?IsFromInventory={true}");
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.StackTrace);
+            }
+            IsBusy = false;
         }
 
-        private async Task EditItem(Inventory item)
+
+        [RelayCommand]
+        public async Task Edit(string barcode)
         {
-            if (item == null) return;
-            await Application.Current.MainPage.Navigation.PushAsync(new EditInventory(item));
+            var param = new Dictionary<string, object>
+            {
+                {"ItemBarcode", barcode}
+            };
+            var popup = new EditInventoryPopup(new EditInventoryPopupViewModel(inventoryService, barcode));
+            await Shell.Current.ShowPopupAsync(popup);
         }
+
+
+        public async Task RefreshInventoryRecords()
+        {
+            if (IsBusy) return;
+            IsBusy = true;
+
+            InventoryItems = await inventoryService.GetInventoryRecordsAsync();
+
+            IsBusy = false;
+        }
+
+        // private void FilterItems(string query)
+        // {
+        //     InventoryItems.Clear();
+
+        //     var filtered = string.IsNullOrWhiteSpace(query)
+        //         ? _allItems
+        //         : _allItems.Where(i => i.ItemName.ToLower().Contains(query.ToLower()));
+
+        //     foreach (var item in filtered)
+        //         InventoryItems.Add(item);
+        // }
+        // private void AddItem()
+        // {
+        //     var newItem = new Inventory
+        //     {
+        //         Id = _allItems.Count + 1,
+
+        //         LastModified = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+        //     };
+
+        //     _allItems.Add(newItem);
+        //     InventoryItems.Add(newItem);
+        // }
+
+        // private async Task EditItem(Inventory item)
+        // {
+        //     if (item == null) return;
+        //     await Application.Current.MainPage.Navigation.PushAsync(new EditInventory(item));
+        // }
     }
 }

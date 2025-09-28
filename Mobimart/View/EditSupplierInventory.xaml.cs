@@ -3,20 +3,39 @@ using MobiMart.ViewModel;
 
 namespace MobiMart.View;
 
-public partial class EditSupplierInventory : ContentPage, IQueryAttributable
+
+[QueryProperty(nameof(DeliveryId), "DeliveryId")]
+public partial class EditSupplierInventory : ContentPage
 {
-	private EditSuppInventoryViewModel vm = new();
-	public EditSupplierInventory()
+
+	private int _deliveryId;
+	public int DeliveryId
+	{
+		get => _deliveryId;
+		set
+		{
+			_deliveryId = value;
+			if (BindingContext is EditSuppInventoryViewModel vm)
+			{
+				vm.DeliveryId = value;
+			}
+		}
+	}
+
+	public EditSupplierInventory(EditSuppInventoryViewModel vm)
 	{
 		InitializeComponent();
 		BindingContext = vm;
 	}
 
-	public void ApplyQueryAttributes(IDictionary<string, object> query)
+
+	protected override async void OnAppearing()
 	{
-		if (query.TryGetValue("InventoryItem", out var item) && item is WholesaleInventory inv)
+		base.OnAppearing();
+
+		if (BindingContext is EditSuppInventoryViewModel vm)
 		{
-			vm.loadItems(inv);
-		} 
-	}
+			await vm.OnAppearing();
+		}
+    }
 }

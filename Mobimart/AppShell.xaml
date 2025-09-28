@@ -36,7 +36,7 @@
         <ShellContent
             Title="Supplier List"
             ContentTemplate="{DataTemplate view:SupplierList}"
-            Route="SupplierList" />
+            Route="SupplierListWrapper"/>
         <ShellContent
             Title="Inventory"
             ContentTemplate="{DataTemplate view:InventoryListPage}"

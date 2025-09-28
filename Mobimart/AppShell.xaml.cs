@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using MobiMart.Service;
 using MobiMart.View;
 using MobiMart.ViewModel;
@@ -37,11 +38,27 @@ namespace MobiMart
             // Routing.RegisterRoute(nameof(EditSupplierInventory), typeof(EditSupplierInventory));
             Routing.RegisterRoute(nameof(AddSupplierItem), typeof(AddSupplierItem));
             Routing.RegisterRoute(nameof(ViewTransaction), typeof(ViewTransaction));
+
+            Routing.RegisterRoute(nameof(SupplierList), typeof(SupplierList));
+            Routing.RegisterRoute("SupplierListWrapper", typeof(SupplierList));
+            this.Navigating += async (s, e) =>
+            {
+                if (e.Target.Location.OriginalString.Contains("SupplierListWrapper"))
+                {
+                    // redirect to supplier list with parameter
+                    e.Cancel();
+                    try
+                    {
+                        await Shell.Current.GoToAsync($"{nameof(SupplierList)}?IsFromInventory=false");
+                    }
+                    catch (Exception err)
+                    {
+                        Debug.WriteLine(err);
+                    }
+                }
+            };
         }
-        // private async void OnShellLoaded(object sender, EventArgs e)
-        // {
-        //     await Shell.Current.GoToAsync("//InventoryListPage");
-        // }
+        
         private void OnShellPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (BindingContext is FlyoutMenuViewModel vm)

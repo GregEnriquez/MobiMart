@@ -4,16 +4,16 @@ using SQLite;
 
 namespace MobiMart.Model;
 
-public class WholeSaleInventory
+public class Delivery
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; } // deliveryId
     [ForeignKey(nameof(Supplier))]
     public int SupplierId { get; set; }
-    public string ItemName { get; set; } = "";
+    [ForeignKey(nameof(Item))]
+    public string ItemBarcode { get; set; } = "";
     public int DeliveryAmount { get; set; }
     public string DateDelivered { get; set; } = "";
     public string ExpirationDate { get; set; } = "";
     public float BatchWorth { get; set; }
-    public string ItemType { get; set; } = "";
 }

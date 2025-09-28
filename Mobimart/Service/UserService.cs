@@ -16,6 +16,18 @@ public class UserService
 
     public UserService()
     {
+        if (DeviceInfo.Platform == DevicePlatform.Android)
+        {
+            if (DeviceInfo.DeviceType == DeviceType.Virtual)
+                baseUrl = "http://10.0.2.2:5199"; // emulator
+            else
+                baseUrl = "http://172.20.10.5:5199"; // physical device (replace with server [LAN] IP)
+        }
+        else
+        {
+            baseUrl = "http://localhost:5199"; // Windows
+        }
+
         client = new HttpClient()
         {
             BaseAddress = new Uri(baseUrl)

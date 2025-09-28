@@ -4,6 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:view="clr-namespace:MobiMart.View"
     xmlns:viewmodel="clr-namespace:MobiMart.ViewModel"
+    x:DataType="viewmodel:InventoryViewModel"
+    xmlns:model="clr-namespace:MobiMart.Model"
     x:Class="MobiMart.View.InventoryListPage"
     BackgroundColor="#FDF4DC"
     Title="InventoryListPage">
@@ -60,35 +62,33 @@
 
                 <ScrollView Orientation="Both">
                     <VerticalStackLayout>
-                        <Grid ColumnDefinitions="100, 80, 50, 100, 100, 50" BackgroundColor="#6D5206" Padding="5">
+                        <Grid ColumnDefinitions="120, 120, 120, 120, 120" BackgroundColor="#6D5206" Padding="5">
                             <Label Text="Item Name" TextColor="White" FontAttributes="Bold" />
                             <Label Grid.Column="1" Text="Quantity" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
                             <Label Grid.Column="2" Text="Price" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
                             <Label Grid.Column="3" Text="Type" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
-                            <Label Grid.Column="4" Text="Desc" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
-                            <Label Grid.Column="5" Text="Action" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+                            <Label Grid.Column="4" Text="Action" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
                         </Grid>
 
                         <CollectionView ItemsSource="{Binding InventoryItems}">
                             <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid ColumnDefinitions="100, 80, 50, 100, 100, 50" Padding="5" BackgroundColor="#F6CD5E">
-                                        <Label Text="{Binding ItemName}" TextColor="#6D5206" />
-                                        <Label Grid.Column="1" Text="{Binding TotalAmount}" TextColor="#6D5206" HorizontalOptions="Center" />
-                                        <Label Grid.Column="2" Text="{Binding RetailPrice}" TextColor="#6D5206" HorizontalOptions="Center" />
-                                        <Label Grid.Column="3" Text="{Binding ItemType}" TextColor="#6D5206" HorizontalOptions="Center" />
-                                        <Label Grid.Column="4" Text="" TextColor="#6D5206" HorizontalOptions="Center" />
-                                        <Button Grid.Column="5"
+                                <DataTemplate x:DataType="model:InventoryRecord">
+                                    <Grid ColumnDefinitions="120, 120, 120, 120, 120" Padding="5" BackgroundColor="#F6CD5E">
+                                        <Label Text="{Binding Name}" TextColor="#6D5206" />
+                                        <Label Grid.Column="1" Text="{Binding Quantity}" TextColor="#6D5206" HorizontalOptions="Center" />
+                                        <Label Grid.Column="2" Text="{Binding Price}" TextColor="#6D5206" HorizontalOptions="Center" />
+                                        <Label Grid.Column="3" Text="{Binding Type}" TextColor="#6D5206" HorizontalOptions="Center" />
+                                        <Button Grid.Column="4"
                                                 Text="Edit"
                                                 BackgroundColor="#FBE7B3"
                                                 TextColor="#6D5206"
                                                 CornerRadius="10"
                                                 Padding="5,0"
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:InventoryViewModel}}, Path=EditCommand}"
-                                                CommandParameter="{Binding .}" />
+                                                CommandParameter="{Binding Barcode}" />
                                     </Grid>
                                 </DataTemplate>
-                            </CollectionView.ItemTemplate>
+                            </CollectionView.ItemTemplate>  
                         </CollectionView>
                     </VerticalStackLayout>
                 </ScrollView>
