@@ -72,6 +72,15 @@ namespace MobiMart.ViewModel
 
         [ObservableProperty]
         List<Item> allItems;
+        [ObservableProperty]
+        string barcodeId;
+        [ObservableProperty]
+        bool isBarcodeEntry = true;
+        [ObservableProperty]
+        bool isScannerVisible = false;
+
+
+        private Transaction transactionUsingBarcode;
 
 
         public TransactionViewModel(InventoryService inventoryService, SalesService salesService)
@@ -192,7 +201,7 @@ namespace MobiMart.ViewModel
             {
                 if (Object.ReferenceEquals(transaction, existingTransaction)) continue;
                 if (!transaction.ItemName.Equals(existingTransaction.ItemName)) continue;
-                
+
                 transaction.Quantity = 0;
                 transaction.ItemName = "";
                 transaction.Price = 0;
@@ -310,7 +319,7 @@ namespace MobiMart.ViewModel
                     }
                 }
             }
-            
+
 
             // reset page
             TotalPrice = 0;
@@ -320,6 +329,42 @@ namespace MobiMart.ViewModel
             await Toast.Make("Sales Transaction Succesfully Saved", ToastDuration.Short, 14).Show();
 
             IsBusy = false;
+        }
+
+
+        public bool PickItem(string barcode)
+        {
+            var item = AllItems.Find(x => x.Barcode.Equals(barcode));
+            if (item is null) return false;
+
+            transactionUsingBarcode.BarcodeId = barcode;
+            transactionUsingBarcode.SelectedIndex = AllItems.IndexOf(item);
+            IsBarcodeEntry = false;
+
+            return true;
+        }
+
+
+        [RelayCommand]
+        public void ShowScanner(Transaction transactionItem)
+        {
+            IsScannerVisible = true;
+            transactionUsingBarcode = transactionItem;
+        }
+
+
+        [RelayCommand]
+        public void HideScanner()
+        {
+            IsScannerVisible = false;
+            transactionUsingBarcode = null;
+        }
+
+
+        [RelayCommand]
+        public void ToggleBarcode()
+        {
+            IsBarcodeEntry = !IsBarcodeEntry;
         }
 
 

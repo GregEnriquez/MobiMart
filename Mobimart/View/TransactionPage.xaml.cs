@@ -1,6 +1,9 @@
 using System.Diagnostics;
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 using MobiMart.Model;
 using MobiMart.ViewModel;
+using ZXing.Net.Maui;
 
 namespace MobiMart.View;
 
@@ -56,6 +59,45 @@ public partial class TransactionPage : ContentPage
         if (BindingContext is TransactionViewModel vm)
         {
             vm.UpdateChange();
+        }
+    }
+
+
+    private void OnBarcodeEntryTextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (e.NewTextValue.Length == 13)
+		{
+			if (BindingContext is TransactionViewModel vm)
+			{
+                vm.PickItem(e.NewTextValue);
+			}
+		}
+    }
+    
+    private void OnPressedTorchButton(object sender, EventArgs e)
+	{
+		barcodeReader.IsTorchOn = !barcodeReader.IsTorchOn;
+	}
+
+
+    private void BarcodeReader_BarcodesDetected(object sender, BarcodeDetectionEventArgs e)
+    {
+        var first = e.Results?.FirstOrDefault();
+        if (first is null) return;
+
+        if (BindingContext is TransactionViewModel vm)
+        {
+            bool hasRecord = vm.PickItem(first.Value);
+            if (!hasRecord)
+            {
+                Dispatcher.Dispatch(async () =>
+                {
+                    await Toast.Make("No item found with that barcode", ToastDuration.Short, 14).Show();
+                });
+            }
+
+            barcodeReader.IsTorchOn = false;
+            vm.HideScanner();
         }
     }
 

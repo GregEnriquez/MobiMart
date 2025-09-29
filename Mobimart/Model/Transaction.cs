@@ -31,6 +31,9 @@ namespace MobiMart.Model
             set { price = value; OnPropertyChanged(); OnQuantityOrPriceChanged?.Invoke(); }
         }
 
+        public int SelectedIndex { get; set; } = -1;
+        public string BarcodeId { get; set; } = "";
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = "") =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
