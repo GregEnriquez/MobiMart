@@ -123,20 +123,24 @@ public class InventoryService
     }
 
 
-    public async Task<List<DeliveryRecord>> GetDeliveryRecordsAsync(int supplierId)
+    public async Task<List<Delivery>> GetDeliveriesViaItem(string barcode)
+    {
+        await Init();
+        return await db!.Table<Delivery>().Where(x => x.ItemBarcode.Equals(barcode)).ToListAsync();
+    }
+
+
+    public async Task<List<DeliveryRecord>> GetDeliveryRecordsViaItem(string barcode)
     {
         await Init();
         var output = new List<DeliveryRecord>();
-        var deliveries = await GetDeliveriesViaSupplier(supplierId);
-        Item item = null;
-        Description desc = null;
+        var deliveries = await GetDeliveriesViaItem(barcode);
+        var item = await GetItemAsync(barcode);
+        var desc = await GetItemDescAsync(barcode);
+        Inventory inv = null;
         foreach (var d in deliveries)
         {
-            if (item is null || !item.Barcode.Equals(d.ItemBarcode))
-            {
-                item = await GetItemAsync(d.ItemBarcode);
-                desc = await GetItemDescAsync(item.Barcode);
-            }
+            inv = await GetInventoryFromDeliveryAsync(d.Id);
 
             output.Add(new DeliveryRecord()
             {
@@ -148,7 +152,48 @@ public class InventoryService
                 BatchCostPrice = d.BatchWorth,
                 ItemType = item.Type,
                 ItemDesc = desc!.Text,
-                Barcode = item.Barcode
+                Barcode = item.Barcode,
+                QuantityInStock = inv!.TotalAmount,
+                ConsignmentSchedule = d.ConsignmentSchedule,
+                ReturnByDate = d.ReturnByDate
+            });
+        }
+
+        return output;
+    }
+
+
+    public async Task<List<DeliveryRecord>> GetDeliveryRecordsAsync(int supplierId)
+    {
+        await Init();
+        var output = new List<DeliveryRecord>();
+        var deliveries = await GetDeliveriesViaSupplier(supplierId);
+        Item item = null;
+        Description desc = null;
+        Inventory inv = null;
+        foreach (var d in deliveries)
+        {
+            if (item is null || !item.Barcode.Equals(d.ItemBarcode))
+            {
+                item = await GetItemAsync(d.ItemBarcode);
+                desc = await GetItemDescAsync(item.Barcode);
+            }
+            inv = await GetInventoryFromDeliveryAsync(d.Id);
+
+            output.Add(new DeliveryRecord()
+            {
+                DeliveryId = d.Id,
+                ItemName = item.Name,
+                DelivQuantity = d.DeliveryAmount,
+                DateDelivered = d.DateDelivered,
+                DateExpire = d.ExpirationDate,
+                BatchCostPrice = d.BatchWorth,
+                ItemType = item.Type,
+                ItemDesc = desc!.Text,
+                Barcode = item.Barcode,
+                QuantityInStock = inv!.TotalAmount,
+                ConsignmentSchedule = d.ConsignmentSchedule,
+                ReturnByDate = d.ReturnByDate
             });
         }
 
@@ -239,6 +284,13 @@ public class InventoryService
 
 
     public async Task DeleteInventory(Inventory x)
+    {
+        await Init();
+        await db!.DeleteAsync(x);
+    }
+
+
+    public async Task DeleteDelivery(Delivery x)
     {
         await Init();
         await db!.DeleteAsync(x);

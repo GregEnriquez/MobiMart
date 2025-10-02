@@ -38,7 +38,7 @@
                 FontSize="22"/>
 
             <Label 
-                Text="Inventory for Wholesale" 
+                Text="{Binding Supplier.Type, StringFormat='Inventory for {0}'}" 
                 FontAttributes="Bold" 
                 TextColor="#6F4E37" 
                 HorizontalTextAlignment="Center"
@@ -49,9 +49,16 @@
             <ScrollView Orientation="Both">
                 <CollectionView ItemsSource="{Binding SupplierItems}">
                     <CollectionView.Header>
-                        <Grid ColumnDefinitions="110, 110, 110, 110, 110, 110, 110, 110, 210"
+                        <Grid ColumnDefinitions="110, 110, 110, 110, 110, 110, 110, 210"
                             Padding="5"
                             BackgroundColor="#A9882D">
+                            <Grid.Triggers>
+                                <DataTrigger TargetType="Grid"
+                                            Binding="{Binding Supplier.Type}"
+                                            Value="Consignment">
+                                    <Setter Property="ColumnDefinitions" Value="110, 110, 110, 110, 110, 110, 110, 110, 110, 210"/>
+                                </DataTrigger>
+                            </Grid.Triggers>
 
                             <!-- <BoxView Grid.Column="0" WidthRequest="100" BackgroundColor="Transparent" /> -->
 
@@ -75,8 +82,7 @@
                                     <ImageButton
                                         Source="edit.png"
                                         WidthRequest="15" HeightRequest="15"
-                                        Padding="13"
-                                        Clicked="editTapped"/>
+                                        Padding="13"/>
 
                                     <Label 
                                         Text="Add" 
@@ -88,13 +94,13 @@
                                 </HorizontalStackLayout>
                             </Border>
 
-                            <Label 
+                            <!-- <Label 
                                 Text="Delivery Id" 
                                 TextColor="White" 
                                 HorizontalTextAlignment="Center"
                                 VerticalTextAlignment="Center"
                                 FontSize="17"
-                                Grid.Column="1"/>
+                                Grid.Column="1"/> -->
 
                             <Label 
                                 Text="Item Name" 
@@ -102,15 +108,15 @@
                                 HorizontalTextAlignment="Center"
                                 VerticalTextAlignment="Center"
                                 FontSize="17"
-                                Grid.Column="2"/>
+                                Grid.Column="1"/>
 
                             <Label 
-                                Text="Delivery Amount" 
+                                Text="Delivery Qty."
                                 TextColor="White" 
                                 HorizontalTextAlignment="Center"
                                 VerticalTextAlignment="Center"
                                 FontSize="17"
-                                Grid.Column="3"/>
+                                Grid.Column="2"/>
 
                             <Label 
                                 Text="Date Delivered" 
@@ -118,7 +124,7 @@
                                 HorizontalTextAlignment="Center"
                                 VerticalTextAlignment="Center"
                                 FontSize="17"
-                                Grid.Column="4"/>
+                                Grid.Column="3"/>
 
                             <Label 
                                 Text="Expiration Date" 
@@ -126,15 +132,15 @@
                                 HorizontalTextAlignment="Center"
                                 VerticalTextAlignment="Center"
                                 FontSize="17"
-                                Grid.Column="5"/>
+                                Grid.Column="4"/>
 
                             <Label 
-                                Text="Batch Worth" 
+                                Text="Batch Cost" 
                                 TextColor="White" 
                                 HorizontalTextAlignment="Center"
                                 VerticalTextAlignment="Center"
                                 FontSize="17"
-                                Grid.Column="6"/>
+                                Grid.Column="5"/>
 
                             <Label 
                                 Text="Item Type" 
@@ -142,7 +148,41 @@
                                 HorizontalTextAlignment="Center"
                                 VerticalTextAlignment="Center"
                                 FontSize="17"
-                                Grid.Column="7"/>
+                                Grid.Column="6"/>
+
+                            <Label 
+                                Text="Consignment Schedule"
+                                TextColor="White" 
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center"
+                                FontSize="17"
+                                Grid.Column="7"
+                                IsVisible="False"> 
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label"
+                                                Binding="{Binding Supplier.Type}"
+                                                Value="Consignment">
+                                        <Setter Property="IsVisible" Value="True"/>
+                                    </DataTrigger>
+                                </Label.Triggers>    
+                            </Label>
+
+                            <Label 
+                                Text="Return By Date"
+                                TextColor="White" 
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center"
+                                FontSize="17"
+                                Grid.Column="8"
+                                IsVisible="False"> 
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label"
+                                                Binding="{Binding Supplier.Type}"
+                                                Value="Consignment">
+                                        <Setter Property="IsVisible" Value="True"/>
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
 
                             <Label 
                                 Text="Item Description" 
@@ -150,7 +190,15 @@
                                 HorizontalTextAlignment="Center"
                                 VerticalTextAlignment="Center"
                                 FontSize="17"
-                                Grid.Column="8"/>
+                                Grid.Column="7">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label"
+                                                Binding="{Binding Supplier.Type}"
+                                                Value="Consignment">
+                                        <Setter Property="Grid.Column" Value="9"/>
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
 
 
                         </Grid>
@@ -158,18 +206,25 @@
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="model:DeliveryRecord">
-                            <Grid ColumnDefinitions="110, 110, 110, 110, 110, 110, 110, 110, 210"
+                            <Grid ColumnDefinitions="110, 110, 110, 110, 110, 110, 110, 210"
                                 Padding="5"
                                 BackgroundColor="#CFBC5D"
                                 Margin="0,1">
+                                <Grid.Triggers>
+                                    <DataTrigger TargetType="Grid"
+                                                Binding="{Binding BindingContext.Supplier.Type, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                                Value="Consignment">
+                                        <Setter Property="ColumnDefinitions" Value="110, 110, 110, 110, 110, 110, 110, 110, 110, 210"/>
+                                    </DataTrigger>
+                                </Grid.Triggers>
 
                                 <Border
-                                BackgroundColor="Green"
-                                StrokeShape="RoundRectangle 10,10,10,10"
-                                HorizontalOptions="Center"
-                                VerticalOptions="Center"
-                                Grid.Column="0"
-                                IsVisible="False">
+                                    BackgroundColor="Green"
+                                    StrokeShape="RoundRectangle 10,10,10,10"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"
+                                    Grid.Column="0"
+                                    IsVisible="True">
 
                                     <Border.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="editTapped"
@@ -183,8 +238,7 @@
                                         <ImageButton
                                     Source="edit.png"
                                     WidthRequest="5" HeightRequest="5"
-                                    Padding="10"
-                                    Clicked="editTapped"/>
+                                    Padding="10"/>
 
                                         <Label 
                                         Text="Edit" 
@@ -196,61 +250,109 @@
                                     </HorizontalStackLayout>
                                 </Border>
 
-                                <Label 
+                                <!-- <Label 
                                     Text="{Binding DeliveryId}" 
                                     TextColor="White" 
                                     HorizontalTextAlignment="Center"
                                     FontSize="18"
-                                    Grid.Column="1"/>
+                                    Grid.Column="1"/> -->
 
                                 <Label 
                                     Text="{Binding ItemName}" 
                                     TextColor="White" 
                                     HorizontalTextAlignment="Center"
                                     FontSize="18"
-                                    Grid.Column="2"/>
+                                    Grid.Column="1"/>
 
                                 <Label 
-                                    Text="{Binding DelivQuantity}" 
                                     TextColor="White" 
                                     HorizontalTextAlignment="Center"
                                     FontSize="18"
-                                    Grid.Column="3"/>
+                                    Grid.Column="2">
+                                    <Label.Text>
+                                        <MultiBinding StringFormat="{}{0} / {1} ">
+                                        <Binding Path="QuantityInStock" />
+                                        <Binding Path="DelivQuantity" />
+                                    </MultiBinding>
+                                    </Label.Text>
+                                </Label>
+                                
 
                                 <Label 
                                     Text="{Binding DateDelivered}" 
                                     TextColor="White" 
                                     HorizontalTextAlignment="Center"
                                     FontSize="18"
-                                    Grid.Column="4"/>
+                                    Grid.Column="3"/>
 
                                 <Label 
                                     Text="{Binding DateExpire}" 
                                     TextColor="White" 
                                     HorizontalTextAlignment="Center"
                                     FontSize="18"
-                                    Grid.Column="5"/>
+                                    Grid.Column="4"/>
 
                                 <Label 
                                     Text="{Binding BatchCostPrice}" 
                                     TextColor="White" 
                                     HorizontalTextAlignment="Center"
                                     FontSize="18"
-                                    Grid.Column="6"/>
+                                    Grid.Column="5"/>
 
                                 <Label 
                                     Text="{Binding ItemType}" 
                                     TextColor="White" 
                                     HorizontalTextAlignment="Center"
                                     FontSize="18"
-                                    Grid.Column="7"/>
+                                    Grid.Column="6"/>
+
+                                <Label 
+                                    Text="{Binding ConsignmentSchedule}" 
+                                    TextColor="White" 
+                                    HorizontalTextAlignment="Center"
+                                    FontSize="18"
+                                    Grid.Column="7"
+                                    IsVisible="False">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label"
+                                                    Binding="{Binding BindingContext.Supplier.Type, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                                    Value="Consignment">
+                                            <Setter Property="IsVisible" Value="True"/>
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+
+                                <Label 
+                                    Text="{Binding ReturnByDate}" 
+                                    TextColor="White" 
+                                    HorizontalTextAlignment="Center"
+                                    FontSize="18"
+                                    Grid.Column="8"
+                                    IsVisible="False">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label"
+                                                    Binding="{Binding BindingContext.Supplier.Type, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                                    Value="Consignment">
+                                            <Setter Property="IsVisible" Value="True"/>
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+
 
                                 <Label 
                                     Text="{Binding ItemDesc}" 
                                     TextColor="White" 
                                     HorizontalTextAlignment="Center"
                                     FontSize="18"
-                                    Grid.Column="8"/>
+                                    Grid.Column="7">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label"
+                                                    Binding="{Binding BindingContext.Supplier.Type, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                                    Value="Consignment">
+                                            <Setter Property="Grid.Column" Value="9"/>
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
 
                             </Grid>
                         </DataTemplate>

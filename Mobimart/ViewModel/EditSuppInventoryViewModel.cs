@@ -38,9 +38,19 @@ namespace MobiMart.ViewModel
         float? wUnitCost;
         [ObservableProperty]
         bool isBatchCost = true;
+        [ObservableProperty]
+        int? wDelivQuantity;
+        [ObservableProperty]
+        DateTime? wReturnByDate;
+        [ObservableProperty]
+        string wConsignmentSchedule;
 
         [ObservableProperty]
         int deliveryId;
+        [ObservableProperty]
+        bool isEditDelivery = false;
+        [ObservableProperty]
+        bool isConsignment = false;
 
         Item item;
         Inventory inventory;
@@ -62,7 +72,7 @@ namespace MobiMart.ViewModel
             item = await inventoryService.GetItemAsync(inventory.ItemBarcode);
             desc = await inventoryService.GetItemDescAsync(item.Barcode);
 
-
+            IsConsignment = !delivery.ConsignmentSchedule.Equals("");
             BarcodeId = item.Barcode;
             WItemName = item.Name;
             WItemDesc = desc.Text;
@@ -71,20 +81,30 @@ namespace MobiMart.ViewModel
             WDateDelivered = DateTime.Parse(delivery.DateDelivered);
             WDateExpire = DateTime.Parse(delivery.ExpirationDate);
             WItemQuantity = inventory.TotalAmount;
+            WDelivQuantity = delivery.DeliveryAmount;
+            WBatchCost = delivery.BatchWorth;
+            if (IsConsignment)
+            {
+                WConsignmentSchedule = delivery.ConsignmentSchedule;
+                WReturnByDate = DateTime.Parse(delivery.ReturnByDate);
+            }
         }
 
 
         [RelayCommand]
         async Task Delete()
         {
+            string message = "Are you sure you want to delete this " + (IsEditDelivery ? "Delivery" : "Inventory") + " record?";
+            if (IsEditDelivery) message += "\n\nThis will also delete the Inventory Record associated with this delivery.";
             bool confirm = await Shell.Current.DisplayAlert(
                 "Confirm Delete",
-                "Are you sure you want to delete this record from the inventory?",
+                message,
                 "Yes", "No"
             );
 
             if (!confirm) return;
             await inventoryService!.DeleteInventory(inventory);
+            if (IsEditDelivery) await inventoryService!.DeleteDelivery(delivery);
             await Toast.Make("Record has been deleted", ToastDuration.Short, 14).Show();
             await Shell.Current.GoToAsync("..", true);
         }
@@ -135,23 +155,30 @@ namespace MobiMart.ViewModel
             }
 
 
+            inventory.TotalAmount = (int)WItemQuantity!;
             delivery.DateDelivered = WDateDelivered.ToString()!;
             delivery.ExpirationDate = WDateExpire.ToString()!;
-            inventory.TotalAmount = (int)WItemQuantity!;
+            if (IsConsignment) delivery.ReturnByDate = WReturnByDate.ToString()!;
+            delivery.DeliveryAmount = (int)WDelivQuantity!;
+            delivery.BatchWorth = (float)WBatchCost!;
+            if (IsConsignment) delivery.ConsignmentSchedule = WConsignmentSchedule;
 
             await inventoryService!.UpdateDescAsync(desc);
             await inventoryService!.UpdateDeliveryAsync(delivery);
             await inventoryService!.UpdateInventoryAsync(inventory);
-
 
             BarcodeId = "";
             WItemName = "";
             WItemDesc = "";
             WItemType = "";
             WRetailPrice = null;
+            WItemQuantity = null;
             WDateDelivered = null;
             WDateExpire = null;
-            WItemQuantity = null;
+            WReturnByDate = null;
+            WDelivQuantity = null;
+            WBatchCost = null;
+            WConsignmentSchedule = "";
 
             await Toast.Make("Record has been updated", ToastDuration.Short, 14).Show();
             await Shell.Current.GoToAsync("..", true);

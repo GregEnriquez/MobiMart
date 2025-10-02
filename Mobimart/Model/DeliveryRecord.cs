@@ -11,4 +11,8 @@ public record DeliveryRecord
     public string ItemType { get; set; } = "";
     public string ItemDesc { get; set; } = "";
     public string Barcode { get; set; } = "";
+    public int QuantityInStock { get; set; }
+
+    public string ConsignmentSchedule { get; set; } = "";
+    public string ReturnByDate { get; set; } = "";
 }

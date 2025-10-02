@@ -27,17 +27,15 @@ public partial class SupplierInventory : ContentPage
 		BindingContext = viewModel;
 	}
 
-	private async void editTapped(object sender, EventArgs args)
+	private async void editTapped(object sender, TappedEventArgs args)
 	{
-		if (sender is Element element && element.BindingContext is WholesaleInventory item)
+		var navParam = new Dictionary<string, object>
 		{
-			var navParam = new Dictionary<string, object>
-			{
-				{ "DeliveryId", 1 }
-			};
+			{ "DeliveryId", args.Parameter! },
+			{ "IsEditDelivery", true}
+		};
 
-			await Shell.Current.GoToAsync(nameof(EditSupplierInventory), navParam);
-		}
+		await Shell.Current.GoToAsync(nameof(EditSupplierInventory), true, navParam);
 	}
 
 	private async void addTapped(object sender, EventArgs args)

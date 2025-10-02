@@ -16,4 +16,6 @@ public class Delivery
     public string DateDelivered { get; set; } = "";
     public string ExpirationDate { get; set; } = "";
     public float BatchWorth { get; set; }
+    public string ConsignmentSchedule { get; set; } = "";
+    public string ReturnByDate { get; set; } = "";
 }

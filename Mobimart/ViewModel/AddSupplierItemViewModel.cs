@@ -37,6 +37,10 @@ namespace MobiMart.ViewModel
         float? wUnitCost;
         [ObservableProperty]
         bool isBatchCost = true;
+        [ObservableProperty]
+        string wConsignmentSchedule = "";
+        [ObservableProperty]
+        DateTime? wReturnByDate;
 
         [ObservableProperty]
         bool isScannerVisible = false;
@@ -78,6 +82,8 @@ namespace MobiMart.ViewModel
             if (WDelivQuantity == null) emptyCount += 1;
             if (WBatchCost == null && WUnitCost == null) emptyCount += 1;
             if (WDateExpire == null) emptyCount += 1;
+            if (Supplier.Type.Equals("Consignment") && WConsignmentSchedule.Equals("")) emptyCount += 1;
+            if (Supplier.Type.Equals("Consignment") && WReturnByDate == null) emptyCount += 1;
 
             if (emptyCount > 0)
             {
@@ -168,6 +174,11 @@ namespace MobiMart.ViewModel
                 ExpirationDate = WDateExpire.ToString()!,
                 BatchWorth = (float)WBatchCost!
             };
+            if (Supplier.Type.Equals("Consignment"))
+            {
+                delivery.ConsignmentSchedule = WConsignmentSchedule;
+                delivery.ReturnByDate = WReturnByDate.ToString()!;
+            }
 
             await inventoryService.AddDeliveryAsync(delivery);
 

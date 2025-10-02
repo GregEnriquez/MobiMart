@@ -65,7 +65,7 @@
                 Stroke="#A9882D"
                 StrokeThickness="1.5"
                 StrokeShape="RoundRectangle 10,10,10,10">
-                    <Entry Placeholder="Enter Item Description" Text="{Binding WItemDesc}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                    <Editor AutoSize="TextChanges" Placeholder="Enter Item Description" Text="{Binding WItemDesc}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
                 </Border>
 
                 <Label Text="Item Type" FontAttributes="Bold" TextColor="#6F4E37" />
@@ -145,6 +145,49 @@
                     </Border>
                 </VerticalStackLayout>
 
+<!-- ================================================================================================================================================================================ -->
+                <VerticalStackLayout Margin="0,20,0,0" Spacing="15">
+                    
+                    <VerticalStackLayout.Triggers>
+                        <DataTrigger TargetType="VerticalStackLayout"
+                                    Binding="{Binding Supplier.Type}"
+                                    Value="Wholesale">
+                            <Setter Property="IsVisible" Value="False"/>
+                        </DataTrigger>
+                        <DataTrigger TargetType="VerticalStackLayout"
+                                    Binding="{Binding Supplier.Type}"
+                                    Value="Consignment">
+                            <Setter Property="IsVisible" Value="True"/>
+                        </DataTrigger>
+                    </VerticalStackLayout.Triggers>
+
+                    <Label Text="Consignment Schedule" FontAttributes="Bold" TextColor="#6F4E37" />
+                    <Border
+                        Stroke="#A9882D"
+                        StrokeThickness="1.5"
+                        StrokeShape="RoundRectangle 10,10,10,10">
+                        <Entry Placeholder="Enter Consignment Schedule" Text="{Binding WConsignmentSchedule}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                    </Border>
+
+                    <Label Text="Return By Date" FontAttributes="Bold" TextColor="#6F4E37" />
+                    <Border
+                        Stroke="#A9882D"
+                        StrokeThickness="1.5"
+                        StrokeShape="RoundRectangle 10,10,10,10"
+                        WidthRequest="125"
+                        HorizontalOptions="Start">
+                        <DatePicker 
+                            Date="{Binding WReturnByDate}" 
+                            BackgroundColor="#F8ECC6" 
+                            TextColor="#A9882D"
+                            Format="MM/dd/yyyy"
+                            HorizontalOptions="Center"
+                            MinimumDate="01/01/2025"
+                            />
+                    </Border>
+                </VerticalStackLayout>
+
+
                 <Label Text="Delivery Quantity" FontAttributes="Bold" TextColor="#6F4E37" />
                 <Border
                 Stroke="#A9882D"
@@ -175,7 +218,8 @@
                         <Entry Placeholder="Enter Batch Cost" 
                             Text="{Binding WBatchCost}" 
                             BackgroundColor="#F8ECC6" 
-                            TextColor="#A9882D"/>
+                            TextColor="#A9882D"
+                            Keyboard="Numeric"/>
                         <Button Text="⇆"
                             BackgroundColor="Transparent"
                             Grid.Column="1"
@@ -200,7 +244,8 @@
                         <Entry Placeholder="Enter Unit Cost" 
                             Text="{Binding WUnitCost}" 
                             BackgroundColor="#F8ECC6" 
-                            TextColor="#A9882D"/>
+                            TextColor="#A9882D"
+                            Keyboard="Numeric"/>
                         <Button Text="⇆"
                             BackgroundColor="Transparent"
                             Grid.Column="1"

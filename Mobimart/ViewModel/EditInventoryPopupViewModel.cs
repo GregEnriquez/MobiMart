@@ -13,7 +13,7 @@ public partial class EditInventoryPopupViewModel : BaseViewModel, IQueryAttribut
 {
 
     [ObservableProperty]
-    public List<Delivery> deliveries;
+    public List<DeliveryRecord> deliveries;
     [ObservableProperty]
     public Item item;
 
@@ -25,29 +25,30 @@ public partial class EditInventoryPopupViewModel : BaseViewModel, IQueryAttribut
     {
         this.inventoryService = inventoryService;
         ItemBarcode = barcode;
-
         RefreshRecords();
     }
 
 
     private async void RefreshRecords()
     {
-        var DeliveriesDummy = new List<Delivery>();
         Item = await inventoryService.GetItemAsync(ItemBarcode);
-        var inventoryList = await inventoryService.GetInventoriesAsync(ItemBarcode);
-        var deliveries = await inventoryService.GetDeliveriesAsync(ItemBarcode);
+        // var DeliveriesDummy = new List<Delivery>();
+        // var inventoryList = await inventoryService.GetInventoriesAsync(ItemBarcode);
+        // var deliveries = await inventoryService.GetDeliveriesAsync(ItemBarcode);
 
-        foreach (var inv in inventoryList)
-        {
-            var deliveryRecord = deliveries.Find(x => x.Id == inv.DeliveryId);
-            if (deliveryRecord is not null)
-            {
-                DeliveriesDummy.Add(deliveryRecord);
-                continue;
-            }
-        }
+        // foreach (var inv in inventoryList)
+        // {
+        //     var deliveryRecord = deliveries.Find(x => x.Id == inv.DeliveryId);
+        //     if (deliveryRecord is not null)
+        //     {
+        //         DeliveriesDummy.Add(deliveryRecord);
+        //         continue;
+        //     }
+        // }
 
-        Deliveries = DeliveriesDummy;
+        // Deliveries = DeliveriesDummy;
+
+        Deliveries = await inventoryService.GetDeliveryRecordsViaItem(ItemBarcode);
     }
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)

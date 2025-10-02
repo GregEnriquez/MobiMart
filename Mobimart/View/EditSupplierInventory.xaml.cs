@@ -5,6 +5,7 @@ namespace MobiMart.View;
 
 
 [QueryProperty(nameof(DeliveryId), "DeliveryId")]
+[QueryProperty(nameof(IsEditDelivery), "IsEditDelivery")]
 public partial class EditSupplierInventory : ContentPage
 {
 
@@ -18,6 +19,20 @@ public partial class EditSupplierInventory : ContentPage
 			if (BindingContext is EditSuppInventoryViewModel vm)
 			{
 				vm.DeliveryId = value;
+			}
+		}
+	}
+
+	private bool _isEditDelivery;
+	public bool IsEditDelivery
+	{
+		get => _isEditDelivery;
+		set
+		{
+			_isEditDelivery = value;
+			if (BindingContext is EditSuppInventoryViewModel vm)
+			{
+				vm.IsEditDelivery = value;
 			}
 		}
 	}

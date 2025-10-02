@@ -24,7 +24,8 @@ public partial class EditInventoryPopup : Popup
 
 		var navParam = new Dictionary<string, object>
 			{
-				{ "DeliveryId", e.Parameter! }
+				{ "DeliveryId", e.Parameter! },
+				{ "IsEditDelivery", false }
 			};
 
         await Shell.Current.GoToAsync(nameof(EditSupplierInventory), true, navParam);
