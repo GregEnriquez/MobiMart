@@ -67,9 +67,11 @@ public partial class TransactionPage : ContentPage
     {
         if (e.NewTextValue.Length == 13)
 		{
-			if (BindingContext is TransactionViewModel vm)
-			{
-                vm.PickItem(e.NewTextValue);
+            if (BindingContext is TransactionViewModel vm)
+            {
+                Entry entry = (Entry)sender;
+                vm.PickItem(e.NewTextValue, (Transaction)entry.BindingContext);
+                entry.Focus();
 			}
 		}
     }

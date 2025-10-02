@@ -31,8 +31,21 @@ namespace MobiMart.Model
             set { price = value; OnPropertyChanged(); OnQuantityOrPriceChanged?.Invoke(); }
         }
 
-        public int SelectedIndex { get; set; } = -1;
+        private Item _selectedItem;
+        public Item SelectedItem
+        {
+            get => _selectedItem;
+            set { _selectedItem = value; OnPropertyChanged(); }
+        }
+        private bool _isBarcodeEntry = true;
+        public bool IsBarcodeEntry
+        {
+            get => _isBarcodeEntry;
+            set { _isBarcodeEntry = value;  OnPropertyChanged(); }
+        }
+
         public string BarcodeId { get; set; } = "";
+        public int SelectedIndex { get; set; } = -1;
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = "") =>

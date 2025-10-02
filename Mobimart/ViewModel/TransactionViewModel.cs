@@ -206,11 +206,14 @@ namespace MobiMart.ViewModel
                 transaction.ItemName = "";
                 transaction.Price = 0;
                 picker.SelectedIndex = -1;
+                picker.SelectedItem = null;
 
                 await Toast.Make("Item already added\nYou can change the quantity if you want to add more of this item", ToastDuration.Short, 14).Show();
                 IsBusy = false;
                 return;
             }
+
+            transactionItem.IsBarcodeEntry = false;
 
             IsBusy = false;
         }
@@ -338,10 +341,16 @@ namespace MobiMart.ViewModel
             if (item is null) return false;
 
             transactionUsingBarcode.BarcodeId = barcode;
-            transactionUsingBarcode.SelectedIndex = AllItems.IndexOf(item);
-            IsBarcodeEntry = false;
+            transactionUsingBarcode.SelectedItem = item;
 
             return true;
+        }
+
+
+        public bool PickItem(string barcode, Transaction transactionItem)
+        {
+            transactionUsingBarcode = transactionItem;
+            return PickItem(barcode);
         }
 
 
@@ -362,9 +371,9 @@ namespace MobiMart.ViewModel
 
 
         [RelayCommand]
-        public void ToggleBarcode()
+        public void ToggleBarcode(Transaction transactionItem)
         {
-            IsBarcodeEntry = !IsBarcodeEntry;
+            transactionItem.IsBarcodeEntry = !transactionItem.IsBarcodeEntry;
         }
 
 

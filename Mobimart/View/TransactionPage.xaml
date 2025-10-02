@@ -81,12 +81,12 @@
                                             StrokeShape="RoundRectangle 10,10,10,10">
                                         <Border.Triggers>
                                             <DataTrigger TargetType="Border"
-                                                        Binding="{Binding BindingContext.IsBarcodeEntry, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                                        Binding="{Binding IsBarcodeEntry}"
                                                         Value="false">
                                                 <Setter Property="IsVisible" Value="True"/>
                                             </DataTrigger>
                                             <DataTrigger TargetType="Border"
-                                                        Binding="{Binding BindingContext.IsBarcodeEntry, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                                        Binding="{Binding IsBarcodeEntry}"
                                                         Value="true">
                                                 <Setter Property="IsVisible" Value="False"/>
                                             </DataTrigger>
@@ -97,7 +97,7 @@
                                                 Title="Select Item"
                                                 ItemsSource="{Binding BindingContext.AllItems, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
                                                 ItemDisplayBinding="{Binding Name}"
-                                                SelectedIndex="{Binding SelectedIndex}"
+                                                SelectedItem="{Binding SelectedItem}"
                                                 SelectedIndexChanged="OnItemSelected"
                                                 TextColor="#6D5206"
                                                 HorizontalOptions="Fill">
@@ -109,7 +109,8 @@
                                                 WidthRequest="30"
                                                 HeightRequest="30"
                                                 FontSize="18"
-                                                Command="{Binding BindingContext.ToggleBarcodeCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"/>
+                                                Command="{Binding BindingContext.ToggleBarcodeCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                                CommandParameter="{Binding .}"/>
                                         </Grid>
                                     </Border>
                                     <Border
@@ -117,7 +118,7 @@
                                         Stroke="#A9882D"
                                         StrokeThickness="1.5"
                                         StrokeShape="RoundRectangle 10,10,10,10"
-                                        IsVisible="{Binding BindingContext.IsBarcodeEntry, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                        IsVisible="{Binding IsBarcodeEntry}"
                                         HorizontalOptions="Center"
                                         VerticalOptions="Center">
 
@@ -142,7 +143,6 @@
                                                         WidthRequest="10" 
                                                         HeightRequest="10"
                                                         Command="{Binding BindingContext.ShowScannerCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" 
-                                                        CommandParameter="{Binding .}"
                                                         HorizontalOptions="Center"
                                                         VerticalOptions="Center"/>
 
@@ -153,7 +153,8 @@
                                                 WidthRequest="30"
                                                 HeightRequest="30"
                                                 FontSize="18"
-                                                Command="{Binding BindingContext.ToggleBarcodeCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"/>
+                                                Command="{Binding BindingContext.ToggleBarcodeCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                                CommandParameter="{Binding .}"/>
                                         </Grid>
                                     </Border>
 

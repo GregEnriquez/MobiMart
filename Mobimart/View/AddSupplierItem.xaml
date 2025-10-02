@@ -161,14 +161,6 @@
                         </DataTrigger>
                     </VerticalStackLayout.Triggers>
 
-                    <Label Text="Consignment Schedule" FontAttributes="Bold" TextColor="#6F4E37" />
-                    <Border
-                        Stroke="#A9882D"
-                        StrokeThickness="1.5"
-                        StrokeShape="RoundRectangle 10,10,10,10">
-                        <Entry Placeholder="Enter Consignment Schedule" Text="{Binding WConsignmentSchedule}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
-                    </Border>
-
                     <Label Text="Return By Date" FontAttributes="Bold" TextColor="#6F4E37" />
                     <Border
                         Stroke="#A9882D"
@@ -185,6 +177,15 @@
                             MinimumDate="01/01/2025"
                             />
                     </Border>
+
+                    <Label Text="Consignment Schedule" FontAttributes="Bold" TextColor="#6F4E37" />
+                    <Border
+                        Stroke="#A9882D"
+                        StrokeThickness="1.5"
+                        StrokeShape="RoundRectangle 10,10,10,10">
+                        <Entry Placeholder="Enter Consignment Schedule" Text="{Binding WConsignmentSchedule}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                    </Border>
+                    
                 </VerticalStackLayout>
 
 

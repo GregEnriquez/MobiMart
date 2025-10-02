@@ -201,6 +201,7 @@ namespace MobiMart.ViewModel
             WRetailPrice = null;
             WDelivQuantity = null;
             WUnitCost = null;
+            WConsignmentSchedule = "";
             string message = "item/s added to inventory";
             if (!IsFromInventory) message = "Delivery recorded and " + message;
             await Toast.Make(message, ToastDuration.Short, 14).Show();
