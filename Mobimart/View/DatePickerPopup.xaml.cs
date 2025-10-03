@@ -6,10 +6,11 @@ public partial class DatePickerPopup : Popup
 {
     private TaskCompletionSource<DateTime?> _tcs;
 
-    public DatePickerPopup()
+    public DatePickerPopup(DateTime currentDate)
     {
         InitializeComponent();
-        Picker.Date = DateTime.Today;
+        Picker.Date = currentDate.Date;
+        Picker.BackgroundColor = Color.Parse("Transparent");
         _tcs = new TaskCompletionSource<DateTime?>();
     }
 

@@ -1,5 +1,7 @@
 using System;
+using System.Diagnostics;
 using MobiMart.Model;
+using MobiMart.ViewModel;
 using SQLite;
 
 namespace MobiMart.Service;
@@ -55,5 +57,50 @@ public class SalesService
     {
         await Init();
         await db!.InsertAsync(x);
+    }
+
+
+
+    public async Task<List<SalesRecord>> GetSalesRecordsAsync(DateTime date)
+    {
+        await Init();
+        var output = new List<SalesRecord>();
+        int businessId = -1;
+        if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
+        {
+            businessId = vm.BusinessId;
+        }
+
+        try
+        {
+            var dateString = date.ToString("d");
+            var ts = await db!.Table<SalesTransaction>().ToListAsync();
+            var transactions = (await db!.Table<SalesTransaction>().Where(x => x.BusinessId == businessId).ToListAsync())
+            .Where(x => DateTime.Parse(x.Date).Date == DateTime.Parse(dateString).Date).ToList();
+
+            foreach (var t in transactions)
+            {
+                SalesRecord record = new()
+                {
+                    TransactionId = t.Id,
+                    Date = t.Date,
+                    TotalPrice = t.TotalPrice,
+                    Payment = t.Payment,
+                    Change = t.Change,
+                    Items = []
+                };
+                var items = await db!.Table<SalesItem>().Where(x => x.TransactionId == t.Id).ToListAsync();
+
+                foreach (var item in items) record.Items.Add(item);
+
+                output.Add(record);
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine(e.StackTrace);
+        }
+
+        return output;
     }
 }

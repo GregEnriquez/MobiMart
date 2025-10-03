@@ -113,7 +113,7 @@ namespace MobiMart.ViewModel
                 {
                     ItemId = BarcodeId,
                     Text = WItemDesc,
-                    LastModified = DateTime.Today.ToString()
+                    LastModified = DateTime.Now.ToString()
                 };
                 await inventoryService.AddDescAsync(desc);
             }
@@ -165,20 +165,22 @@ namespace MobiMart.ViewModel
             {
                 WBatchCost = WUnitCost * WDelivQuantity;
             }
+            var _dateExpire = (DateTime)WDateExpire!;
             var delivery = new Delivery()
             {
+                BusinessId = user.BusinessRefId,
                 SupplierId = Supplier.Id,
                 ItemBarcode = BarcodeId,
                 DeliveryAmount = (int)WDelivQuantity!,
-                DateDelivered = WDateDelivered.ToString(),
-                ExpirationDate = WDateExpire.ToString()!,
-                BatchWorth = (float)WBatchCost!,
-                BusinessId = user.BusinessRefId
+                DateDelivered = WDateDelivered.ToString("g"),
+                ExpirationDate = _dateExpire.ToString("d"),
+                BatchWorth = (float)WBatchCost!
             };
             if (Supplier.Type.Equals("Consignment"))
             {
+                var _returnDate = (DateTime)WReturnByDate!;
                 delivery.ConsignmentSchedule = WConsignmentSchedule;
-                delivery.ReturnByDate = WReturnByDate.ToString()!;
+                delivery.ReturnByDate = _returnDate.ToString("d");
             }
 
             await inventoryService.AddDeliveryAsync(delivery);
@@ -226,7 +228,7 @@ namespace MobiMart.ViewModel
         public async Task<bool> FillItemDetails(string barcode)
         {
             BarcodeId = barcode;
-            WDateDelivered = DateTime.Today;
+            WDateDelivered = DateTime.Now;
 
             var item = await inventoryService.GetItemAsync(barcode);
             var desc = await inventoryService.GetItemDescAsync(barcode);

@@ -3,10 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:view="clr-namespace:MobiMart.View"
              x:Class="MobiMart.View.ViewTransaction"
+             xmlns:viewmodel="clr-namespace:MobiMart.ViewModel"
+             x:DataType="viewmodel:ViewTransactionViewModel"
+             xmlns:model="clr-namespace:MobiMart.Model"
              BackgroundColor="#FDF4DC"
              Title="ViewTransaction">
 
-    <Shell.TitleView>
+    <!-- <Shell.TitleView>
         <Grid ColumnDefinitions="Auto, *">
             <ImageButton
                 Grid.Column="0"
@@ -24,7 +27,7 @@
                 TextColor="White"
                 FontAttributes="Bold" />
         </Grid>
-    </Shell.TitleView>
+    </Shell.TitleView> -->
 
     <Grid RowDefinitions="Auto, Auto, Auto, *" Padding="10">
 
@@ -64,16 +67,16 @@
                 </StackLayout>
 
                 <CollectionView Grid.Row="1"
-                                x:Name="ItemsList"
-                                Margin="0,5,0,0">
+                                Margin="0,5,0,0"
+                                ItemsSource="{Binding Record.Items}">
                     <CollectionView.ItemTemplate>
-                        <DataTemplate>
+                        <DataTemplate x:DataType="model:SalesItem">
                             <Grid ColumnDefinitions="100, *, *" Padding="5" ColumnSpacing="5">
                                 <Border Stroke="#6D5206" 
                                         StrokeThickness="1" 
                                         StrokeShape="RoundRectangle 5,5,5,5"
                                         Padding="3">
-                                    <Label Text="{Binding ItemName}" 
+                                    <Label Text="{Binding Name}" 
                                            TextColor="#6D5206" 
                                            VerticalOptions="Center"/>
                                 </Border>
@@ -110,19 +113,19 @@
                      HorizontalOptions="Start">
 
             <Label x:Name="TotalLabel"
-                   Text="Total: ₱0.00"
+                   Text="{Binding Record.TotalPrice, StringFormat='Total: ₱{0:F2}'}"
                    FontSize="16"
                    FontAttributes="Bold"
                    TextColor="#6D5206"/>
 
             <Label x:Name="PaymentLabel"
-                   Text="Payment: ₱0.00"
+                   Text="{Binding Record.Payment, StringFormat='Payment: ₱{0:F2}'}"
                    FontSize="16"
                    FontAttributes="Bold"
                    TextColor="#6D5206"/>
 
             <Label x:Name="ChangeLabel"
-                   Text="Change: ₱0.00"
+                   Text="{Binding Record.Change, StringFormat='Change: ₱{0:F2}'}"
                    FontSize="16"
                    FontAttributes="Bold"
                    TextColor="#6D5206"/>

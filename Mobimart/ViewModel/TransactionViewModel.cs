@@ -270,7 +270,7 @@ namespace MobiMart.ViewModel
             var salesTransaction = new SalesTransaction()
             {
                 BusinessId = businessId,
-                Date = DateTime.Today.ToString(),
+                Date = DateTime.Now.ToString("g"),
                 TotalPrice = TotalPrice,
                 Payment = Payment,
                 Change = Change
@@ -288,7 +288,8 @@ namespace MobiMart.ViewModel
                     TransactionId = salesTransaction.Id,
                     Name = itemTransaction.ItemName,
                     Barcode = barcode,
-                    Quantity = itemTransaction.Quantity
+                    Quantity = itemTransaction.Quantity,
+                    Price = itemTransaction.Price * itemTransaction.Quantity
                 };
                 await salesService.AddSalesItemAsync(salesItem);
 

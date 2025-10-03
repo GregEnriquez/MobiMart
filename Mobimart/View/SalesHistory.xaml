@@ -3,10 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:view="clr-namespace:MobiMart.View"
              x:Class="MobiMart.View.SalesHistory"
+             xmlns:viewmodel="clr-namespace:MobiMart.ViewModel"
+             x:DataType="viewmodel:SalesHistoryViewModel"
+             xmlns:model="clr-namespace:MobiMart.Model"
              BackgroundColor="#FDF4DC"
              Title="SalesHistory">
 
-    <Shell.TitleView>
+    <!-- <Shell.TitleView>
         <Grid ColumnDefinitions="Auto, *">
             <ImageButton
                 Grid.Column="0"
@@ -24,7 +27,7 @@
                 TextColor="White"
                 FontAttributes="Bold" />
         </Grid>
-    </Shell.TitleView>
+    </Shell.TitleView> -->
 
     <ScrollView>
         <VerticalStackLayout Padding="10" Spacing="8">
@@ -73,15 +76,15 @@
                     Clicked="OnNextDateClicked" />
             </Grid>
 
-            <CollectionView x:Name="TransactionList" ItemsSource="{Binding}">
+            <CollectionView ItemsSource="{Binding SalesRecords}">
                 <CollectionView.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="model:SalesRecord">
                         <Frame HasShadow="True" BorderColor="#6D5206" CornerRadius="10" Padding="10" BackgroundColor="#FBE7B3" Margin="0,0,0,10">
                             <VerticalStackLayout> 
-                                <Label Text="{Binding Name}" FontAttributes="Bold" TextColor="#6D5206"/>
+                                <Label Text="{Binding TransactionId, StringFormat='Transaction Id: {0}'}" FontAttributes="Bold" TextColor="#6D5206"/>
                                 <BoxView HeightRequest="1" BackgroundColor="#6D5206" VerticalOptions="Start" />
                                 <Grid ColumnDefinitions="*,*">
-                                    <Label Text="{Binding Date, StringFormat='{0:hh:mm tt}'}" 
+                                    <Label Text="{Binding Date}" 
                                             Grid.Column="0" TextColor="#6D5206"/>
                                     <Label Text="{Binding TotalPrice, StringFormat='Total Price: {0} php'}" 
                                             Grid.Column="1" TextColor="#6D5206"

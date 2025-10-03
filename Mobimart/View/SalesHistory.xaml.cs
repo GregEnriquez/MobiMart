@@ -1,86 +1,91 @@
 using CommunityToolkit.Maui.Extensions;
 using MobiMart.Model;
+using MobiMart.ViewModel;
 using System;
+using System.Diagnostics;
 
 namespace MobiMart.View;
 
 public partial class SalesHistory : ContentPage
 {
-    private DateTime _currentDate = DateTime.Today;
-    public SalesHistory()
-	{
-		InitializeComponent();
-        UpdateDateLabel(); 
+    private DateTime? _currentDate = null;
+    public DateTime CurrentDate
+    {
+        get => (DateTime)_currentDate!;
+        set
+        {
+            _currentDate = value;
+            if (BindingContext is SalesHistoryViewModel vm)
+            {
+                vm.CurrentDate = value;
+            }
+        }
     }
 
-    private void OnHamburgerClicked(object sender, EventArgs e)
+    public SalesHistory(SalesHistoryViewModel viewModel)
     {
-        Shell.Current.FlyoutIsPresented = true;
+        InitializeComponent();
+        CurrentDate = DateTime.Today;
+        BindingContext = viewModel;
+
+        if (BindingContext is SalesHistoryViewModel vm)
+        {
+            UpdateDateLabel();
+        }
     }
 
-    private void UpdateDateLabel()
+    private async Task UpdateDateLabel()
     {
-        DateLabel.Text = _currentDate.ToString("MMMM dd, yyyy");
-        UpdateTransactionList();
+        DateLabel.Text = CurrentDate.ToString("MMMM dd, yyyy");
+        await UpdateTransactionList();
     }
 
-    private void OnPreviousDateClicked(object sender, EventArgs e)
+    private async void OnPreviousDateClicked(object sender, EventArgs e)
     {
-        _currentDate = _currentDate.AddDays(-1);
-        UpdateDateLabel();
+        CurrentDate = CurrentDate.AddDays(-1);
+        await UpdateDateLabel();
     }
 
-    private void OnNextDateClicked(object sender, EventArgs e)
+    private async void OnNextDateClicked(object sender, EventArgs e)
     {
-        _currentDate = _currentDate.AddDays(1);
-        UpdateDateLabel();
+        CurrentDate = CurrentDate.AddDays(1);
+        await UpdateDateLabel();
     }
 
     private async void OnTransactionClicked(object sender, EventArgs e)
     {
-        if (sender is Frame frame && frame.BindingContext is TransactionRecord record)
+        if (sender is Frame frame && frame.BindingContext is SalesRecord record)
         {
             // Pass the transaction record as navigation data
             await Shell.Current.GoToAsync(nameof(ViewTransaction), true,
                 new Dictionary<string, object>
                 {
-                { "TransactionRecord", record }
+                { "SalesRecord", record }
                 });
         }
     }
 
-    private void UpdateTransactionList()
+    private async Task UpdateTransactionList()
     {
-        var filtered = TransactionStore.Records
-            .Where(r => r.Date.Date == _currentDate.Date)
-            .ToList();
-
-        TransactionList.ItemsSource = filtered;
+        if (BindingContext is SalesHistoryViewModel vm)
+        {
+            await vm.RefreshRecords();
+        }
     }
 
-    protected override void OnAppearing()
-    {
-        base.OnAppearing();
-        UpdateTransactionList();
-    }
 
     private async void OnDateLabelTapped(object sender, EventArgs e)
     {
-        var popup = new DatePickerPopup();
+        var popup = new DatePickerPopup(CurrentDate);
         await this.ShowPopupAsync(popup); // show the popup
 
         var selectedDate = await popup.GetResultAsync(); // get the result
 
         if (selectedDate.HasValue)
         {
-            _currentDate = selectedDate.Value;
-            DateLabel.Text = _currentDate.ToString("MMMM dd, yyyy");
-
-            var filtered = TransactionStore.Records
-                .Where(r => r.Date.Date == _currentDate.Date)
-                .ToList();
-
-            TransactionList.ItemsSource = filtered;
+            CurrentDate = selectedDate.Value;
+            DateLabel.Text = CurrentDate.ToString("MMMM dd, yyyy");
+            await UpdateTransactionList();
         }
     }
 

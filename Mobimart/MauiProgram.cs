@@ -54,6 +54,8 @@ namespace MobiMart
             builder.Services.AddSingleton<EditInventoryPopupViewModel>();
             builder.Services.AddSingleton<EditSuppInventoryViewModel>();
             builder.Services.AddSingleton<TransactionViewModel>();
+            builder.Services.AddSingleton<SalesHistoryViewModel>();
+            builder.Services.AddSingleton<ViewTransactionViewModel>();
 
             // inject views
             builder.Services.AddSingleton<SignUpPage>();
