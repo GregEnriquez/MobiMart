@@ -1,17 +1,13 @@
 using System;
-using System.ComponentModel.DataAnnotations.Schema;
-using SQLite;
 
 namespace MobiMart.Model;
 
-public class SalesTransaction
+public record SalesRecord
 {
-    [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
-    [ForeignKey(nameof(Business))]
-    public int BusinessId { get; set; }
     public string Date { get; set; } = "";
     public float TotalPrice { get; set; }
     public float Payment { get; set; }
     public float Change { get; set; }
+    public SalesItem Items { get; set; } = null!;
 }

@@ -262,8 +262,14 @@ namespace MobiMart.ViewModel
             }
 
             // save process
+            var businessId = -1;
+            if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
+            {
+                businessId = vm.BusinessId;
+            }
             var salesTransaction = new SalesTransaction()
             {
+                BusinessId = businessId,
                 Date = DateTime.Today.ToString(),
                 TotalPrice = TotalPrice,
                 Payment = Payment,

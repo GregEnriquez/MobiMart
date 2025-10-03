@@ -15,6 +15,7 @@
     Shell.ForegroundColor="White"
     FlyoutWidth="250"
     FlyoutBackgroundColor="#FBE7B3">
+
     
     <FlyoutItem FlyoutItemIsVisible="False">
         <ShellContent
@@ -33,39 +34,48 @@
             ContentTemplate="{DataTemplate view:BusinessPage}"
             Icon="dotnet_bot.png"
             Route="BusinessPage"/>
+
         <ShellContent
+            IsVisible="{Binding IsUserInBusiness}"
             Title="Supplier List"
             ContentTemplate="{DataTemplate view:SupplierList}"
             Route="SupplierListWrapper"/>
         <ShellContent
+            IsVisible="{Binding IsUserInBusiness}"
             Title="Inventory"
             ContentTemplate="{DataTemplate view:InventoryListPage}"
             Route="InventoryListPage" />
         <ShellContent
+            IsVisible="{Binding IsUserInBusiness}"
             Title="Transaction"
             ContentTemplate="{DataTemplate view:TransactionPage}"
             Route="TransactionPage" />
         <ShellContent
+            IsVisible="{Binding IsUserInBusiness}"
             Title="Sales History"
             ContentTemplate="{DataTemplate view:SalesHistory}"
             Route="SalesHistory" />
         
         <ShellContent
+            IsVisible="{Binding IsUserOwner}"
             Title="DailySales"
             ContentTemplate="{DataTemplate view:DailySales}"
             Route="DailySales" />
         <ShellContent
+            IsVisible="{Binding IsUserOwner}"
             Title="IncomeSummary"
             ContentTemplate="{DataTemplate view:IncomeSummary}"
             Route="IncomeSummary" />
         <ShellContent
+            IsVisible="{Binding IsUserOwner}"
             Title="SalesForecast"
             ContentTemplate="{DataTemplate view:SalesForecast}"
             Route="SalesForecast" />
         <ShellContent
+            IsVisible="{Binding IsUserOwner}"
             Title="Calendar"
             ContentTemplate="{DataTemplate view:Calendar}"
-            Route="Calendar" /> 
+            Route="Calendar" />
     </FlyoutItem>
 
     <!-- <FlyoutItem Title="Profile">
@@ -158,7 +168,8 @@
                 <Label Text="{Binding Source={RelativeSource AncestorType={x:Type ShellContent}}, Path=Title}" 
                        TextColor="#6D5206"
                        FontSize="15"
-                       FontAttributes="Bold">
+                       FontAttributes="Bold"
+                       Margin="5,0,0,0">
                 </Label>
             </Grid>
         </DataTemplate>

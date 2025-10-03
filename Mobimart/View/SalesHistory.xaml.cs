@@ -10,7 +10,7 @@ public partial class SalesHistory : ContentPage
     public SalesHistory()
 	{
 		InitializeComponent();
-        UpdateDateLabel();
+        UpdateDateLabel(); 
     }
 
     private void OnHamburgerClicked(object sender, EventArgs e)

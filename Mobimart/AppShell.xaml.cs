@@ -58,13 +58,13 @@ namespace MobiMart
                 }
             };
         }
-        
+
         private void OnShellPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (BindingContext is FlyoutMenuViewModel vm)
-		{
-			vm.UpdateInfo();
-		}
+            {
+                vm.UpdateInfo();
+            }
         }
     }
 }

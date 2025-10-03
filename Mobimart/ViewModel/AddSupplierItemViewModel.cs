@@ -172,7 +172,8 @@ namespace MobiMart.ViewModel
                 DeliveryAmount = (int)WDelivQuantity!,
                 DateDelivered = WDateDelivered.ToString(),
                 ExpirationDate = WDateExpire.ToString()!,
-                BatchWorth = (float)WBatchCost!
+                BatchWorth = (float)WBatchCost!,
+                BusinessId = user.BusinessRefId
             };
             if (Supplier.Type.Equals("Consignment"))
             {
@@ -189,7 +190,7 @@ namespace MobiMart.ViewModel
                 BusinessId = user.BusinessRefId,
                 DeliveryId = delivery.Id,
                 ItemBarcode = BarcodeId,
-                TotalAmount = (int)WDelivQuantity!,
+                TotalAmount = (int)WDelivQuantity!
             };
             await inventoryService.AddInventoryAsync(inv);
 

@@ -1,5 +1,6 @@
 using System;
 using MobiMart.Model;
+using MobiMart.ViewModel;
 using SQLite;
 
 namespace MobiMart.Service;
@@ -54,7 +55,12 @@ public class InventoryService
     public async Task<List<Item>> GetAllItemsAsync()
     {
         await Init();
-        return await db!.Table<Item>().ToListAsync();
+        var businessId = -1;
+        if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
+        {
+            businessId = vm.BusinessId;
+        }
+        return await db!.Table<Item>().Where(x => x.BusinessId == businessId).ToListAsync();
     }
 
 
@@ -97,7 +103,12 @@ public class InventoryService
     public async Task<List<Inventory>> GetInventoriesAsync()
     {
         await Init();
-        return await db!.Table<Inventory>().ToListAsync();
+        var businessId = -1;
+        if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
+        {
+            businessId = vm.BusinessId;
+        }
+        return await db!.Table<Inventory>().Where(x => x.BusinessId == businessId).ToListAsync();
     }
 
 
@@ -105,28 +116,48 @@ public class InventoryService
     public async Task<List<Inventory>> GetInventoriesAsync(string barcode)
     {
         await Init();
-        return await db!.Table<Inventory>().Where(x => x.ItemBarcode == barcode).ToListAsync();
+        var businessId = -1;
+        if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
+        {
+            businessId = vm.BusinessId;
+        }
+        return await db!.Table<Inventory>().Where(x => x.BusinessId == businessId && x.ItemBarcode == barcode).ToListAsync();
     }
 
 
     public async Task<List<Delivery>> GetDeliveriesAsync(string barcode)
     {
         await Init();
-        return await db!.Table<Delivery>().Where(x => x.ItemBarcode == barcode).ToListAsync();
+        var businessId = -1;
+        if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
+        {
+            businessId = vm.BusinessId;
+        }
+        return await db!.Table<Delivery>().Where(x => x.BusinessId == businessId && x.ItemBarcode == barcode).ToListAsync();
     }
 
 
     public async Task<List<Delivery>> GetDeliveriesViaSupplier(int supplierId)
     {
         await Init();
-        return await db!.Table<Delivery>().Where(x => x.SupplierId == supplierId).ToListAsync();
+        var businessId = -1;
+        if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
+        {
+            businessId = vm.BusinessId;
+        }
+        return await db!.Table<Delivery>().Where(x => x.BusinessId == businessId && x.SupplierId == supplierId).ToListAsync();
     }
 
 
     public async Task<List<Delivery>> GetDeliveriesViaItem(string barcode)
     {
         await Init();
-        return await db!.Table<Delivery>().Where(x => x.ItemBarcode.Equals(barcode)).ToListAsync();
+        var businessId = -1;
+        if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
+        {
+            businessId = vm.BusinessId;
+        }
+        return await db!.Table<Delivery>().Where(x => x.BusinessId == businessId && x.ItemBarcode.Equals(barcode)).ToListAsync();
     }
 
 

@@ -1,5 +1,6 @@
 using System;
 using MobiMart.Model;
+using MobiMart.ViewModel;
 using SQLite;
 
 namespace MobiMart.Service;
@@ -33,7 +34,12 @@ public class SupplierService
     public async Task<List<Supplier>> GetAllSuppliersAsync()
     {
         await Init();
-        return await db!.Table<Supplier>().ToListAsync();
+        var businessId = -1;
+        if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
+        {
+            businessId = vm.BusinessId;
+        }
+        return await db!.Table<Supplier>().Where(x => x.BusinessId == businessId).ToListAsync();
     }
 
 

@@ -12,6 +12,8 @@ public class Delivery
     public int SupplierId { get; set; }
     [ForeignKey(nameof(Item))]
     public string ItemBarcode { get; set; } = "";
+    [ForeignKey(nameof(Business))]
+    public int BusinessId { get; set; }
     public int DeliveryAmount { get; set; }
     public string DateDelivered { get; set; } = "";
     public string ExpirationDate { get; set; } = "";
