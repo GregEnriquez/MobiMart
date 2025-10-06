@@ -22,6 +22,16 @@ public partial class InventoryListPage : ContentPage
     //     ItemPopup.IsVisible = true;
     // }
 
+    void OnTextChanged(object sender, EventArgs e)
+    {
+        SearchBar searchBar = (SearchBar)sender;
+
+        if (BindingContext is InventoryViewModel vm)
+        {
+            vm.FilterItems(searchBar.Text);
+        }
+    }
+
 
     protected override async void OnAppearing()
     {

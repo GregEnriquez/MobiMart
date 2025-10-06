@@ -4,6 +4,7 @@ using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MobiMart.Model;
 using MobiMart.Service;
 
 namespace MobiMart.ViewModel;
@@ -65,6 +66,19 @@ public partial class BusinessPageViewModel : BaseViewModel
             return;
         }
 
+        // input validation (make sure user has info when creating a business)
+        if (BusinessName.Equals("") || BusinessAddress.Equals(""))
+        {
+            await Toast.Make("Complete business details first", ToastDuration.Short, 14).Show();
+            return;
+        }
+        if (user.FirstName is null || user.LastName is null || user.FirstName.Equals("") || user.LastName.Equals(""))
+        {
+            await Toast.Make("Complete your profile before registering a business", ToastDuration.Short, 14).Show();
+            return;
+        }
+
+
         var random = new Random();
         string code;
         do
@@ -86,7 +100,13 @@ public partial class BusinessPageViewModel : BaseViewModel
         user.EmployeeType = "owner";
         await userService.UpdateUserAsync(user);
 
+
+        if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
+        {
+            await vm.ForceUpdateInfo();
+        }
         await UpdateInfo();
+        await Toast.Make("Business Successfuly Generated", ToastDuration.Short, 14).Show();
     }
 
 

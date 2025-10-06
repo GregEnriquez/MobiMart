@@ -54,7 +54,7 @@
                     Grid.Column="1"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
-                    FontSize="13"
+                    FontSize="14"
                     FontAttributes="Bold"
                     Text="x"
                     TextColor="#6D5206">
@@ -76,7 +76,31 @@
                     Clicked="OnNextDateClicked" />
             </Grid>
 
-            <CollectionView ItemsSource="{Binding SalesRecords}">
+            <ActivityIndicator IsRunning="{Binding IsBusy}" 
+                            IsVisible="{Binding IsBusy}"
+                            Color="#D99B2B" 
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Center" />
+
+            <Label 
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                HorizontalTextAlignment="Center"
+                FontSize="14"
+                FontAttributes="Bold"
+                Text="Seems like no transatcion has been made on this day."
+                TextColor="#6D5206"
+                Margin="90, 30"
+                IsVisible="{Binding RecordsEmpty}">
+                <Label.Triggers>
+                    <DataTrigger TargetType="Label" Binding="{Binding IsBusy}" Value="True">
+                        <Setter Property="IsVisible" Value="False"/>
+                    </DataTrigger>
+                </Label.Triggers>    
+            </Label>
+
+
+            <CollectionView ItemsSource="{Binding SalesRecords}" IsVisible="{Binding IsNotBusy}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="model:SalesRecord">
                         <Frame HasShadow="True" BorderColor="#6D5206" CornerRadius="10" Padding="10" BackgroundColor="#FBE7B3" Margin="0,0,0,10">

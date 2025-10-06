@@ -23,6 +23,10 @@ namespace MobiMart.ViewModel
         [ObservableProperty]
         List<InventoryRecord> inventoryItems;
 
+        [ObservableProperty]
+        string searchText;
+
+        private List<InventoryRecord> _allItems;
         InventoryService inventoryService;
 
         // private ObservableCollection<Inventory> _allItems; // original list
@@ -77,7 +81,7 @@ namespace MobiMart.ViewModel
             // AddItemCommand = new Command(AddItem);
             // EditCommand = new Command<Inventory>(async (item) => await EditItem(item));
         }
-        
+
 
         [RelayCommand]
         public async Task AddItem()
@@ -118,22 +122,40 @@ namespace MobiMart.ViewModel
             if (IsBusy) return;
             IsBusy = true;
 
-            InventoryItems = await inventoryService.GetInventoryRecordsAsync();
+            _allItems = await inventoryService.GetInventoryRecordsAsync();
+            InventoryItems = [.. _allItems];
 
             IsBusy = false;
         }
 
-        // private void FilterItems(string query)
-        // {
-        //     InventoryItems.Clear();
+        public void FilterItems(string query)
+        {
+            InventoryItems.Clear();
 
-        //     var filtered = string.IsNullOrWhiteSpace(query)
-        //         ? _allItems
-        //         : _allItems.Where(i => i.ItemName.ToLower().Contains(query.ToLower()));
+            InventoryItems = _allItems.Where(i => i.Name.ToLower().Contains(query.ToLower())).ToList();
 
-        //     foreach (var item in filtered)
-        //         InventoryItems.Add(item);
-        // }
+            // var filtered = string.IsNullOrWhiteSpace(query)
+            //     ? _allItems
+            //     : _allItems.Where(i => i.ItemName.ToLower().Contains(query.ToLower()));
+
+            // foreach (var item in filtered)
+            //     InventoryItems.Add(item);
+        }
+
+
+        [RelayCommand]
+        public async Task ScanBarcode()
+        {
+            var param = new Dictionary<string, object>
+            {
+                {"IsFromInventory", true},
+                {"IsFromScanBarcode", true}
+            };
+
+            await Shell.Current.GoToAsync(nameof(SupplierList), true, param);
+        }
+        
+
         // private void AddItem()
         // {
         //     var newItem = new Inventory

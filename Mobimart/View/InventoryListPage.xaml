@@ -57,10 +57,11 @@
                                BackgroundColor="White"
                                TextColor="#6D5206"
                                HeightRequest="40" 
-                               Text="{Binding SearchText}"/>
+                               Text="{Binding SearchText}"
+                               TextChanged="OnTextChanged"/>
                 </Border>
 
-                <ScrollView Orientation="Both">
+                <ScrollView Orientation="Both" IsVisible="{Binding IsNotBusy}">
                     <VerticalStackLayout>
                         <Grid ColumnDefinitions="120, 120, 120, 120, 120" BackgroundColor="#6D5206" Padding="5">
                             <Label Text="Item Name" TextColor="White" FontAttributes="Bold" />
@@ -93,6 +94,12 @@
                     </VerticalStackLayout>
                 </ScrollView>
 
+                <ActivityIndicator IsRunning="{Binding IsBusy}" 
+                            IsVisible="{Binding IsBusy}"
+                            Color="#D99B2B" 
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Center" />
+
                 <HorizontalStackLayout Padding="1" HorizontalOptions="Center">
                     <Frame Padding="5" HasShadow="False" BackgroundColor="Transparent" BorderColor="Transparent">
                         <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
@@ -122,7 +129,8 @@
                     HeightRequest="0"
                     HorizontalOptions="Center"
                     WidthRequest="200"
-                    Margin="0,0,0,0" />
+                    Margin="0,0,0,0"
+                    Command="{Binding ScanBarcodeCommand}"/>
         </Grid>
     </ScrollView>
 

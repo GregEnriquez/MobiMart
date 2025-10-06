@@ -9,6 +9,7 @@ using ZXing.Net.Maui;
 
 [QueryProperty(nameof(Supplier), "Supplier")]
 [QueryProperty(nameof(IsFromInventory), "IsFromInventory")]
+[QueryProperty(nameof(IsFromScanBarcode), "IsFromScanBarcode")]
 public partial class AddSupplierItem : ContentPage
 {
 	private Supplier? supplier;
@@ -35,6 +36,20 @@ public partial class AddSupplierItem : ContentPage
 			if (BindingContext is AddSupplierItemViewModel vm)
 			{
 				vm.IsFromInventory = value;
+			}
+		}
+	}
+	private bool isFromScanBarcode = false;
+	public bool IsFromScanBarcode
+	{
+		get => isFromScanBarcode;
+		set
+		{
+			isFromScanBarcode = value;
+			if (BindingContext is AddSupplierItemViewModel vm)
+			{
+				vm.IsFromScanBarcode = value;
+				if (value) vm.IsScannerVisible = true;
 			}
 		}
 	}

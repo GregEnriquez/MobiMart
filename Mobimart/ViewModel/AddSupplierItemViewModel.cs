@@ -48,6 +48,8 @@ namespace MobiMart.ViewModel
         Supplier supplier;
         [ObservableProperty]
         bool isFromInventory = false;
+        [ObservableProperty]
+        bool isFromScanBarcode;
 
         InventoryService inventoryService;
         UserService userService;

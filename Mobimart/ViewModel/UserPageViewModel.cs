@@ -1,6 +1,8 @@
 using System;
 using System.Diagnostics;
 using System.Globalization;
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MobiMart.Service;
@@ -94,6 +96,7 @@ public partial class UserPageViewModel : BaseViewModel
 
 
         await userService.UpdateUserAsync(user);
+        await Toast.Make("Profile Successfully Updated", ToastDuration.Short, 14).Show();
         IsBusy = false;
     }
 

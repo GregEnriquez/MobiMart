@@ -7,14 +7,12 @@
 
     <Grid RowDefinitions="Auto,*">
 
-        <!-- title -->
         <Grid BackgroundColor="#C07A2A" Padding="10" Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- title -->
             <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center" Spacing="5">
                 <Label Text="App Name"
                        FontSize="20"

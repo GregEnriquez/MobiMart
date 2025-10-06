@@ -107,6 +107,7 @@ namespace MobiMart.ViewModel
             {
                 TotalPrice += item.Price * item.Quantity;
             }
+            UpdateChange();
         }
 
 
@@ -245,13 +246,19 @@ namespace MobiMart.ViewModel
             }
             else if (Items.Count > 0)
             {
+                if (Payment - TotalPrice < 0)
+                {
+                    await Toast.Make("Payment entered is insufficient", ToastDuration.Short, 14).Show();
+                    IsBusy = false;
+                    return;
+                }
+
                 bool hasEmpty = false;
                 foreach (var item in Items)
                 {
-                    if (item.ItemName == "") { hasEmpty = true; break; }
-                    if (item.Quantity < 0) { hasEmpty = true; break; }
+                    if (item.ItemName is null) { hasEmpty = true; break; }
+                    if (item.Quantity <= 0) { hasEmpty = true; break; }
                 }
-                if (Payment - TotalPrice <= 0) hasEmpty = true;
 
                 if (hasEmpty)
                 {

@@ -22,6 +22,8 @@ namespace MobiMart.ViewModel
         List<Supplier> suppliers;
         [ObservableProperty]
         bool isFromInventory;
+        [ObservableProperty]
+        bool isFromScanBarcode;
 
         public SupplierListViewModel(SupplierService supplierService)
         {
@@ -89,7 +91,8 @@ namespace MobiMart.ViewModel
             var navParameter = new Dictionary<string, object>()
             {
                 {"Supplier", supplier },
-                {"IsFromInventory", IsFromInventory}
+                {"IsFromInventory", IsFromInventory},
+                {"IsFromScanBarcode", IsFromScanBarcode}
             };
 
             await Shell.Current.GoToAsync(IsFromInventory ? nameof(AddSupplierItem) : nameof(SupplierInformation), navParameter);

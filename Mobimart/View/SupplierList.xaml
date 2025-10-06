@@ -28,7 +28,7 @@
                                 </DataTrigger>
                         </VerticalStackLayout.Triggers>
 
-                        <Label Text="Select Item Supplier" 
+                        <Label Text="Select the Item's Supplier" 
                                 FontAttributes="Bold" 
                                 TextColor="#6F4E37" 
                                 HorizontalTextAlignment="Center"

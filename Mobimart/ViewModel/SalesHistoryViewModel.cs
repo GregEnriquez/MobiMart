@@ -13,6 +13,8 @@ public partial class SalesHistoryViewModel : BaseViewModel
     List<SalesRecord> salesRecords;
     [ObservableProperty]
     DateTime currentDate;
+    [ObservableProperty]
+    bool recordsEmpty = false;
 
 
     SalesService salesService;
@@ -26,8 +28,17 @@ public partial class SalesHistoryViewModel : BaseViewModel
 
     public async Task RefreshRecords()
     {
-        Debug.WriteLine(CurrentDate);
+        if (IsBusy) return;
+        IsBusy = true;
+
+        RecordsEmpty = true;
         SalesRecords = await salesService.GetSalesRecordsAsync(CurrentDate);
+        if (SalesRecords.Count > 0)
+        {
+            RecordsEmpty = false;
+        }
+
+        IsBusy = false;
     }
 
 }

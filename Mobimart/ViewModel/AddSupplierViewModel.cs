@@ -83,7 +83,7 @@ public partial class AddSupplierViewModel : BaseViewModel
         Supplier = null;
         try
         {
-            await Shell.Current.GoToAsync("//SupplierList");
+            await Shell.Current.GoToAsync("..");
         }
         catch (Exception e)
         {

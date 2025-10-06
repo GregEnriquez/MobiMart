@@ -6,6 +6,7 @@ namespace MobiMart.View;
 
 
 [QueryProperty(nameof(IsFromInventory), "IsFromInventory")]
+[QueryProperty(nameof(IsFromScanBarcode), "IsFromScanBarcode")]
 public partial class SupplierList : ContentPage
 {
 
@@ -19,6 +20,20 @@ public partial class SupplierList : ContentPage
             if (BindingContext is SupplierListViewModel vm)
             {
                 vm.IsFromInventory = value;
+            }
+        }
+    }
+
+    private bool isFromScanBarcode = false;
+    public bool IsFromScanBarcode
+    {
+        get => isFromScanBarcode;
+        set
+        {
+            isFromScanBarcode = value;
+            if (BindingContext is SupplierListViewModel vm)
+            {
+                vm.IsFromScanBarcode = value;
             }
         }
     }

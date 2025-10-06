@@ -98,4 +98,11 @@ public partial class FlyoutMenuViewModel : BaseViewModel
             IsUserOwner = false;
         }
     }
+
+
+    public async Task ForceUpdateInfo()
+    {
+        user = null;
+        await UpdateInfo();
+    }
 }

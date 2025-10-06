@@ -135,7 +135,20 @@
                     HorizontalOptions="Center"
                     WidthRequest="121"
                     Margin="0,10,0,10" 
-                    Command="{Binding SaveChangesCommand}"/>
+                    Command="{Binding SaveChangesCommand}">
+                    <Button.Triggers>
+                        <DataTrigger TargetType="Button"
+                                    Binding="{Binding JoinedBusiness}"
+                                    Value="false">
+                            <Setter Property="Text" Value="Generate Business"/>
+                        </DataTrigger>
+                        <DataTrigger TargetType="Button"
+                                    Binding="{Binding JoinedBusiness}"
+                                    Value="true">
+                            <Setter Property="Text" Value="Save Changes"/>
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
             </HorizontalStackLayout>
 
             <Button 
