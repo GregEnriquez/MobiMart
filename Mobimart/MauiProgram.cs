@@ -7,6 +7,7 @@ using MobiMart.ViewModel;
 using CommunityToolkit.Mvvm;
 using CommunityToolkit.Maui;
 using ZXing.Net.Maui.Controls;
+using Plugin.LocalNotification;
 
 namespace MobiMart
 {
@@ -18,6 +19,7 @@ namespace MobiMart
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
+                .UseLocalNotification()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
