@@ -54,12 +54,18 @@ namespace MobiMart.ViewModel
         InventoryService inventoryService;
         UserService userService;
         BusinessService businessService;
+        NotificationService notificationService;
 
-        public AddSupplierItemViewModel(InventoryService inventoryService, UserService userService, BusinessService businessService)
+        public AddSupplierItemViewModel(
+            InventoryService inventoryService,
+            UserService userService,
+            BusinessService businessService,
+            NotificationService notificationService)
         {
             this.inventoryService = inventoryService;
             this.userService = userService;
             this.businessService = businessService;
+            this.notificationService = notificationService;
 
             // BarcodeId = "4807770270017";
             // WItemName = "Lucky Me Beef Noodles";
@@ -178,13 +184,12 @@ namespace MobiMart.ViewModel
                 ExpirationDate = _dateExpire.ToString("d"),
                 BatchWorth = (float)WBatchCost!
             };
-            if (Supplier.Type.Equals("Consignment"))
+            if (Supplier.Type.ToLower().Equals("consignment"))
             {
                 var _returnDate = (DateTime)WReturnByDate!;
                 delivery.ConsignmentSchedule = WConsignmentSchedule;
                 delivery.ReturnByDate = _returnDate.ToString("d");
             }
-
             await inventoryService.AddDeliveryAsync(delivery);
 
 
@@ -197,6 +202,43 @@ namespace MobiMart.ViewModel
                 TotalAmount = (int)WDelivQuantity!
             };
             await inventoryService.AddInventoryAsync(inv);
+
+
+            // -- CREATE REMINDER FOR CONSIGNMENT AGREEMENT --
+            if (Supplier.Type.ToLower().Equals("consignment"))
+            {
+                // create reminder
+                var r = new Reminder()
+                {
+                    BusinessId = user.BusinessRefId,
+                    Type = ReminderType.SupplyRunout,
+                    Title = "Return Consignment Item",
+                    Message = $"""
+                    The item {item.Name} delivered on {DateTime.Parse(delivery.DateDelivered):MM/dd/yyyy} is to be returned on {WReturnByDate:MM/dd/yyyy} with stock remaining: {inv.TotalAmount}
+                    """,
+                    NotifyAtDate = new DateTime(DateOnly.FromDateTime(DateTime.Parse(delivery.ReturnByDate)), new TimeOnly(9, 0)).ToString(),
+                    RepeatDaily = false,
+                    RelatedEntityId = delivery.Id,
+                    IsEnabled = true,
+                    Sent = false
+                };
+                // save to database
+                await notificationService.AddReminderAsync(r);
+
+                // schedule local notification
+                DateTime date = DateTime.Parse(r.NotifyAtDate);
+                // gentle reminder at 3pm before the actual due date
+                date = new DateTime(DateOnly.FromDateTime(date).AddDays(-1), new TimeOnly(15, 0));
+                await notificationService.ScheduleLocalNotification(
+                    r.Id, r.Title, r.Message, date, r.Id.ToString()
+                );
+                // due date at 9 am
+                date = new DateTime(DateOnly.FromDateTime(date).AddDays(1), new TimeOnly(9, 0));
+                await notificationService.ScheduleLocalNotification(
+                    r.Id, r.Title, r.Message, date, r.Id.ToString()
+                );
+            }
+
 
             // clear every entry and notify the user that delivery has been added
             BarcodeId = "";

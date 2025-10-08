@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -27,48 +28,13 @@ namespace MobiMart.ViewModel
 
         [ObservableProperty]
         float totalPrice;
-        // [ObservableProperty]
-        // string itemName;
         [ObservableProperty]
         bool suggestionsVisible = false;
 
-        // private decimal totalPrice;
-        // public decimal TotalPrice
-        // {
-        //     get => totalPrice;
-        //     set
-        //     {
-        //         totalPrice = value;
-        //         OnPropertyChanged();
-        //         OnPropertyChanged(nameof(Change));
-        //     }
-        // }
-
         [ObservableProperty]
         float payment;
-        // private decimal payment;
-        // public decimal Payment
-        // {
-        //     get => payment;
-        //     set
-        //     {
-        //         if (payment != value)
-        //         {
-        //             payment = value;
-        //             OnPropertyChanged();
-        //             OnPropertyChanged(nameof(Change));
-        //         }
-        //     }
-        // }
-
         [ObservableProperty]
         public float change;
-
-        // public event PropertyChangedEventHandler PropertyChanged;
-        // protected void OnPropertyChanged([CallerMemberName] string name = "") =>
-        //     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        InventoryService inventoryService;
-        SalesService salesService;
 
         [ObservableProperty]
         List<Item> allItems;
@@ -79,15 +45,19 @@ namespace MobiMart.ViewModel
         [ObservableProperty]
         bool isScannerVisible = false;
 
+        InventoryService inventoryService;
+        SalesService salesService;
+        NotificationService notificationService;
 
         private Transaction transactionUsingBarcode;
 
 
-        public TransactionViewModel(InventoryService inventoryService, SalesService salesService)
+        public TransactionViewModel(InventoryService inventoryService, SalesService salesService, NotificationService notificationService)
         {
             Items = [];
             this.inventoryService = inventoryService;
             this.salesService = salesService;
+            this.notificationService = notificationService;
         }
 
 
@@ -123,17 +93,6 @@ namespace MobiMart.ViewModel
             // ItemName = AllItems.Find(x => x.Barcode.Equals(itemBarcode))!.Name;
             SuggestionsVisible = false;
         }
-
-
-        // [RelayCommand]
-        // public async Task SuggesionLabelTapped()
-        // {
-        //     await InitItems();
-
-
-        // }
-
-
 
 
         public async Task OnEntryTextChanged(string input)
@@ -268,6 +227,7 @@ namespace MobiMart.ViewModel
                 }
             }
 
+
             // save process
             var businessId = -1;
             if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
@@ -282,14 +242,28 @@ namespace MobiMart.ViewModel
                 Payment = Payment,
                 Change = Change
             };
-            await salesService.AddSalesTransactionAsync(salesTransaction);
+            // await salesService.AddSalesTransactionAsync(salesTransaction);
 
             foreach (var itemTransaction in Items)
             {
                 var barcode = AllItems.Find(x => x.Name.Contains(itemTransaction.ItemName))!.Barcode;
-                var sortedDeliveries = (await inventoryService.GetDeliveriesAsync(barcode)).OrderByDescending(x => DateTime.Parse(x.DateDelivered)).ToList();
+                var sortedDeliveries = (await inventoryService.GetDeliveriesAsync(barcode)).OrderBy(x => DateTime.Parse(x.DateDelivered)).ToList();
                 var invRecords = await inventoryService.GetInventoriesAsync(barcode);
 
+                // input validation part 2: check if each item transaction has enough stock in the inventory
+                int totalInv = 0;
+                foreach (var inv in invRecords)
+                {
+                    totalInv += inv.TotalAmount;
+                }
+                if (totalInv < itemTransaction.Quantity)
+                {
+                    await Toast.Make($"Not enough stock for item {itemTransaction.ItemName}. Remaining: {totalInv}").Show();
+                    IsBusy = false;
+                    return;
+                }
+
+                // saving of sales transaction
                 var salesItem = new SalesItem()
                 {
                     TransactionId = salesTransaction.Id,
@@ -298,26 +272,29 @@ namespace MobiMart.ViewModel
                     Quantity = itemTransaction.Quantity,
                     Price = itemTransaction.Price * itemTransaction.Quantity
                 };
-                await salesService.AddSalesItemAsync(salesItem);
+                // await salesService.AddSalesItemAsync(salesItem);
 
                 // subtraction of inventory
                 int toSubtract = 0;
                 foreach (var delivery in sortedDeliveries)
                 {
                     var inv = invRecords.Find(x => x.DeliveryId == delivery.Id)!;
+                    if (inv is null) continue; // inventory for that delivery record is already emptied(ubos na)
+
                     if (toSubtract > 0)
                     {
                         if (inv.TotalAmount - toSubtract < 0)
                         {
                             toSubtract -= inv.TotalAmount;
                             // remove that from inventory already
-                            await inventoryService.DeleteInventory(inv);
+                            invRecords.Remove(inv);
+                            // await inventoryService.DeleteInventory(inv);
                             continue;
                         }
                         else
                         {
                             inv.TotalAmount -= toSubtract;
-                            await inventoryService.UpdateInventoryAsync(inv);
+                            // await inventoryService.UpdateInventoryAsync(inv);
                             break;
                         }
                     }
@@ -325,16 +302,62 @@ namespace MobiMart.ViewModel
                     {
                         toSubtract = salesItem.Quantity - inv.TotalAmount;
                         // remove that from inventory already
-                        await inventoryService.DeleteInventory(inv);
+                        invRecords.Remove(inv);
+                        // await inventoryService.DeleteInventory(inv);
                         continue;
                     }
                     else
                     {
                         inv.TotalAmount -= salesItem.Quantity;
-                        await inventoryService.UpdateInventoryAsync(inv);
+                        // await inventoryService.UpdateInventoryAsync(inv);
                         break;
                     }
                 }
+
+                // check if needed reminder
+                totalInv = 0;
+                foreach (var inv in invRecords)
+                {
+                    totalInv += inv.TotalAmount;
+                }
+
+                if (totalInv >= 10) // low stock threshold
+                {
+                    continue;
+                }
+
+
+                // create reminder
+                var r = new Reminder()
+                {
+                    BusinessId = businessId,
+                    Type = ReminderType.SupplyRunout,
+                    Title = "Stock Running Low",
+                    Message = $"Stock for item {itemTransaction.ItemName} is running low\nRemaining Stock: {totalInv}",
+                    NotifyAtDate = DateTime.Now.ToString(),
+                    RepeatDaily = true,
+                    RelatedEntityId = invRecords[0].Id,
+                    IsEnabled = true,
+                    Sent = false
+                };
+                // save to database
+                try
+                {
+                    await notificationService.AddReminderAsync(r);
+                }
+                catch (Exception e)
+                {
+                    
+                }
+
+                // schedule local notification
+                DateTime date = DateTime.Parse(r.NotifyAtDate);
+                date = date.AddSeconds(5);
+                await notificationService.ScheduleLocalNotification(
+                    r.Id, r.Title, r.Message, date, r.Id.ToString()
+                );
+
+                IsBusy = false;
             }
 
 
@@ -389,49 +412,5 @@ namespace MobiMart.ViewModel
         {
             transactionItem.IsBarcodeEntry = !transactionItem.IsBarcodeEntry;
         }
-
-
-        // public ICommand AddItemCommand => new Command(() =>
-        // {
-        //     AddItem(new Transaction());
-        // });
-
-        // public ICommand SaveTransactionCommand => new Command(async () =>
-        // {
-        //     if (Items.Count == 0)
-        //     {
-        //         var notsuccessPopup = new NoItemsPopup();
-        //         Application.Current.MainPage.ShowPopup(notsuccessPopup);
-        //         return;
-        //     }
-
-        //     // Create new record and copy Items
-        //     var record = new TransactionRecord
-        //     {
-        //         Name = $"Transaction {TransactionStore.Records.Count + 1}",
-        //         Date = DateTime.Now,
-        //         TotalPrice = TotalPrice,
-        //         Items = Items.Select(item => new Transaction
-        //         {
-        //             ItemName = item.ItemName,
-        //             Quantity = item.Quantity,
-        //             Price = item.Price
-        //         }).ToList(),
-        //         Payment = this.Payment,
-        //         Change = this.Change
-        //     };
-
-        //     TransactionStore.Records.Add(record);
-
-        //     // Show success popup
-        //     var successPopup = new SaveInventoryPopup("Transaction saved!");
-        //     Application.Current.MainPage.ShowPopup(successPopup);
-
-        //     // Clear transaction form
-        //     Items.Clear();
-        //     TotalPrice = 0;
-        //     Payment = 0;
-        // });
-
     }
 }

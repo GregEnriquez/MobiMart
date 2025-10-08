@@ -2,96 +2,157 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:MobiMart.ViewModel"
+             x:DataType="viewmodel:CalendarViewModel"
              x:Class="MobiMart.View.Calendar"
+             xmlns:model="clr-namespace:MobiMart.Model"
              Title="Calendar"
              BackgroundColor="#FFFBE9">
 
-    <ContentPage.BindingContext>
-        <viewmodel:CalendarViewModel />
-    </ContentPage.BindingContext>
+    <VerticalStackLayout>
 
-    <Grid RowDefinitions="Auto,*">
-
-        <!-- Header -->
-        <Grid BackgroundColor="#D18800"
-              Padding="10"
-              Row="0"
-              HeightRequest="90">
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <!-- Title + Subtitle -->
-            <VerticalStackLayout Grid.Column="1"
-                                 HorizontalOptions="Center"
-                                 VerticalOptions="Center">
-                <Label Text="App Name"
-                       FontSize="18"
-                       TextColor="White"
-                       HorizontalOptions="Center"
-                       FontAttributes="Bold"/>
-                <Label Text="{Binding Title}"
-                       BackgroundColor="#FFD54F"
-                       TextColor="White"
-                       Padding="15,3"
-                       FontAttributes="Bold"
-                       FontSize="14"
-                       HorizontalOptions="Center"/>
-            </VerticalStackLayout>
+        <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,10,0,0">
+            <ImageButton 
+                Source="previous_icon.png"
+                HeightRequest="40"
+                WidthRequest="40"
+                VerticalOptions="Center"
+                HorizontalOptions="Start"
+                Margin="0,0,10,0"
+                Aspect="AspectFit"
+                Command="{Binding PrevMonthCommand}"/>
+            <Label 
+                x:Name="DateLabel"
+                Grid.Column="1"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                FontSize="16"
+                FontAttributes="Bold"
+                Text="{Binding CurrentDate, StringFormat='{0:D}'}"
+                TextColor="#6D5206">
+            </Label>
+            <ImageButton 
+                Grid.Column="2"
+                Source="next_icon.png"
+                HeightRequest="40"
+                WidthRequest="40"
+                VerticalOptions="Center"
+                HorizontalOptions="End"
+                Margin="0,0,10,0"
+                Aspect="AspectFit"
+                Command="{Binding NextMonthCommand}"/>
         </Grid>
 
-        <!-- Calendar Content -->
+
+        <VerticalStackLayout Padding="12, 0">
+            <Label Text="Notifications" FontAttributes="Bold" FontSize="20" HorizontalOptions="Center" Padding="0, 0, 0, 12"/>
+            <!-- <Button Text="New Reminder" Command="{Binding CreateReminderCommand}" /> -->
+
+            <Label Text="no reminders for this day" HorizontalTextAlignment="Center" IsVisible="False">
+                <Label.Triggers>
+                    <DataTrigger TargetType="Label"
+                                Binding="{Binding Reminders.Count}"
+                                Value="0">
+                        <Setter Property="IsVisible" Value="True"/>
+                    </DataTrigger>
+                </Label.Triggers>
+            </Label>
+
+            <CollectionView ItemsSource="{Binding Reminders}" MaximumHeightRequest="130">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="model:Reminder">
+                    <Frame HasShadow="True" BorderColor="#6D5206" CornerRadius="5" BackgroundColor="#FBE7B3" Margin="0,0,0,0" Padding="5">
+                        <VerticalStackLayout Padding="0">
+                        <Label Text="{Binding Title}" FontAttributes="Bold" TextColor="#6D5206"/>
+                        <Label Text="{Binding Message}" FontSize="12" TextColor="#6D5206"/>
+                        <Label Text="{Binding NotifyAtDate, StringFormat='{0:g}'}" FontSize="12" TextColor="#6D5206"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+
+        <!-- loading indicator -->
+        <VerticalStackLayout IsVisible="False" Grid.Row="1">
+            <VerticalStackLayout.Triggers>
+                <DataTrigger TargetType="VerticalStackLayout"
+                            Binding="{Binding Days.Count}"
+                            Value="0">
+                    <Setter Property="IsVisible" Value="True"/>
+                </DataTrigger>
+            </VerticalStackLayout.Triggers>
+
+            <ActivityIndicator IsRunning="True" 
+                                IsVisible="True"
+                                Color="#D99B2B" 
+                                VerticalOptions="Center" 
+                                HorizontalOptions="Center">
+            </ActivityIndicator>
+            <Label Text="Loading Calendar Reminders"
+                HorizontalTextAlignment="Center"/>
+        </VerticalStackLayout>
+
         <ScrollView Grid.Row="1" Padding="15">
             <VerticalStackLayout Spacing="20">
-
-                <!-- Month Navigation -->
-                <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
-                    <Button Text="◀ Prev"
-                            Command="{Binding PrevMonthCommand}"
-                            BackgroundColor="#FFD54F"
-                            TextColor="White"
-                            CornerRadius="15"
-                            Padding="10,3"/>
-
-                    <Label Text="{Binding MonthYear}"
-                           FontAttributes="Bold"
-                           FontSize="20"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center"
-                           TextColor="Black"/>
-
-                    <Button Text="Next ▶"
-                            Command="{Binding NextMonthCommand}"
-                            BackgroundColor="#FFD54F"
-                            TextColor="White"
-                            CornerRadius="15"
-                            Padding="10,3"/>
-                </HorizontalStackLayout>
-
                 <!-- Calendar Days -->
                 <CollectionView ItemsSource="{Binding Days}"
                                 ItemsLayout="VerticalGrid, 7"
                                 Margin="0,10">
                     <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Frame BorderColor="LightGray"
-                                   CornerRadius="10"
-                                   Padding="10"
-                                   HasShadow="False"
-                                   HeightRequest="50"
-                                   WidthRequest="50">
-                                <Label Text="{Binding Day}"
-                                       HorizontalOptions="Center"
-                                       VerticalOptions="Center"
-                                       FontSize="16"/>
-                            </Frame>
+                        <DataTemplate x:DataType="model:CalendarDay">
+                            <Grid>
+                                <Frame BorderColor="LightGray"
+                                    CornerRadius="10"
+                                    Padding="10"
+                                    HasShadow="False"
+                                    HeightRequest="50"
+                                    WidthRequest="50"
+                                    IsVisible="{Binding IsVisible}">
+                                    <Frame.Triggers>
+                                        <DataTrigger TargetType="Frame"
+                                                    Binding="{Binding IsSelected}"
+                                                    Value="true">
+                                            <Setter Property="BackgroundColor" Value="#FFDDBB5E"/>
+                                        </DataTrigger>
+                                    </Frame.Triggers>
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding BindingContext.DayTappedCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                                            CommandParameter="{Binding .}"/>
+                                    </Frame.GestureRecognizers>
+
+                                    <Label Text="{Binding Value}"
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="Center"
+                                        FontSize="16"/>
+                                </Frame>
+                                <Ellipse
+                                    WidthRequest="10"
+                                    HeightRequest="10"
+                                    Fill="Red"
+                                    HorizontalOptions="End"
+                                    VerticalOptions="Start"
+                                    Margin="0,3,3,0"
+                                    ZIndex="10"
+                                    IsVisible="{Binding HasReminders}" />
+                            </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-
             </VerticalStackLayout>
         </ScrollView>
-    </Grid>
+
+        <Button 
+                Text="Add Delivery Reminder" 
+                BackgroundColor="#FBE7B3"
+                BorderColor="#6D5206"
+                BorderWidth="2"
+                TextColor="#6D5206"
+                CornerRadius="20"
+                HeightRequest="40"
+                HorizontalOptions="Center"
+                WidthRequest="200"
+                Margin="0,10,0,10"
+                Command="{Binding AddDeliveryCommand}"/>
+
+    </VerticalStackLayout>
 </ContentPage>

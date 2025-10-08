@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MobiMart.View.AddDeliveryReminder"
+             xmlns:viewmodel="clr-namespace:MobiMart.ViewModel"
+             x:DataType="viewmodel:AddDeliveryReminderViewModel"
+             Title="AddDeliveryReminder">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <!-- Supplier Name -->
+            <Label Text="Supplier Name" FontAttributes="Bold" TextColor="#6F4E37" />
+            <Border
+                Stroke="#A9882D"
+                StrokeThickness="1.5"
+                StrokeShape="RoundRectangle 10,10,10,10">
+                <Picker 
+                    Title="Select Supplier" 
+                    ItemsSource="{Binding Suppliers}"
+                    SelectedItem="{Binding SelectedSupplier, Mode=TwoWay}"
+                    ItemDisplayBinding="{Binding Name}"
+                    BackgroundColor="#F8ECC6"
+                    TextColor="#A9882D" />
+            </Border>
+
+            <!-- Notify At Date -->
+            <Label Text="Date of Delivery" FontAttributes="Bold" TextColor="#6F4E37" />
+            <Border
+                Stroke="#A9882D"
+                StrokeThickness="1.5"
+                StrokeShape="RoundRectangle 10,10,10,10"
+                WidthRequest="125"
+                HorizontalOptions="Start">
+                <DatePicker 
+                    Date="{Binding NotifyAtDate}" 
+                    BackgroundColor="#F8ECC6" 
+                    TextColor="#A9882D"
+                    Format="MM/dd/yyyy"
+                    HorizontalOptions="Center"
+                    MinimumDate="01/01/2025" />
+            </Border>
+
+            <!-- Notify At Time -->
+            <Label Text="Time of Delivery" FontAttributes="Bold" TextColor="#6F4E37" />
+            <Border
+                Stroke="#A9882D"
+                StrokeThickness="1.5"
+                StrokeShape="RoundRectangle 10,10,10,10"
+                WidthRequest="125"
+                HorizontalOptions="Start">
+                <TimePicker 
+                    Time="{Binding NotifyAtTime}" 
+                    BackgroundColor="#F8ECC6" 
+                    TextColor="#A9882D"
+                    HorizontalOptions="Center" />
+            </Border>
+
+            <!-- Title -->
+            <Label Text="Reminder Title" FontAttributes="Bold" TextColor="#6F4E37" />
+            <Border
+                Stroke="#A9882D"
+                StrokeThickness="1.5"
+                StrokeShape="RoundRectangle 10,10,10,10">
+                <Entry 
+                    Text="{Binding ReminderTitle}" 
+                    BackgroundColor="#F8ECC6" 
+                    TextColor="#A9882D" />
+            </Border>
+
+            <!-- Reminder Message -->
+            <Label Text="Reminder Message" FontAttributes="Bold" TextColor="#6F4E37" />
+            <Border
+                Stroke="#A9882D"
+                StrokeThickness="1.5"
+                StrokeShape="RoundRectangle 10,10,10,10">
+                <Editor 
+                    AutoSize="TextChanges" 
+                    Text="{Binding ReminderMessage}"
+                    BackgroundColor="#F8ECC6" 
+                    TextColor="#A9882D" 
+                    HeightRequest="100" />
+            </Border>
+
+            <!-- Save Button -->
+            <Button 
+                Text="Save Reminder"
+                Command="{Binding SaveReminderCommand}"
+                BackgroundColor="#A9882D"
+                TextColor="White"
+                CornerRadius="10"
+                Margin="0,10,0,0" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -15,13 +15,21 @@ public partial class UserPage : ContentPage
 		await Shell.Current.GoToAsync("//BusinessPage", true);
 	}
 
-	protected override void OnAppearing()
+	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
+
+		// ask for permissions
+		if (OperatingSystem.IsAndroidVersionAtLeast(33))
+		{
+			var status = await Permissions.CheckStatusAsync<Permissions.PostNotifications>();
+			if (status != PermissionStatus.Granted)
+				await Permissions.RequestAsync<Permissions.PostNotifications>();
+		}
 		
 		if (BindingContext is UserPageViewModel vm)
 		{
-			vm.UpdateInfo();
+			await vm.UpdateInfo();
 		}
     }
 }

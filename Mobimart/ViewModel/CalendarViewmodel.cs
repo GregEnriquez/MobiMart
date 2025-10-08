@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MobiMart.Model;
+using MobiMart.Service;
+using MobiMart.View;
 
 namespace MobiMart.ViewModel
 {
@@ -9,45 +10,156 @@ namespace MobiMart.ViewModel
     {
         [ObservableProperty]
         private string monthYear;
-
         [ObservableProperty]
-        private ObservableCollection<DateTime> days = new();
+        // private ObservableCollection<DateTime> days = new();
+        List<CalendarDay> days = [];
+        [ObservableProperty]
+        List<Reminder> reminders = [];
+        [ObservableProperty]
+        DateTime currentDate;
 
-        private DateTime _currentDate;
+        private CalendarDay selectedDay;
+        List<Reminder> allReminders = [];
 
-        public CalendarViewModel()
+
+        // private DateTime _currentDate;
+
+        NotificationService notificationService;
+
+        public CalendarViewModel(NotificationService notificationService)
         {
             Title = "Calendar";
-            _currentDate = DateTime.Today;
-            LoadMonth(_currentDate);
+            this.notificationService = notificationService;
+            CurrentDate = DateTime.Today;
+            Days = [];
+
+            // Days = [];
+            // for (int i = 0; i < 31; i++)
+            // {
+            //     Days.Add(new(i));
+            // }
+            // LoadMonth();
+
+            // debug data
+            reminders = [];
+            // reminders.Add(new()
+            // {
+            //     Type = ReminderType.SupplyRunout,
+            //     Title = "Stock running low",
+            //     Message = "Stock for item Lucky Me Beef Noodles is running low\nRemaning stock: 4",
+            //     NotifyAtDate = DateTime.Now.ToString(),
+            //     RepeatDaily = true,
+            //     IsEnabled = true,
+            // });
+            // reminders.Add(new()
+            // {
+            //     Type = ReminderType.SupplyRunout,
+            //     Title = "Stock running low",
+            //     Message = "Stock for item Rexona Ice Cool is running low\nRemaning stock: 2",
+            //     NotifyAtDate = DateTime.Now.ToString(),
+            //     RepeatDaily = true,
+            //     IsEnabled = true,
+            // });
+            // reminders.Add(new()
+            // {
+            //     Type = ReminderType.SupplyRunout,
+            //     Title = "Stock running low",
+            //     Message = "Stock for item Coke Kasalo is running low\nRemaning stock: 5",
+            //     NotifyAtDate = DateTime.Now.ToString(),
+            //     RepeatDaily = true,
+            //     IsEnabled = true,
+            // });
         }
 
         [RelayCommand]
-        private void NextMonth()
+        private async Task NextMonth()
         {
-            _currentDate = _currentDate.AddMonths(1);
-            LoadMonth(_currentDate);
+            CurrentDate = new DateTime(CurrentDate.Year, CurrentDate.Month + 1, 1);
+            await LoadMonth();
         }
 
         [RelayCommand]
-        private void PrevMonth()
+        private async Task PrevMonth()
         {
-            _currentDate = _currentDate.AddMonths(-1);
-            LoadMonth(_currentDate);
+            CurrentDate = new DateTime(CurrentDate.Year, CurrentDate.Month - 1, 1);
+            await LoadMonth();
         }
 
-        private void LoadMonth(DateTime date)
+        private async Task LoadMonth()
         {
-            Days.Clear();
-            MonthYear = date.ToString("MMMM yyyy");
+            // tap day one of the month
+            DayTapped(Days[0]);
 
-            var firstDay = new DateTime(date.Year, date.Month, 1);
-            var daysInMonth = DateTime.DaysInMonth(date.Year, date.Month);
-
-            for (int i = 0; i < daysInMonth; i++)
+            // adjust the length of the month
+            for (int i = 28; i < Days.Count; i++) Days[i].IsVisible = true;
+            var daysInMonth = DateTime.DaysInMonth(CurrentDate.Year, CurrentDate.Month);
+            for (int i = 0; i < Days.Count - daysInMonth; i++)
             {
-                Days.Add(firstDay.AddDays(i));
+                Days[Days.Count - 1 - i].IsVisible = false;
             }
+
+            // reset notification indicator for each day that hasReminders
+            foreach (var day in Days)
+            {
+                if (!day.HasReminders) continue;
+                day.HasReminders = false;
+            }
+            // add notification indicator to proper days
+            foreach (var reminder in allReminders)
+            {
+                if (DateTime.Parse(reminder.NotifyAtDate).Month != CurrentDate.Month) continue;
+                Days[DateTime.Parse(reminder.NotifyAtDate).Day - 1].HasReminders = true;
+            }
+        }
+
+
+        [RelayCommand]
+        public void DayTapped(CalendarDay day)
+        {
+            selectedDay ??= day;
+            CurrentDate = new DateTime(CurrentDate.Year, CurrentDate.Month, day.Value);
+            selectedDay.IsSelected = false;
+            selectedDay = Days[day.DayIdx];
+            selectedDay.IsSelected = true;
+
+            Reminders = [.. allReminders.Where(x => DateTime.Parse(x.NotifyAtDate).Date == CurrentDate.Date)];
+        }
+
+
+        [RelayCommand]
+        public async Task AddDelivery()
+        {
+            await Shell.Current.GoToAsync(nameof(AddDeliveryReminder), true);
+        }
+
+
+        public async Task OnAppearing()
+        {
+            // if (Reminders.Count <= 0)
+            // {
+            //     allReminders = await notificationService.GetAllRemindersAsync();
+            //     Reminders = [.. allReminders.Where(x => x.NotifyAtDate.Equals(""))];
+            // }
+
+            allReminders = await notificationService.GetAllRemindersAsync();
+            Reminders = [.. allReminders.Where(x => DateTime.Parse(x.NotifyAtDate).Date == DateTime.Now.Date)];
+
+            if (Days.Count <= 0)
+            {
+                Days = [];
+                for (int i = 0; i < 31; i++)
+                {
+                    Days.Add(new(i));
+                }
+                Days = [.. Days.AsEnumerable()];
+                await LoadMonth();
+            }
+
+            // foreach (var reminder in Reminders)
+            // {
+            //     Days[DateTime.Parse(reminder.NotifyAtDate).Day - 1].HasReminders = true;
+            // }
+            // Days = [.. Days.AsEnumerable()];
         }
     }
 }

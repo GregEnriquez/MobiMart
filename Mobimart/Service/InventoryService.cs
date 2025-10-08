@@ -113,6 +113,14 @@ public class InventoryService
 
 
 
+    public async Task<Inventory> GetInventoryAsync(int id)
+    {
+        await Init();
+        return await db!.Table<Inventory>().Where(x => x.Id == id).FirstOrDefaultAsync();
+    }
+
+
+
     public async Task<List<Inventory>> GetInventoriesAsync(string barcode)
     {
         await Init();
