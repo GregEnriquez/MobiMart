@@ -67,7 +67,11 @@
         <ShellContent
             Title="Calendar"
             ContentTemplate="{DataTemplate view:Calendar}"
-            Route="Calendar" /> 
+            Route="Calendar" />
+        <ShellContent
+            Title="Contracts"
+            ContentTemplate="{DataTemplate view:Contracts}"
+            Route="Contracts" />
     </FlyoutItem>
 
     <!-- <FlyoutItem Title="Profile">

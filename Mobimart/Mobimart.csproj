@@ -92,6 +92,9 @@
 	  <MauiXaml Update="View\AddSupplier.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="View\Contracts.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="View\EditSupplierInventory.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
