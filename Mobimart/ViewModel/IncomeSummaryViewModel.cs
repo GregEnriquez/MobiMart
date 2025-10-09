@@ -24,13 +24,4 @@ namespace MobiMart.ViewModel
             };
         }
     }
-
-    public class ItemSold
-    {
-        public string ItemName { get; set; }
-        public int Amount { get; set; }
-        public double Total { get; set; }
-        public string Date { get; set; }
-        public string ItemType { get; set; }
-    }
 }

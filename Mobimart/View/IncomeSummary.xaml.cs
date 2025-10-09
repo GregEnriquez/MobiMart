@@ -4,9 +4,20 @@ namespace MobiMart.View;
 
 public partial class IncomeSummary : ContentPage
 {
-    public IncomeSummary(IncomeSummaryViewModel viewModel)
+    public IncomeSummary(DailySalesViewModel viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;
+    }
+
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (BindingContext is DailySalesViewModel vm)
+        {
+            await vm.OnAppearing();
+        }
     }
 }
