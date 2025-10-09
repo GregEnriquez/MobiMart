@@ -9,4 +9,14 @@ public partial class DailySales : ContentPage
         InitializeComponent();
         BindingContext = viewModel;
     }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (BindingContext is DailySalesViewModel vm)
+        {
+            await vm.OnAppearing();
+        }
+    }
 }

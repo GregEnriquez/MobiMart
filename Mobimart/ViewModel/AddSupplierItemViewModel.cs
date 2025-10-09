@@ -214,7 +214,8 @@ namespace MobiMart.ViewModel
                     Type = ReminderType.SupplyRunout,
                     Title = "Return Consignment Item",
                     Message = $"""
-                    The item {item.Name} delivered on {DateTime.Parse(delivery.DateDelivered):MM/dd/yyyy} is to be returned on {WReturnByDate:MM/dd/yyyy} with stock remaining: {inv.TotalAmount}
+                    The item {item.Name} delivered on {DateTime.Parse(delivery.DateDelivered):MM/dd/yyyy} is to be returned on {WReturnByDate:MM/dd/yyyy} 
+                    Stock Remaining: {inv.TotalAmount}
                     """,
                     NotifyAtDate = new DateTime(DateOnly.FromDateTime(DateTime.Parse(delivery.ReturnByDate)), new TimeOnly(9, 0)).ToString(),
                     RepeatDaily = false,

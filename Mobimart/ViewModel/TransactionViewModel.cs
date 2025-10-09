@@ -234,6 +234,7 @@ namespace MobiMart.ViewModel
             {
                 businessId = vm.BusinessId;
             }
+            bool salesTransactionSaved = false;
             var salesTransaction = new SalesTransaction()
             {
                 BusinessId = businessId,
@@ -242,7 +243,6 @@ namespace MobiMart.ViewModel
                 Payment = Payment,
                 Change = Change
             };
-            // await salesService.AddSalesTransactionAsync(salesTransaction);
 
             foreach (var itemTransaction in Items)
             {
@@ -264,6 +264,11 @@ namespace MobiMart.ViewModel
                 }
 
                 // saving of sales transaction
+                if (!salesTransactionSaved)
+                {
+                    await salesService.AddSalesTransactionAsync(salesTransaction);
+                    salesTransactionSaved = true;
+                }
                 var salesItem = new SalesItem()
                 {
                     TransactionId = salesTransaction.Id,
@@ -272,7 +277,7 @@ namespace MobiMart.ViewModel
                     Quantity = itemTransaction.Quantity,
                     Price = itemTransaction.Price * itemTransaction.Quantity
                 };
-                // await salesService.AddSalesItemAsync(salesItem);
+                await salesService.AddSalesItemAsync(salesItem);
 
                 // subtraction of inventory
                 int toSubtract = 0;
@@ -288,13 +293,16 @@ namespace MobiMart.ViewModel
                             toSubtract -= inv.TotalAmount;
                             // remove that from inventory already
                             invRecords.Remove(inv);
-                            // await inventoryService.DeleteInventory(inv);
+                            await inventoryService.DeleteInventory(inv);
                             continue;
                         }
                         else
                         {
                             inv.TotalAmount -= toSubtract;
-                            // await inventoryService.UpdateInventoryAsync(inv);
+                            if (inv.TotalAmount == 0)
+                                await inventoryService.DeleteInventory(inv);
+                            else
+                                await inventoryService.UpdateInventoryAsync(inv);
                             break;
                         }
                     }
@@ -303,13 +311,16 @@ namespace MobiMart.ViewModel
                         toSubtract = salesItem.Quantity - inv.TotalAmount;
                         // remove that from inventory already
                         invRecords.Remove(inv);
-                        // await inventoryService.DeleteInventory(inv);
+                        await inventoryService.DeleteInventory(inv);
                         continue;
                     }
                     else
                     {
                         inv.TotalAmount -= salesItem.Quantity;
-                        // await inventoryService.UpdateInventoryAsync(inv);
+                        if (inv.TotalAmount == 0)
+                            await inventoryService.DeleteInventory(inv);
+                        else
+                            await inventoryService.UpdateInventoryAsync(inv);
                         break;
                     }
                 }
@@ -341,14 +352,7 @@ namespace MobiMart.ViewModel
                     Sent = false
                 };
                 // save to database
-                try
-                {
-                    await notificationService.AddReminderAsync(r);
-                }
-                catch (Exception e)
-                {
-                    
-                }
+                await notificationService.AddReminderAsync(r);
 
                 // schedule local notification
                 DateTime date = DateTime.Parse(r.NotifyAtDate);

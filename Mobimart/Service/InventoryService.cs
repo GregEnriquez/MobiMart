@@ -145,6 +145,18 @@ public class InventoryService
     }
 
 
+    public async Task<List<Delivery>> GetDeliveriesViaDate(DateTime date)
+    {
+        await Init();
+        var businessId = -1;
+        if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
+        {
+            businessId = vm.BusinessId;
+        }
+        return (await db!.Table<Delivery>().Where(x => x.BusinessId == businessId).ToListAsync()).Where(x => DateTime.Parse(x.DateDelivered).Date == date.Date).ToList();
+    }
+
+
     public async Task<List<Delivery>> GetDeliveriesViaSupplier(int supplierId)
     {
         await Init();

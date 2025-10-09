@@ -2,33 +2,15 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MobiMart.View.DailySales"
+             xmlns:microcharts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
+            xmlns:viewmodel="clr-namespace:MobiMart.ViewModel"
+            x:DataType="viewmodel:DailySalesViewModel"
              Title="DailySales"
              BackgroundColor="#FFFBE9">
 
     <ContentPage.Content>
         <ScrollView>
             <VerticalStackLayout Padding="10" Spacing="15">
-
-                <!-- title -->
-                <Grid BackgroundColor="#D28F2C" Padding="15" ColumnDefinitions="40,*,40">
-                    <Image Source="menu.png" HeightRequest="24" WidthRequest="24" />
-                    <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Center">
-                        <Label Text="App Name"
-                               TextColor="Black"
-                               FontSize="18"
-                               HorizontalOptions="Center"/>
-                        <Border Padding="5" Background="#FDD835">
-                            <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="15"/>
-                            </Border.StrokeShape>
-                            <Label Text="Daily Sales"
-                                   FontSize="12"
-                                   TextColor="Black"
-                                   HorizontalOptions="Center"/>
-                        </Border>
-                    </VerticalStackLayout>
-                </Grid>
-
                 <!-- navigation of dates -->
                 <Grid ColumnDefinitions="40,*,40" VerticalOptions="Center" Padding="10,0">
                     <Button Text="«"
@@ -60,44 +42,64 @@
                 </Grid>
 
                 <!-- Previous Balance -->
-                <Label Text="{Binding PreviousBalance, StringFormat='Previous Balance: {0:C}'}"
+                <!-- Text="{Binding PreviousBalance, StringFormat='Previous Balance: {0:C}'}" -->
+                <Label Text="Sales for the Past 7 Days"
                        FontAttributes="Bold"
                        FontSize="16"
                        TextColor="Black"
                        HorizontalOptions="Center"/>
 
+                <!-- Line Chart -->
                 <Border Padding="10" Stroke="LightGray" StrokeThickness="1" 
-                        HeightRequest="200" WidthRequest="350">
+                    HeightRequest="200" WidthRequest="350">
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="10"/>
                     </Border.StrokeShape>
-                    <Label Text="[Line Chart Here]"
-                           TextColor="Black"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center"
-                           FontSize="16"/>
+                    <ScrollView Orientation="Horizontal" HeightRequest="200" WidthRequest="350">
+                        <microcharts:ChartView 
+                            x:Name="LineChartController"
+                            Chart="{Binding LineChart}"
+                            WidthRequest="{Binding LineChartWidth}"/>
+                    </ScrollView>
                 </Border>
 
                 <!-- Today's Income -->
-                <Label Text="{Binding TodaysIncome, StringFormat='Today\'s Income: {0:C}'}"
+                <Label Text="{Binding TodaysIncome, StringFormat='Today\'s Income: ₱{0:0.00}'}"
                        FontSize="16"
                        FontAttributes="Bold"
                        TextColor="Black"
                        HorizontalOptions="Center"/>
+
+                <!-- Pie Chart -->
                 <Border Padding="10" Stroke="LightGray" StrokeThickness="1"
                         HeightRequest="200" WidthRequest="350">
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="10"/>
                     </Border.StrokeShape>
-                    <Label Text="[Pie Chart - Income]"
-                           TextColor="Black"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center"
-                           FontSize="16"/>
+                    <Border.Triggers>
+                        <DataTrigger TargetType="Border" Binding="{Binding HasNoTransactions}" Value="True">
+                            <Setter Property="IsVisible" Value="False"/>
+                        </DataTrigger>
+                    </Border.Triggers>
+                        <microcharts:ChartView 
+                            x:Name="PieChartController"
+                            Chart="{Binding PieChart}"/>
+                </Border>
+                <Border Padding="10" Stroke="LightGray" StrokeThickness="1"
+                        HeightRequest="200" WidthRequest="350"
+                        IsVisible="{Binding HasNoTransactions}">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10"/>
+                    </Border.StrokeShape>
+                    <Label Text="seems like no transaction has been made today"
+                                FontSize="16"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                HorizontalTextAlignment="Center"/>
                 </Border>
 
                 <!-- Today's Expenses -->
-                <Label Text="{Binding TodaysExpenses, StringFormat='Today\'s Expenses: {0:C}'}"
+                <Label Text="{Binding TodaysExpenses, StringFormat='Today\'s Delivery Expenses: ₱{0:0.00}'}"
                        FontSize="16"
                        FontAttributes="Bold"
                        TextColor="Black"
@@ -107,12 +109,28 @@
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="10"/>
                     </Border.StrokeShape>
-                    <Label Text="[Pie Chart - Expenses]"
-                           TextColor="Black"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center"
-                           FontSize="16"/>
+                    <Border.Triggers>
+                        <DataTrigger TargetType="Border" Binding="{Binding HasNoExpenses}" Value="True">
+                            <Setter Property="IsVisible" Value="False"/>
+                        </DataTrigger>
+                    </Border.Triggers>
+                        <microcharts:ChartView 
+                                x:Name="PieChartExpenseController"
+                                Chart="{Binding PieChartExpense}"/>
                 </Border>
+                <Border Padding="10" Stroke="LightGray" StrokeThickness="1"
+                        HeightRequest="200" WidthRequest="350"
+                        IsVisible="{Binding HasNoExpenses}">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10"/>
+                    </Border.StrokeShape>
+                    <Label Text="seems like no expense has spent made today"
+                                FontSize="16"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                HorizontalTextAlignment="Center"/>
+                </Border>
+
 
             </VerticalStackLayout>
         </ScrollView>
