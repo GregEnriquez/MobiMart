@@ -6,6 +6,7 @@ using MobiMart.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -58,23 +59,6 @@ namespace MobiMart.ViewModel
 
         public async Task RefreshRecords()
         {
-            // SupplierItems = [];
-
-            // var dummyItems = new List<dynamic>();
-
-            // dummyItems.Append(new
-            // {
-            //     DeliveryId = 1,
-            //     ItemName = "Zesto",
-            //     DelivQuantity = 20,
-            //     DateDelivered = DateTime.Today.ToString(),
-            //     DateExpire = DateTime.Today.ToString(),
-            //     BatchCostPrice = 20 * 7.5,
-            //     ItemType = "Drinks",
-            //     ItemDesc = "Zesto drink is a juice drink and wala na akong masabi ayoko na ba-bye na po"
-            // });
-
-
             SupplierItems = await inventoryService.GetDeliveryRecordsAsync(Supplier.Id);
         }
     }

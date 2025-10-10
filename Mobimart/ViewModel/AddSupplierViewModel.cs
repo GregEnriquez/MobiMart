@@ -57,7 +57,7 @@ public partial class AddSupplierViewModel : BaseViewModel
                 BusinessId = user.BusinessRefId,
                 Type = Type,
                 Name = Name,
-                Email = Email,
+                Email = Email,  
                 Socials = Socials,
                 Number = Number
             };

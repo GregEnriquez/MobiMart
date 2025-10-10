@@ -49,7 +49,16 @@
                 Stroke="#A9882D"
                 StrokeThickness="1.5"
                 StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter Supplier Type" Text="{Binding Type}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                <!-- <Entry Placeholder="Enter Supplier Type" Text="{Binding Type}" BackgroundColor="#F8ECC6" TextColor="#A9882D" /> -->
+                <Picker Title="Select Supplier Type"
+                        SelectedItem="{Binding Type}">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Wholesale</x:String>
+                            <x:String>Consignment   </x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
             </Border>
 
             <Label Text="Supplier Number" FontAttributes="Bold" TextColor="#6F4E37" />

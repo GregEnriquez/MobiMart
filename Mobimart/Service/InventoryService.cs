@@ -242,7 +242,7 @@ public class InventoryService
                 ItemType = item.Type,
                 ItemDesc = desc!.Text,
                 Barcode = item.Barcode,
-                QuantityInStock = inv!.TotalAmount,
+                QuantityInStock = inv is not null ? inv.TotalAmount : 0,
                 ConsignmentSchedule = d.ConsignmentSchedule,
                 ReturnByDate = d.ReturnByDate
             });
