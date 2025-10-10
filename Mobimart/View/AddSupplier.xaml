@@ -76,13 +76,13 @@
                 <Entry Placeholder="Enter Supplier Socials" Text="{Binding Socials}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
             </Border>
 
-            <Button 
+            <!-- <Button 
                 Text="Add Contact" 
                 BackgroundColor="#D99B2B" 
                 TextColor="White"
                 CornerRadius="10"
                 HeightRequest="45"
-                Clicked="onButtonClicked"/>
+                Clicked="onButtonClicked"/> -->
 
             <Button 
                 Text="Save Changes" 
