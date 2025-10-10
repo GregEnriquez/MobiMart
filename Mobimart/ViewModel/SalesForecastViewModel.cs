@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Diagnostics;
+using System.Text.Json;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microcharts;
 using MobiMart.Model;
 using MobiMart.Service;
@@ -16,17 +18,31 @@ public partial class SalesForecastViewModel : BaseViewModel
     string recommendation;
     [ObservableProperty]
     Chart barChart;
+    [ObservableProperty]
+    List<SalesRecommendation> salesRecommendations;
 
-
+    MonthlyForecastInstance? monthlyForecast;
 
     SalesService salesService;
     InventoryService inventoryService;
+    OpenAiService openAiService;
+    GeminiService geminiService;
+    BusinessService businessService;
 
-    public SalesForecastViewModel(SalesService salesService, InventoryService inventoryService)
+    public SalesForecastViewModel(
+        SalesService salesService,
+        InventoryService inventoryService,
+        OpenAiService openAiService,
+        GeminiService geminiService,
+        BusinessService businessService
+        )
     {
         Title = "Sales Forecast";
         this.salesService = salesService;
         this.inventoryService = inventoryService;
+        this.openAiService = openAiService;
+        this.geminiService = geminiService;
+        this.businessService = businessService;
 
         // Example placeholder data (replace later with real data or API call)
         ForecastedRevenue = "₱50,000";
@@ -39,6 +55,37 @@ public partial class SalesForecastViewModel : BaseViewModel
     public async Task OnAppearing()
     {
         await GenerateBarOverlayChart();
+        var sales = await salesService.GetMonthlySalesRecords(DateTime.Today);
+        // await openAiService.GenerateMonthlyForecast(sales);
+
+        // get monthly forecast for today using gemini service
+        SalesRecommendations = [];
+        // await businessService.DeleteMonthlyForecastInstance(); //debug
+        monthlyForecast = await businessService.GetMonthlyForecastInstance();
+        if (monthlyForecast is not null 
+        && DateTime.Parse(monthlyForecast.DateGenerated).Date < DateTime.Now.Date)
+        {
+            await businessService.DeleteMonthlyForecastInstance();
+            monthlyForecast = null;
+        }
+        if (monthlyForecast is null)
+        {
+            monthlyForecast = await geminiService.GenerateMonthlyForecast(sales);
+            await businessService.AddMonthlyForecastInstance(monthlyForecast);
+        }
+        // convert the response revenue report
+        try
+        {
+            string og = monthlyForecast.Response;
+            monthlyForecast.Response = monthlyForecast.Response.Replace("```json", "");
+            monthlyForecast.Response = monthlyForecast.Response.Replace("```", "");
+            RevenueReport report = JsonSerializer.Deserialize<RevenueReport>(monthlyForecast.Response)!;
+            SalesRecommendations = [.. report.SalesRecommendations.AsEnumerable()];
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine(e.StackTrace);
+        }
     }
 
 

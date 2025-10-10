@@ -38,6 +38,8 @@ namespace MobiMart
             builder.Services.AddSingleton<InventoryService>();
             builder.Services.AddSingleton<SalesService>();
             builder.Services.AddSingleton<NotificationService>();
+            builder.Services.AddSingleton<OpenAiService>();
+            builder.Services.AddSingleton<GeminiService>();
 
             // inject viewmodels
             builder.Services.AddSingleton<LoginViewModel>();

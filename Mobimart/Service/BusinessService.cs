@@ -1,5 +1,6 @@
 using System;
 using MobiMart.Model;
+using MobiMart.ViewModel;
 using SQLite;
 
 namespace MobiMart.Service;
@@ -26,6 +27,7 @@ public class BusinessService
         db = new SQLiteAsyncConnection(databasePath);
 
         await db.CreateTableAsync<Business>();
+        await db.CreateTableAsync<MonthlyForecastInstance>();
     }
 
 
@@ -59,6 +61,33 @@ public class BusinessService
 
     public async Task AddBusinessAsync(Business b)
     {
+        await Init();
         await db!.InsertAsync(b);
+    }
+
+
+    public async Task AddMonthlyForecastInstance(MonthlyForecastInstance x)
+    {
+        await Init();
+        await db!.InsertAsync(x);
+    }
+
+
+    public async Task<MonthlyForecastInstance> GetMonthlyForecastInstance()
+    {
+        await Init();
+        var businessId = -1;
+        if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
+        {
+            businessId = vm.BusinessId;
+        }
+        return await db!.Table<MonthlyForecastInstance>().FirstOrDefaultAsync(x => x.BusinessId == businessId); ;
+    }
+    
+
+    public async Task DeleteMonthlyForecastInstance()
+    {
+        await Init();
+        await db!.DeleteAllAsync<MonthlyForecastInstance>();
     }
 }
