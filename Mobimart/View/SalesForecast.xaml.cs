@@ -9,4 +9,16 @@ public partial class SalesForecast : ContentPage
         InitializeComponent();
         BindingContext = viewModel;
     }
+
+
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (BindingContext is SalesForecastViewModel vm)
+        {
+            await vm.OnAppearing();
+        }
+    }
 }

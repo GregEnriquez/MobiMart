@@ -2,36 +2,13 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MobiMart.View.SalesForecast"
+             xmlns:viewmodel="clr-namespace:MobiMart.ViewModel"
+             x:DataType="viewmodel:SalesForecastViewModel"
+             xmlns:microcharts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
              Title="SalesForecast"
              BackgroundColor="#FFFBE9">
 
     <Grid RowDefinitions="Auto, *" ColumnDefinitions="*">
-
-        <!-- Header -->
-        <Grid BackgroundColor="#D18E2D" Padding="15">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <!-- App Title -->
-            <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center">
-                <Label Text="App Name"
-                       FontSize="20"
-                       TextColor="White"
-                       HorizontalOptions="Center"/>
-                <Frame BackgroundColor="#E6B655"
-                       Padding="5,2"
-                       CornerRadius="20"
-                       HasShadow="False"
-                       Margin="0,5,0,0">
-                    <Label Text="Sales Forecast"
-                           FontSize="14"
-                           TextColor="White"
-                           HorizontalOptions="Center"/>
-                </Frame>
-            </VerticalStackLayout>
-        </Grid>
 
         <!-- Content -->
         <ScrollView Grid.Row="1">
@@ -44,21 +21,16 @@
                        HorizontalOptions="Center"
                        TextColor="Black"/>
 
-                <!-- Chart Placeholder -->
-                <Frame BorderColor="#BFA76F"
-                       CornerRadius="10"
-                       Padding="10"
-                       HasShadow="False"
-                       BackgroundColor="White"
-                       HeightRequest="220">
-                    <VerticalStackLayout>
-                        <Label Text="[Chart Placeholder]"
-                               FontSize="14"
-                               HorizontalOptions="Center"
-                               VerticalOptions="CenterAndExpand"
-                               TextColor="Gray"/>
-                    </VerticalStackLayout>
-                </Frame>
+                <!-- Bar Chart -->
+                <Border Padding="15" Stroke="#BFA76F" StrokeThickness="1" 
+                    HeightRequest="220">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10"/>
+                    </Border.StrokeShape>
+                        <microcharts:ChartView 
+                            x:Name="PieChartController"
+                            Chart="{Binding BarChart}"/>
+                </Border>
 
                 <!-- Forecasted Revenue -->
                 <Label FontSize="16" TextColor="Black">

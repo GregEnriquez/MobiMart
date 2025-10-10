@@ -173,7 +173,7 @@ namespace MobiMart.ViewModel
                 entries.Add(new ChartEntry(itemSold.Value)
                 {
                     Label = item.Name,
-                    ValueLabel = $"₱{itemSold.Value:0.00} | {(itemSold.Value / total) * 100:0}%",
+                    ValueLabel = $" {itemSold.Value:0.00} | {(itemSold.Value / total) * 100:0}%",
                     Color = GetRandomColor()
                 });
             }

@@ -103,4 +103,42 @@ public class SalesService
 
         return output;
     }
+
+
+
+    public async Task<List<SalesRecord>> GetMonthlySalesRecords(DateTime dateMonth)
+    {
+        await Init();
+        var output = new List<SalesRecord>();
+        int businessId = -1;
+        if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
+        {
+            businessId = vm.BusinessId;
+        }
+
+        var ts = await db!.Table<SalesTransaction>().ToListAsync();
+        var transactions = (await db!.Table<SalesTransaction>().Where(x => x.BusinessId == businessId).ToListAsync())
+        .Where(x => DateTime.Parse(x.Date).Month == dateMonth.Month).ToList();
+
+        foreach (var t in transactions)
+        {
+            SalesRecord record = new()
+            {
+                TransactionId = t.Id,
+                Date = t.Date,
+                TotalPrice = t.TotalPrice,
+                Payment = t.Payment,
+                Change = t.Change,
+                Items = []
+            };
+            var items = await db!.Table<SalesItem>().Where(x => x.TransactionId == t.Id).ToListAsync();
+
+            foreach (var item in items) record.Items.Add(item);
+
+            output.Add(record);
+        }
+
+
+        return output;
+    }
 }
