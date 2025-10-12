@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using MobiMart.Model;
 using MobiMart.ViewModel;
 using Plugin.LocalNotification;
@@ -82,7 +83,9 @@ public class NotificationService
         {
             businessId = vm.BusinessId;
         }
-        return await db!.Table<Reminder>().Where(x => x.BusinessId == businessId).ToListAsync();
+
+        if (businessId == -1) return [];
+        return await db!.Table<Reminder>().Where(x=> x.BusinessId == businessId).ToListAsync();
     }
 
 
@@ -102,7 +105,15 @@ public class NotificationService
 
     public async Task CheckAndScheduleNotificationsAsync(InventoryService inventoryService)
     {
-        var reminders = await GetAllRemindersAsync();
+        var reminders = new List<Reminder>();
+        try
+        {
+            reminders = await GetAllRemindersAsync();
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine(e.StackTrace);
+        }
 
         for (int i = 0; i < reminders.Count; i++)
         {
@@ -130,6 +141,7 @@ public class NotificationService
                 """;
 
                 reminder.Message = message;
+                await UpdateReminderAsync(reminder);
             }
             else if (reminder.Type is ReminderType.SupplyRunout)
             {
@@ -154,6 +166,7 @@ public class NotificationService
                 var item = await inventoryService.GetItemAsync(inv.ItemBarcode);
                 var message = $"Stock for item {item.Name} is running low\nRemaining Stock: {totalInv}";
                 reminder.Message = message;
+                await UpdateReminderAsync(reminder);
                 var notifyDate = DateTime.Parse(reminder.NotifyAtDate);
                 if (notifyDate.Date < DateTime.Now.Date) // only when today's date (by day) is > previous notifydate sched
                 {

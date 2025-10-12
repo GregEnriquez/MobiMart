@@ -1,4 +1,6 @@
-﻿using MobiMart.Service;
+﻿using System.Diagnostics;
+using MobiMart.Service;
+using MobiMart.ViewModel;
 using Plugin.LocalNotification;
 
 namespace MobiMart
@@ -32,14 +34,9 @@ namespace MobiMart
         }
 
 
-        protected override void OnStart()
+        protected override async void OnStart()
         {
             base.OnStart();
-
-            Task.Run(async () =>
-            {
-                await notificationService.CheckAndScheduleNotificationsAsync(inventoryService);
-            });
         }
     }
 }

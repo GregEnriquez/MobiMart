@@ -11,6 +11,8 @@ public partial class FlyoutMenuViewModel : BaseViewModel
 {
     UserService userService;
     BusinessService businessService;
+    NotificationService notificationService;
+    InventoryService inventoryService;
 
     [ObservableProperty]
     string businessName = "Business Name";
@@ -26,10 +28,14 @@ public partial class FlyoutMenuViewModel : BaseViewModel
     User? user;
     Business? business;
 
-    public FlyoutMenuViewModel(UserService userService, BusinessService businessService)
+    bool isRemindersUpdated = false;
+
+    public FlyoutMenuViewModel(UserService userService, BusinessService businessService, NotificationService notificationService, InventoryService inventoryService)
     {
         this.userService = userService;
         this.businessService = businessService;
+        this.notificationService = notificationService;
+        this.inventoryService = inventoryService;
 
         // Task.Run(async () =>
         // {
@@ -96,6 +102,13 @@ public partial class FlyoutMenuViewModel : BaseViewModel
         {
             IsUserInBusiness = false;
             IsUserOwner = false;
+        }
+
+        // update reminders
+        if (!isRemindersUpdated)
+        {
+            // await notificationService.CheckAndScheduleNotificationsAsync(inventoryService);
+            isRemindersUpdated = true;
         }
     }
 

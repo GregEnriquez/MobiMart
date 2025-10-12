@@ -9,5 +9,17 @@ namespace MobiMart.View
             InitializeComponent();
             BindingContext = viewModel;
         }
+
+
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+
+            if (BindingContext is LoginViewModel vm)
+            {
+                await vm.OnAppearing();
+            }
+        }
     }
 }

@@ -60,11 +60,11 @@ namespace MobiMart
             };
         }
 
-        private void OnShellPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private async void OnShellPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (BindingContext is FlyoutMenuViewModel vm)
             {
-                vm.UpdateInfo();
+                await vm.UpdateInfo();
             }
         }
     }

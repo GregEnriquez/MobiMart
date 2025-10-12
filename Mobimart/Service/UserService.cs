@@ -51,7 +51,9 @@ public class UserService
         await Init();
 
         // check for an active user instance
-        var userInstance = await db!.Table<UserInstance>().FirstOrDefaultAsync();
+        UserInstance userInstance = null;
+        userInstance = await db!.Table<UserInstance>().FirstOrDefaultAsync();
+
         if (userInstance is null)
         {
             // return the user to login page

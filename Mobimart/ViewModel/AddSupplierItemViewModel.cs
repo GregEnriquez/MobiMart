@@ -208,15 +208,18 @@ namespace MobiMart.ViewModel
             if (Supplier.Type.ToLower().Equals("consignment"))
             {
                 // create reminder
+                var m = $"""
+                The item {item.Name} delivered on {DateTime.Parse(delivery.DateDelivered):MM/dd/yyyy} is to be returned on {DateTime.Parse(delivery.ReturnByDate):MM/dd/yyyy}.
+                Items Sold: {delivery.DeliveryAmount - inv.TotalAmount}
+                Stock Remaining: {inv.TotalAmount}
+                Amount to Pay: {(delivery.DeliveryAmount - inv.TotalAmount) * (delivery.BatchWorth / delivery.DeliveryAmount):0.00}
+                """;
                 var r = new Reminder()
                 {
                     BusinessId = user.BusinessRefId,
                     Type = ReminderType.SupplyRunout,
                     Title = "Return Consignment Item",
-                    Message = $"""
-                    The item {item.Name} delivered on {DateTime.Parse(delivery.DateDelivered):MM/dd/yyyy} is to be returned on {WReturnByDate:MM/dd/yyyy} 
-                    Stock Remaining: {inv.TotalAmount}
-                    """,
+                    Message = m,
                     NotifyAtDate = new DateTime(DateOnly.FromDateTime(DateTime.Parse(delivery.ReturnByDate)), new TimeOnly(9, 0)).ToString(),
                     RepeatDaily = false,
                     RelatedEntityId = delivery.Id,

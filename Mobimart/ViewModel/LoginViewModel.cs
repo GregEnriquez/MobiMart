@@ -19,17 +19,16 @@ public partial class LoginViewModel : BaseViewModel
     {
         this.userService = userService;
 
-        Debug.WriteLine("i was initiated");
-        Task.Run(async () =>
-        {
-            IsBusy = true;
-            if (await userService.ResumeUserInstanceAsync())
-            {
-                await Shell.Current.GoToAsync("//UserPage", true);
-                IsBusy = false;
-            }
-            IsBusy = false;
-        });
+        // Task.Run(async () =>
+        // {
+        //     IsBusy = true;
+        //     if (await userService.ResumeUserInstanceAsync())
+        //     {
+        //         await Shell.Current.GoToAsync("//UserPage", true);
+        //         IsBusy = false;
+        //     }
+        //     IsBusy = false;
+        // });
     }
 
 
@@ -74,5 +73,17 @@ public partial class LoginViewModel : BaseViewModel
         // await Navigation.PushAsync(new SignUpPage());
         Debug.WriteLine("I am here");
         await Shell.Current.GoToAsync($"{nameof(SignUpPage)}", true);
+    }
+
+
+    public async Task OnAppearing()
+    {
+        IsBusy = true;
+        if (await userService.ResumeUserInstanceAsync())
+        {
+            await Shell.Current.GoToAsync("//UserPage", true);
+            IsBusy = false;
+        }
+        IsBusy = false;
     }
 }
