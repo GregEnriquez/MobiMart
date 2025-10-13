@@ -124,7 +124,7 @@
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="10"/>
                     </Border.StrokeShape>
-                    <Label Text="seems like no expense has spent made today"
+                    <Label Text="seems like no expense has been spent today"
                                 FontSize="16"
                                 HorizontalOptions="Center"
                                 VerticalOptions="Center"

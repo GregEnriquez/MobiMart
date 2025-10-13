@@ -42,6 +42,7 @@ public partial class AddDeliveryReminderViewModel : BaseViewModel
             }
         };
 
+        NotifyAtDate = DateTime.Now;
         ReminderTitle = "Delivery Reminder";
     }
 
@@ -102,6 +103,8 @@ public partial class AddDeliveryReminderViewModel : BaseViewModel
 
         // clear fields
         SelectedSupplier = null;
+        NotifyAtDate = DateTime.Now;
+        NotifyAtTime = DateTime.Now.TimeOfDay;
 
         // go back
         await Shell.Current.GoToAsync("..");

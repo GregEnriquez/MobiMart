@@ -70,7 +70,24 @@ public partial class SalesForecastViewModel : BaseViewModel
         }
         if (monthlyForecast is null)
         {
-            monthlyForecast = await geminiService.GenerateMonthlyForecast(sales);
+            try
+            {
+                monthlyForecast = await geminiService.GenerateMonthlyForecast(sales);
+            }
+            catch (Exception e)
+            {
+                // if (e.Message.Equals("Connection failure"))
+
+                SalesRecommendations = new List<SalesRecommendation> ()
+                {
+                    new ()
+                    {
+                    Title = "No internet connection",
+                    Details = "Can't connect to the server for generation of insights and recommendations."    
+                    }
+                };
+                return;
+            }
             await businessService.AddMonthlyForecastInstance(monthlyForecast);
         }
         // convert the response revenue report

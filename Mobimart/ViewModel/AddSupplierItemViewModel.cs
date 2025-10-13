@@ -211,7 +211,7 @@ namespace MobiMart.ViewModel
                 var m = $"""
                 The item {item.Name} delivered on {DateTime.Parse(delivery.DateDelivered):MM/dd/yyyy} is to be returned on {DateTime.Parse(delivery.ReturnByDate):MM/dd/yyyy}.
                 Items Sold: {delivery.DeliveryAmount - inv.TotalAmount}
-                Stock Remaining: {inv.TotalAmount}
+                Stock Remaining: {inv.TotalAmount} / {delivery.DeliveryAmount}
                 Amount to Pay: {(delivery.DeliveryAmount - inv.TotalAmount) * (delivery.BatchWorth / delivery.DeliveryAmount):0.00}
                 """;
                 var r = new Reminder()
@@ -252,6 +252,7 @@ namespace MobiMart.ViewModel
             WRetailPrice = null;
             WDelivQuantity = null;
             WUnitCost = null;
+            WBatchCost = null;
             WConsignmentSchedule = "";
             string message = "item/s added to inventory";
             if (!IsFromInventory) message = "Delivery recorded and " + message;

@@ -136,7 +136,7 @@ public class NotificationService
                 var message = $"""
                 The item {item.Name} delivered on {DateTime.Parse(delivery.DateDelivered):MM/dd/yyyy} is to be returned on {DateTime.Parse(delivery.ReturnByDate):MM/dd/yyyy}.
                 Items Sold: {delivery.DeliveryAmount - inv.TotalAmount}
-                Stock Remaining: {inv.TotalAmount}
+                Stock Remaining: {inv.TotalAmount} / {delivery.DeliveryAmount}
                 Amount to Pay: {(delivery.DeliveryAmount - inv.TotalAmount) * (delivery.BatchWorth / delivery.DeliveryAmount):0.00}
                 """;
 

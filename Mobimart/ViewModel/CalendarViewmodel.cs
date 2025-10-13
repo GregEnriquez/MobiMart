@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using MobiMart.Model;
 using MobiMart.Service;
 using MobiMart.View;
+using SQLitePCL;
 
 namespace MobiMart.ViewModel
 {
@@ -98,6 +99,12 @@ namespace MobiMart.ViewModel
                 Days[Days.Count - 1 - i].IsVisible = false;
             }
 
+            UpdateIndicators();
+        }       
+
+
+        private void UpdateIndicators()
+        {
             // reset notification indicator for each day that hasReminders
             foreach (var day in Days)
             {
@@ -153,13 +160,10 @@ namespace MobiMart.ViewModel
                 }
                 Days = [.. Days.AsEnumerable()];
                 await LoadMonth();
+                return;
             }
 
-            // foreach (var reminder in Reminders)
-            // {
-            //     Days[DateTime.Parse(reminder.NotifyAtDate).Day - 1].HasReminders = true;
-            // }
-            // Days = [.. Days.AsEnumerable()];
+            UpdateIndicators();
         }
     }
 }
