@@ -217,7 +217,7 @@ namespace MobiMart.ViewModel
                 var r = new Reminder()
                 {
                     BusinessId = user.BusinessRefId,
-                    Type = ReminderType.SupplyRunout,
+                    Type = ReminderType.ConsignmentDue,
                     Title = "Return Consignment Item",
                     Message = m,
                     NotifyAtDate = new DateTime(DateOnly.FromDateTime(DateTime.Parse(delivery.ReturnByDate)), new TimeOnly(9, 0)).ToString(),

@@ -115,9 +115,12 @@ public class NotificationService
             Debug.WriteLine(e.StackTrace);
         }
 
+        if (reminders is null) return;
+
         for (int i = 0; i < reminders.Count; i++)
         {
             var reminder = reminders[i];
+            // if (reminder.Id == 16) await DeleteReminderAsync(reminder);
 
             if (reminder.Type is ReminderType.ConsignmentDue)
             {
@@ -152,6 +155,7 @@ public class NotificationService
                     await DeleteReminderAsync(reminder);
                     continue;
                 }
+                // all the inventory records of the item
                 var invRecords = await inventoryService.GetInventoriesAsync(inv.ItemBarcode);
                 if (invRecords is null || invRecords.Count <= 0) continue; // same same validation sa taas
                 int totalInv = 0;
