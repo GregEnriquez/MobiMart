@@ -107,7 +107,6 @@ public partial class FlyoutMenuViewModel : BaseViewModel
         // update reminders
         if (!isRemindersUpdated)
         {
-            
             await notificationService.CheckAndScheduleNotificationsAsync(inventoryService);
             isRemindersUpdated = true;
         }
