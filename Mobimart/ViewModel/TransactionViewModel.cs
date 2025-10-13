@@ -83,7 +83,7 @@ namespace MobiMart.ViewModel
 
         private async Task InitItems()
         {
-            if (AllItems is not null) return;
+            // if (AllItems is not null) return;
             AllItems = await inventoryService.GetAllItemsAsync();
         }
 
