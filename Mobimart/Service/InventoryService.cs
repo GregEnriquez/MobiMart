@@ -188,7 +188,7 @@ public class InventoryService
         var deliveries = await GetDeliveriesViaItem(barcode);
         var item = await GetItemAsync(barcode);
         var desc = await GetItemDescAsync(barcode);
-        Inventory inv = null;
+        Inventory? inv = null;
         foreach (var d in deliveries)
         {
             inv = await GetInventoryFromDeliveryAsync(d.Id);
@@ -204,7 +204,7 @@ public class InventoryService
                 ItemType = item.Type,
                 ItemDesc = desc!.Text,
                 Barcode = item.Barcode,
-                QuantityInStock = inv!.TotalAmount,
+                QuantityInStock = inv is null ? 0 : inv.TotalAmount,
                 ConsignmentSchedule = d.ConsignmentSchedule,
                 ReturnByDate = d.ReturnByDate
             });

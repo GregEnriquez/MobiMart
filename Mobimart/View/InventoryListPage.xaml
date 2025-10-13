@@ -61,7 +61,14 @@
                                TextChanged="OnTextChanged"/>
                 </Border>
 
-                <ScrollView Orientation="Both" IsVisible="{Binding IsNotBusy}">
+                <ScrollView Orientation="Both" IsVisible="True">
+                    <ScrollView.Triggers>
+                        <DataTrigger TargetType="ScrollView"
+                                    Binding="{Binding InventoryItems.Count}"
+                                    Value="0">
+                            <Setter Property="IsVisible" Value="False"/>
+                        </DataTrigger>
+                    </ScrollView.Triggers>
                     <VerticalStackLayout>
                         <Grid ColumnDefinitions="120, 120, 120, 120, 120" BackgroundColor="#6D5206" Padding="5">
                             <Label Text="Item Name" TextColor="White" FontAttributes="Bold" />
@@ -94,11 +101,19 @@
                     </VerticalStackLayout>
                 </ScrollView>
 
-                <ActivityIndicator IsRunning="{Binding IsBusy}" 
-                            IsVisible="{Binding IsBusy}"
+                <ActivityIndicator IsRunning="True" 
+                            IsVisible="False"
                             Color="#D99B2B" 
                             VerticalOptions="Center" 
-                            HorizontalOptions="Center" />
+                            HorizontalOptions="Center">
+                    <ActivityIndicator.Triggers>
+                        <DataTrigger TargetType="ActivityIndicator"
+                                    Binding="{Binding InventoryItems.Count}"
+                                    Value="0">
+                            <Setter Property="IsVisible" Value="True"/>
+                        </DataTrigger>
+                    </ActivityIndicator.Triggers>
+                </ActivityIndicator>
 
                 <HorizontalStackLayout Padding="1" HorizontalOptions="Center">
                     <Frame Padding="5" HasShadow="False" BackgroundColor="Transparent" BorderColor="Transparent">

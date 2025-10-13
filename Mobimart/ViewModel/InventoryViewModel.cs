@@ -112,8 +112,15 @@ namespace MobiMart.ViewModel
             {
                 {"ItemBarcode", barcode}
             };
-            var popup = new EditInventoryPopup(new EditInventoryPopupViewModel(inventoryService, barcode));
-            await Shell.Current.ShowPopupAsync(popup);
+            try
+            {
+                var popup = new EditInventoryPopup(new EditInventoryPopupViewModel(inventoryService, barcode));
+                await Shell.Current.ShowPopupAsync(popup);
+            }
+            catch (Exception e)
+            {
+                
+            }
         }
 
 
@@ -122,17 +129,18 @@ namespace MobiMart.ViewModel
             if (IsBusy) return;
             IsBusy = true;
 
+            InventoryItems = [];
             _allItems = await inventoryService.GetInventoryRecordsAsync();
             InventoryItems = [.. _allItems];
 
             IsBusy = false;
         }
 
-        public void FilterItems(string query)
+        public async Task FilterItems(string query)
         {
-            InventoryItems.Clear();
+            InventoryItems = [];
 
-            InventoryItems = _allItems.Where(i => i.Name.ToLower().Contains(query.ToLower())).ToList();
+            InventoryItems = [.. _allItems.Where(i => i.Name.ToLower().Contains(query.ToLower()))];
 
             // var filtered = string.IsNullOrWhiteSpace(query)
             //     ? _allItems

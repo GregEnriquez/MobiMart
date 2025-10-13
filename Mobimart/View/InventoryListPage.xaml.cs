@@ -22,13 +22,13 @@ public partial class InventoryListPage : ContentPage
     //     ItemPopup.IsVisible = true;
     // }
 
-    void OnTextChanged(object sender, EventArgs e)
+    async void OnTextChanged(object sender, EventArgs e)
     {
         SearchBar searchBar = (SearchBar)sender;
 
         if (BindingContext is InventoryViewModel vm)
         {
-            vm.FilterItems(searchBar.Text);
+            await vm.FilterItems(searchBar.Text);
         }
     }
 

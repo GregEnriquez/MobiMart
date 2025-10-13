@@ -47,8 +47,14 @@ public partial class EditInventoryPopupViewModel : BaseViewModel, IQueryAttribut
         // }
 
         // Deliveries = DeliveriesDummy;
-
-        Deliveries = await inventoryService.GetDeliveryRecordsViaItem(ItemBarcode);
+        try
+        {
+            Deliveries = await inventoryService.GetDeliveryRecordsViaItem(ItemBarcode);
+        }
+        catch (Exception e)
+        {
+            
+        }
     }
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
