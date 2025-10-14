@@ -18,15 +18,15 @@ public partial class AddSupplierViewModel : BaseViewModel
     SupplierService supplierService;
 
     [ObservableProperty]
-    string name;
+    string name = "";
     [ObservableProperty]
-    string type;
+    string type = "";
     [ObservableProperty]
-    string number;
+    string number = "";
     [ObservableProperty]
-    string email;
+    string email = "";
     [ObservableProperty]
-    string socials;
+    string socials = "";
     [ObservableProperty]
     Supplier supplier;
     [ObservableProperty]
@@ -45,6 +45,25 @@ public partial class AddSupplierViewModel : BaseViewModel
     {
         if (IsBusy) return;
         IsBusy = true;
+
+
+        // input validation
+        int emptyCount = 0;
+        if (Name.Equals("")) emptyCount += 1;
+        if (Type.Equals("")) emptyCount += 1;
+        if (
+            Number.Equals("") &&
+            Email.Equals("") &&
+            Socials.Equals("")
+        ) emptyCount += 1;
+
+        if (emptyCount > 0)
+        {
+            await Toast.Make("Make sure to fill out all the details", ToastDuration.Short, 14).Show();
+            IsBusy = false;
+            return;
+        }
+
 
         var userInstance = await userService.GetUserInstanceAsync();
         var user = await userService.GetUserAsync(userInstance.UserId);
@@ -103,15 +122,16 @@ public partial class AddSupplierViewModel : BaseViewModel
         Socials = Supplier.Socials;
         EditingExisting = true;
     }
+
+
+    public void OnAppearing()
+    {
+        if (Supplier is not null) return;
+        Name = "";
+        Type = "";
+        Number = "";
+        Email = "";
+        Socials = "";
+        Supplier = null;
+    }
 }
-
-
-// IMPLEMENT DELETE SUPPLIER
-/*
-    If supplier is null, its adding a new supplier so change the button's
-    text to "Add Supplier"
-    If it's not null, then its editing an existing supplier so keep the
-    text to "Save Changes" but make a delete button visible that will 
-    delete the supplier chosen. Maybe the delete should come some time
-    after (its not in the use case, so i wont fucking bother adding that feature)
-*/

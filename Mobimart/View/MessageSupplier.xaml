@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MobiMart.View.MessageSupplier"
              xmlns:view="clr-namespace:MobiMart.View"
+             xmlns:viewmodel="clr-namespace:MobiMart.ViewModel"
+             x:DataType="viewmodel:MessageSupplierViewModel"
              BackgroundColor="#FDF4DC"
              Title="MessageSupplier">
 
@@ -112,7 +114,7 @@
                 Margin="0,100,0,0">
 
             <Editor 
-                    Text="Example premade message." 
+                    Text="{Binding Message}" 
                     TextColor="#A9882D"
                     BackgroundColor="#F8ECC6"
                     FontSize="16"
@@ -121,7 +123,7 @@
         </Border>
 
         <Button 
-                Text="Send" 
+                Text="Compose Message" 
                 BackgroundColor="#D99B2B" 
                 TextColor="White"
                 CornerRadius="10"

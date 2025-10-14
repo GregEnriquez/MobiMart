@@ -89,7 +89,7 @@ namespace MobiMart.ViewModel
             if (WRetailPrice == null) emptyCount += 1;
             if (WDelivQuantity == null) emptyCount += 1;
             if (WBatchCost == null && WUnitCost == null) emptyCount += 1;
-            if (WDateExpire == null) emptyCount += 1;
+            // if (WDateExpire == null) emptyCount += 1;
             if (Supplier.Type.Equals("Consignment") && WConsignmentSchedule.Equals("")) emptyCount += 1;
             if (Supplier.Type.Equals("Consignment") && WReturnByDate == null) emptyCount += 1;
 
@@ -278,6 +278,7 @@ namespace MobiMart.ViewModel
         {
             BarcodeId = barcode;
             WDateDelivered = DateTime.Now;
+            WDateExpire = DateTime.Now.AddYears(1);
 
             var item = await inventoryService.GetItemAsync(barcode);
             var desc = await inventoryService.GetItemDescAsync(barcode);

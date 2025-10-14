@@ -1,17 +1,11 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Maui.ApplicationModel.Communication;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MobiMart.ViewModel
 {
-    public partial class AddContactsViewModel : ObservableObject
+    public partial class AddContactsViewModel : BaseViewModel
     {
         [ObservableProperty]
         string cName = "";
@@ -26,13 +20,27 @@ namespace MobiMart.ViewModel
         string cSocials = "";
 
         [RelayCommand]
-        async Task saveChanges()
+        async Task SaveChanges()
         {
-            await Shell.Current.DisplayAlert(
-                "Saved",
-                $"Name: {cName}\nEmail: {cEmail}\nNumber: {cNumber}\nSocials: {cSocials}",
-                "OK"
-            );
+            // input validation
+            int emptyCount = 0;
+            if (CName.Equals("")) emptyCount += 1;
+            if (
+                CEmail.Equals("") &&
+                CNumber.Equals("") &&
+                CSocials.Equals("")
+            ) emptyCount += 1;
+
+            if (emptyCount > 0)
+            {
+                await Toast.Make("Make sure to fill out the name and atleast one contact info", ToastDuration.Short, 14).Show();
+                return;
+            }
+
+            // SAVE TO DATABASE
+
+
+            await Shell.Current.GoToAsync("..");
         }
 
     }

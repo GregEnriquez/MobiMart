@@ -3,9 +3,9 @@ using MobiMart.ViewModel;
 
 public partial class AddContacts : ContentPage
 {
-	public AddContacts()
+	public AddContacts(AddContactsViewModel viewModel)
 	{
 		InitializeComponent();
-		BindingContext = new AddContactsViewModel();
+		BindingContext = viewModel; 
 	}
 }
