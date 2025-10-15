@@ -346,4 +346,79 @@ public class InventoryService
         await Init();
         await db!.DeleteAsync(x);
     }
+
+
+    public async Task<SupplierContract?> GetSupplierContractAsync(Supplier supplier, DateTime returnDate)
+    {
+        await Init();
+
+        var itemsDesc = await GetAllItemsAsync();
+        var deliveries = await GetDeliveriesViaSupplier(supplier.Id);
+
+        if (deliveries is null) return null;
+        var queriedDeliveries = deliveries.Where(x => !x.ReturnByDate.Equals("") && DateTime.Parse(x.ReturnByDate).Date == returnDate.Date).AsEnumerable();
+        if (queriedDeliveries is null || !queriedDeliveries.Any()) return null;
+        if (deliveries.Count > 0) deliveries = [.. queriedDeliveries];
+
+        var items = new List<ContractItem>();
+        float total = 0;
+
+        for (int i = 0; i < deliveries!.Count; i++)
+        {
+            var delivery = deliveries[i];
+            if (delivery.ReturnByDate is null || delivery.ReturnByDate.Equals("")) continue;
+            if (DateTime.Parse(delivery.ReturnByDate).Date != returnDate.Date) continue;
+            var inv = await GetInventoryFromDeliveryAsync(delivery.Id);
+            string name = itemsDesc.Find(x => x.Barcode.Equals(delivery.ItemBarcode))!.Name;
+            float unitPrice = delivery.BatchWorth / delivery.DeliveryAmount;
+            int soldQuantity = inv is null ? delivery.DeliveryAmount : delivery.DeliveryAmount - inv.TotalAmount;
+            int returnQuantity = delivery.DeliveryAmount - soldQuantity;
+
+            total += soldQuantity * unitPrice;
+            if (items.Find(x => x.Name.Equals(name)) is ContractItem item)
+            {
+                item.SoldQuantity += soldQuantity;
+                item.ReturnQuantity += returnQuantity;
+                continue;
+            }
+            items.Add(new()
+            {
+                Name = name,
+                SoldQuantity = soldQuantity,
+                ReturnQuantity = returnQuantity
+            });
+        }
+
+        if (items.Count <= 0) return null;
+        return new SupplierContract()
+        {
+            SupplierId = supplier.Id,
+            SupplierName = supplier.Name,
+            ReturnDate = returnDate,
+            IsDropped = false,
+            Items = [.. items],
+            AmountToPay = total
+        };
+    }
+
+
+    public async Task RemoveCongsignmentInventoryViaReturnDate(Supplier supplier, DateTime returnDate)
+    {
+        await Init();
+
+        var deliveries = await GetDeliveriesViaSupplier(supplier.Id);
+        if (deliveries.Count > 0) deliveries = [.. deliveries.Where(x => DateTime.Parse(x.ReturnByDate).Date == returnDate.Date).AsEnumerable()];
+
+        for (int i = 0; i < deliveries.Count; i++)
+        {
+            var delivery = deliveries[i];
+            if (delivery.ReturnByDate is null || delivery.ReturnByDate.Equals("")) continue;
+            if (DateTime.Parse(delivery.ReturnByDate).Date != returnDate.Date) continue;
+            var inv = await GetInventoryFromDeliveryAsync(delivery.Id);
+
+            delivery.ReturnByDate = "";
+            await UpdateDeliveryAsync(delivery);
+            await DeleteInventory(inv);
+        }
+    }
 }

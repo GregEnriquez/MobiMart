@@ -133,6 +133,12 @@ public class NotificationService
 
                 // update message
                 var delivery = await inventoryService.GetDeliveryAsync(reminder.RelatedEntityId);
+                // item has been returned already
+                if (delivery.ReturnByDate is null || delivery.ReturnByDate.Equals(""))
+                {
+                    await DeleteReminderAsync(reminder);
+                    continue;
+                }
                 var inv = await inventoryService.GetInventoryFromDeliveryAsync(delivery.Id);
                 var item = await inventoryService.GetItemAsync(inv.ItemBarcode);
 

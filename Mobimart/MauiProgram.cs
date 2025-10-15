@@ -9,6 +9,7 @@ using CommunityToolkit.Maui;
 using ZXing.Net.Maui.Controls;
 using Plugin.LocalNotification;
 using SkiaSharp.Views.Maui.Controls.Hosting;
+using CommunityToolkit.Maui.Core;
 
 namespace MobiMart
 {
@@ -20,6 +21,7 @@ namespace MobiMart
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
+                .UseMauiCommunityToolkitCamera()
                 .UseLocalNotification()
                 .UseSkiaSharp()
                 .ConfigureFonts(fonts =>
@@ -66,6 +68,7 @@ namespace MobiMart
             builder.Services.AddSingleton<AddDeliveryReminderViewModel>();
             builder.Services.AddSingleton<MessageSupplierViewModel>();
             builder.Services.AddSingleton<AddContactsViewModel>();
+            builder.Services.AddSingleton<ContractsViewModel>();
 
             // inject views
             builder.Services.AddSingleton<SignUpPage>();

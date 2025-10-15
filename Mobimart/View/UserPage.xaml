@@ -51,8 +51,8 @@
                        VerticalOptions="Center"
                        Margin="0,0,10,0">
 
-                    <Image Source="profile_avatar.png" Aspect="AspectFill">
-                    </Image>
+                    <!-- <Image Source="" Aspect="AspectFill">
+                    </Image> -->
                 </Frame>
                 
                 <Button 

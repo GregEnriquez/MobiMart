@@ -79,6 +79,7 @@ public partial class LoginViewModel : BaseViewModel
     public async Task OnAppearing()
     {
         IsBusy = true;
+        // await userService.LogoutUserAsync();
         if (await userService.ResumeUserInstanceAsync())
         {
             await Shell.Current.GoToAsync("//UserPage", true);

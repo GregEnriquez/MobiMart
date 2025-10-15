@@ -28,6 +28,8 @@ public class SupplierService
         db = new SQLiteAsyncConnection(databasePath);
 
         await db.CreateTableAsync<Supplier>();
+        await db.CreateTableAsync<CompletedContract>();
+        await db.CreateTableAsync<CompletedContractItem>();
     }
 
 
@@ -61,5 +63,19 @@ public class SupplierService
     {
         await Init();
         await db!.UpdateAsync(updatedSupplier);
+    }
+
+
+    public async Task AddCompletedContractAsync(CompletedContract x)
+    {
+        await Init();
+        await db!.InsertAsync(x);
+    }
+
+
+    public async Task AddCompletedContractItemAsync(CompletedContractItem x)
+    {
+        await Init();
+        await db!.InsertAsync(x);
     }
 }
