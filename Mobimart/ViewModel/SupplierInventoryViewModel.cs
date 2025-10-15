@@ -59,6 +59,7 @@ namespace MobiMart.ViewModel
 
         public async Task RefreshRecords()
         {
+            SupplierItems = [];
             SupplierItems = await inventoryService.GetDeliveryRecordsAsync(Supplier.Id);
         }
     }
