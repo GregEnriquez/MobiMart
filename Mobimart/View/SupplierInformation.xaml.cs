@@ -27,7 +27,12 @@ public partial class SupplierInformation : ContentPage
 
     private async void messageSuppClick(object sender, EventArgs args)
     {
-        await Shell.Current.GoToAsync(nameof(MessageSupplier));
+    var navParameter = new Dictionary<string, object>()
+        {
+            {"Supplier", Supplier },
+        };
+
+        await Shell.Current.GoToAsync(nameof(MessageSupplier), true, navParameter);
     }
 
     private async void suppInventoryClick(object sender, EventArgs args)
