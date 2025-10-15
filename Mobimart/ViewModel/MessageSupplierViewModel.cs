@@ -25,7 +25,7 @@ public partial class MessageSupplierViewModel : BaseViewModel
 
 
     [RelayCommand]
-    private async Task Send()
+    private async Task ComposeMessage()
     {
         if (!Sms.Default.IsComposeSupported) return;
 

@@ -65,11 +65,11 @@ namespace MobiMart.ViewModel
         }
 
 
-        public async Task OnAppearing()
+        public async Task   OnAppearing()
         {
             delivery = await inventoryService!.GetDeliveryAsync(DeliveryId);
             inventory = await inventoryService.GetInventoryFromDeliveryAsync(DeliveryId);
-            item = await inventoryService.GetItemAsync(inventory.ItemBarcode);
+            item = await inventoryService.GetItemAsync(delivery.ItemBarcode);
             desc = await inventoryService.GetItemDescAsync(item.Barcode);
 
             IsConsignment = !delivery.ConsignmentSchedule.Equals("");
@@ -80,7 +80,7 @@ namespace MobiMart.ViewModel
             WRetailPrice = item.RetailPrice;
             WDateDelivered = DateTime.Parse(delivery.DateDelivered);
             WDateExpire = DateTime.Parse(delivery.ExpirationDate);
-            WItemQuantity = inventory.TotalAmount;
+            WItemQuantity = inventory is null ? 0 : inventory.TotalAmount;
             WDelivQuantity = delivery.DeliveryAmount;
             WBatchCost = delivery.BatchWorth;
             if (IsConsignment)
@@ -155,7 +155,7 @@ namespace MobiMart.ViewModel
             }
 
 
-            inventory.TotalAmount = (int)WItemQuantity!;
+            if (inventory is not null) inventory.TotalAmount = (int)WItemQuantity!;
             delivery.DateDelivered = WDateDelivered.ToString()!;
             delivery.ExpirationDate = WDateExpire.ToString()!;
             if (IsConsignment) delivery.ReturnByDate = WReturnByDate.ToString()!;
@@ -165,7 +165,7 @@ namespace MobiMart.ViewModel
 
             await inventoryService!.UpdateDescAsync(desc);
             await inventoryService!.UpdateDeliveryAsync(delivery);
-            await inventoryService!.UpdateInventoryAsync(inventory);
+            if (inventory is not null) await inventoryService!.UpdateInventoryAsync(inventory);
 
             BarcodeId = "";
             WItemName = "";

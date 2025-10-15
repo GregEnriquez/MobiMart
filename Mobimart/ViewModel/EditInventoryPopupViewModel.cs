@@ -49,7 +49,17 @@ public partial class EditInventoryPopupViewModel : BaseViewModel, IQueryAttribut
         // Deliveries = DeliveriesDummy;
         try
         {
-            Deliveries = await inventoryService.GetDeliveryRecordsViaItem(ItemBarcode);
+            var deliveries = await inventoryService.GetDeliveryRecordsViaItem(ItemBarcode);
+            var filteredDeliveries = new List<DeliveryRecord>();
+            for (int i = 0; i < deliveries.Count; i++)
+            {
+                var d = deliveries[i];
+                var inv = await inventoryService.GetInventoryFromDeliveryAsync(d.DeliveryId);
+                if (inv is null) continue;
+                filteredDeliveries.Add(d);
+            }
+
+            Deliveries = [.. filteredDeliveries.AsEnumerable()];
         }
         catch (Exception e)
         {
