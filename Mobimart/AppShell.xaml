@@ -20,7 +20,7 @@
     <FlyoutItem FlyoutItemIsVisible="False">
         <ShellContent
             Title="Home"
-            ContentTemplate="{DataTemplate view:MainPage}"
+            ContentTemplate="{DataTemplate view:TransactionPage}"
             Route="MainPage" />
     </FlyoutItem>
 
