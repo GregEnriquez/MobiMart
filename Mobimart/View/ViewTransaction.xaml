@@ -9,27 +9,8 @@
              BackgroundColor="#FDF4DC"
              Title="ViewTransaction">
 
-    <!-- <Shell.TitleView>
-        <Grid ColumnDefinitions="Auto, *">
-            <ImageButton
-                Grid.Column="0"
-                Source="hamburger_icon.png"
-                HeightRequest="24"
-                WidthRequest="24"
-                Clicked="OnHamburgerClicked" />
 
-            <Label
-                Grid.ColumnSpan="2"
-                Text="MobiMart"
-                HorizontalOptions="Center"
-                VerticalOptions="Center"
-                FontSize="20"
-                TextColor="White"
-                FontAttributes="Bold" />
-        </Grid>
-    </Shell.TitleView> -->
-
-    <Grid RowDefinitions="Auto, Auto, Auto, *" Padding="10">
+    <Grid RowDefinitions="Auto, Auto, *, Auto" Padding="10">
 
         <!-- Page Header -->
         <Label Grid.Row="0" 
@@ -71,35 +52,42 @@
                                 ItemsSource="{Binding Record.Items}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="model:SalesItem">
-                            <Grid ColumnDefinitions="100, *, *" Padding="5" ColumnSpacing="5">
-                                <Border Stroke="#6D5206" 
-                                        StrokeThickness="1" 
-                                        StrokeShape="RoundRectangle 5,5,5,5"
-                                        Padding="3">
-                                    <Label Text="{Binding Name}" 
-                                           TextColor="#6D5206" 
-                                           VerticalOptions="Center"/>
-                                </Border>
-                                <Border Stroke="#6D5206" 
-                                        StrokeThickness="1" 
-                                        StrokeShape="RoundRectangle 5,5,5,5"
-                                        Padding="3"
-                                        Grid.Column="1">
-                                    <Label Text="{Binding Quantity}" 
-                                           TextColor="#6D5206" 
-                                           HorizontalOptions="Center"
-                                           VerticalOptions="Center"/>
-                                </Border>
-                                <Border Stroke="#6D5206" 
-                                        StrokeThickness="1" 
-                                        StrokeShape="RoundRectangle 5,5,5,5"
-                                        Padding="3"
-                                        Grid.Column="2">
-                                    <Label Text="{Binding Price}" 
-                                           TextColor="#6D5206" 
-                                           HorizontalOptions="Center"
-                                           VerticalOptions="Center"/>
-                                </Border>
+                            <Grid ColumnDefinitions="Auto, *">
+                                <CheckBox IsVisible="{Binding BindingContext.IsReturning, Source={RelativeSource AncestorType={x:Type ContentPage}}}">
+                                    <CheckBox.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnCheckboxClicked"/>
+                                    </CheckBox.GestureRecognizers>
+                                </CheckBox>
+                                <Grid Grid.Column="1" ColumnDefinitions="100, *, *" Padding="5" ColumnSpacing="5">
+                                    <Border Stroke="#6D5206" 
+                                            StrokeThickness="1" 
+                                            StrokeShape="RoundRectangle 5,5,5,5"
+                                            Padding="3">
+                                        <Label Text="{Binding Name}" 
+                                            TextColor="#6D5206" 
+                                            VerticalOptions="Center"/>
+                                    </Border>
+                                    <Border Stroke="#6D5206" 
+                                            StrokeThickness="1" 
+                                            StrokeShape="RoundRectangle 5,5,5,5"
+                                            Padding="3"
+                                            Grid.Column="1">
+                                        <Label Text="{Binding Quantity}" 
+                                            TextColor="#6D5206" 
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"/>
+                                    </Border>
+                                    <Border Stroke="#6D5206" 
+                                            StrokeThickness="1" 
+                                            StrokeShape="RoundRectangle 5,5,5,5"
+                                            Padding="3"
+                                            Grid.Column="2">
+                                        <Label Text="{Binding Price}" 
+                                            TextColor="#6D5206" 
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"/>
+                                    </Border>
+                                </Grid>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
@@ -131,19 +119,50 @@
                    TextColor="#6D5206"/>
         </StackLayout>
 
-        <!-- Back Button -->
-        <Button Grid.Row="3"
-                Text="Back"
-                TextColor="#6D5206"
-                BackgroundColor="#FBE7B3"
-                BorderColor="#6D5206"
-                BorderWidth="2"
-                CornerRadius="20"
-                HeightRequest="40"
-                HorizontalOptions="Center"
-                VerticalOptions="End"
-                WidthRequest="200"
-                Margin="0,10,0,10"
-                Clicked="OnBackClicked"/>
+        <StackLayout Grid.Row="3" Spacing="0" Padding="20,0">
+            <Button
+                    Text="Return Item"
+                    TextColor="#6D5206"
+                    BackgroundColor="#FBE7B3"
+                    BorderColor="#6D5206"
+                    BorderWidth="2"
+                    CornerRadius="20"
+                    HeightRequest="40"
+                    HorizontalOptions="Center"
+                    VerticalOptions="End"
+                    WidthRequest="200"
+                    Margin="0,5,0,5"
+                    Command="{Binding Button1ClickedCommand}">
+            <Button.Triggers>
+                <DataTrigger TargetType="Button"
+                            Binding="{Binding IsReturning}"
+                            Value="True">
+                    <Setter Property="Text" Value="Confirm"/>
+                </DataTrigger>
+            </Button.Triggers>
+            </Button>
+            
+            <Button
+                    Text="Void"
+                    TextColor="#6D5206"
+                    BackgroundColor="#FBE7B3"
+                    BorderColor="#6D5206"
+                    BorderWidth="2"
+                    CornerRadius="20"
+                    HeightRequest="40"
+                    HorizontalOptions="Center"
+                    VerticalOptions="End"
+                    WidthRequest="200"
+                    Margin="0,5,0,5"
+                    Command="{Binding Button2ClickedCommand}">
+            <Button.Triggers>
+                <DataTrigger TargetType="Button"
+                            Binding="{Binding IsReturning}"
+                            Value="True">
+                    <Setter Property="Text" Value="Cancel"/>
+                </DataTrigger>
+            </Button.Triggers>
+            </Button>
+        </StackLayout>
     </Grid>
 </ContentPage>

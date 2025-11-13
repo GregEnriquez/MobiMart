@@ -22,6 +22,7 @@ public partial class ViewTransaction : ContentPage
             if (BindingContext is ViewTransactionViewModel vm)
             {
                 vm.Record = value;
+                vm.UpdateSelectedRecords();
             }
         }
     }
@@ -36,8 +37,17 @@ public partial class ViewTransaction : ContentPage
     //     Shell.Current.FlyoutIsPresented = true;
     // }
 
-    private async void OnBackClicked(object sender, EventArgs e)
+    private async void OnCheckboxClicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("..");
+        CheckBox cb = (CheckBox)sender;
+        SalesItem item = (SalesItem)cb.BindingContext;
+
+        cb.IsChecked = !cb.IsChecked;
+
+        
+        if (BindingContext is ViewTransactionViewModel vm)
+        {
+            vm.OnCheckboxClicked(cb, item);
+        }
     }
 }

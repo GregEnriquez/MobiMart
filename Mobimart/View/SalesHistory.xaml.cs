@@ -89,4 +89,15 @@ public partial class SalesHistory : ContentPage
         }
     }
 
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (BindingContext is SalesHistoryViewModel vm)
+        {
+            await vm.RefreshRecords();
+        }
+    }
+
 }

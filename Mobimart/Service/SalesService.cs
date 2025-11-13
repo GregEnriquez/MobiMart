@@ -52,11 +52,40 @@ public class SalesService
     }
 
 
+    public async Task<SalesTransaction> GetSalesTransactionAsync(int transactionId)
+    {
+        await Init();
+        return await db!.Table<SalesTransaction>().Where(x => x.Id == transactionId).FirstOrDefaultAsync();
+    }
+
+
+    public async Task UpdateSalesTransactionAsync(SalesTransaction t)
+    {
+        await Init();
+        await db!.UpdateAsync(t);
+    }
+
+
+    public async Task DeleteSalesTransactionAsync(int transactionId)
+    {
+        await Init();
+        await db!.DeleteAsync(await GetSalesTransactionAsync(transactionId));
+    }
+
+
 
     public async Task AddSalesItemAsync(SalesItem x)
     {
         await Init();
         await db!.InsertAsync(x);
+    }
+
+
+
+    public async Task DeleteSalesItemTransactionAsync(SalesItem x)
+    {
+        await Init();
+        await db!.DeleteAsync(x);
     }
 
 

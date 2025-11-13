@@ -18,6 +18,7 @@ public partial class IncomeSummary : ContentPage
         if (BindingContext is DailySalesViewModel vm)
         {
             await vm.OnAppearing();
+            await vm.GeneratePieChart();
         }
     }
 }
