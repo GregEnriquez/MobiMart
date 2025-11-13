@@ -131,6 +131,11 @@ public partial class UserPageViewModel : BaseViewModel
             NotJoinedBusiness = false;
         }
 
+        if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
+        {
+            NotJoinedBusiness = !vm.IsUserInBusiness;
+        }
+
         IsBusy = false;
     }
 

@@ -92,15 +92,20 @@ public partial class FlyoutMenuViewModel : BaseViewModel
 
         if (business is not null)
         {
-            if (user.EmployeeType is not null)
+            if (!user.EmployeeType.Equals("") && user.EmployeeType is not null)
             {
                 Username += $" |{user.EmployeeType}";
                 IsUserOwner = user.EmployeeType.ToLower().Equals("owner");
-            }
 
-            IsUserInBusiness = true;
-            BusinessName = business!.Name;
-            BusinessId = business.Id;
+                IsUserInBusiness = true;
+                BusinessName = business!.Name;
+                BusinessId = business.Id;
+            }
+            else if (user.EmployeeType is null || user.EmployeeType.Equals(""))
+            {
+                IsUserInBusiness = false;
+                IsUserOwner = false;
+            }
         }
         else
         {

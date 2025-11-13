@@ -1,5 +1,5 @@
-using System;
 using System.Diagnostics;
+using System.Globalization;
 using MobiMart.Model;
 using MobiMart.ViewModel;
 using Plugin.LocalNotification;
@@ -15,6 +15,14 @@ public class NotificationService
     static SQLiteAsyncConnection? db;
     string baseUrl = DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:5199" : "http://localhost:5198";
     HttpClient client;
+
+    string[] formats = new[] {
+        "M/d/yyyy h:mm:ss tt",
+        "MM/dd/yyyy hh:mm:ss tt",
+        "MM/dd/yyyy h:mm tt",
+        "MM/dd/yyyy hh:mm tt",
+        "MM/dd/yyyy"
+    };
 
     public NotificationService()
     {
@@ -115,6 +123,9 @@ public class NotificationService
             Debug.WriteLine(e.StackTrace);
         }
 
+        Debug.WriteLine("-------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        Debug.WriteLine(DateTime.Now.ToString());
+
         if (reminders is null) return;
 
         for (int i = 0; i < reminders.Count; i++)
@@ -125,7 +136,11 @@ public class NotificationService
             if (reminder.Type is ReminderType.ConsignmentDue)
             {
                 // deletion if one week past the notify date already
-                if (DateTime.Now > DateTime.Parse(reminder.NotifyAtDate).AddDays(7))
+                if (DateTime.Now > DateTime.ParseExact(
+                    reminder.NotifyAtDate.Replace('\u202F', ' '),
+                    formats,
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None).AddDays(7))
                 {
                     await DeleteReminderAsync(reminder);
                     continue;
@@ -143,7 +158,7 @@ public class NotificationService
                 var item = await inventoryService.GetItemAsync(inv.ItemBarcode);
 
                 var message = $"""
-                The item {item.Name} delivered on {DateTime.Parse(delivery.DateDelivered):MM/dd/yyyy} is to be returned on {DateTime.Parse(delivery.ReturnByDate):MM/dd/yyyy}.
+                The item {item.Name} delivered on {DateTime.ParseExact(delivery.DateDelivered.Replace('\u202F', ' '), formats, CultureInfo.InvariantCulture):MM/dd/yyyy} is to be returned on {DateTime.ParseExact(delivery.ReturnByDate.Replace('\u202F', ' '), formats, CultureInfo.InvariantCulture):MM/dd/yyyy}.
                 Items Sold: {delivery.DeliveryAmount - inv.TotalAmount}
                 Stock Remaining: {inv.TotalAmount} / {delivery.DeliveryAmount}
                 Amount to Pay: {(delivery.DeliveryAmount - inv.TotalAmount) * (delivery.BatchWorth / delivery.DeliveryAmount):0.00}
@@ -177,16 +192,16 @@ public class NotificationService
                 var message = $"Stock for item {item.Name} is running low\nRemaining Stock: {totalInv}";
                 reminder.Message = message;
                 await UpdateReminderAsync(reminder);
-                var notifyDate = DateTime.Parse(reminder.NotifyAtDate);
+                var notifyDate = DateTime.ParseExact(reminder.NotifyAtDate.Replace('\u202F', ' '), formats, CultureInfo.InvariantCulture);
                 if (notifyDate.Date < DateTime.Now.Date) // only when today's date (by day) is > previous notifydate sched
                 {
-                    reminder.NotifyAtDate = DateTime.Now.AddMinutes(2).ToString();
-                    await ScheduleLocalNotification(reminder.Id, reminder.Title, reminder.Message, DateTime.Parse(reminder.NotifyAtDate), reminder.Id.ToString());
+                    reminder.NotifyAtDate = DateTime.Now.AddMinutes(2).ToString("MM/dd/yyyy hh:mm:ss tt");
+                    await ScheduleLocalNotification(reminder.Id, reminder.Title, reminder.Message, DateTime.ParseExact(reminder.NotifyAtDate.Replace('\u202F', ' '), formats, CultureInfo.InvariantCulture), reminder.Id.ToString());
                 }
             }
             else if (reminder.Type is ReminderType.DeliveryReminder)
             {
-                if (DateTime.Parse(reminder.NotifyAtDate) < DateTime.Now)
+                if (DateTime.ParseExact(reminder.NotifyAtDate.Replace('\u202F', ' '), formats, CultureInfo.InvariantCulture) < DateTime.Now)
                 {
                     await DeleteReminderAsync(reminder);
                 }

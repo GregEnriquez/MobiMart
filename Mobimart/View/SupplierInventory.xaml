@@ -347,6 +347,11 @@
                                                     Value="Consignment">
                                             <Setter Property="IsVisible" Value="True"/>
                                         </DataTrigger>
+                                        <DataTrigger TargetType="Label"
+                                                    Binding="{Binding ReturnByDate}"
+                                                    Value="">
+                                            <Setter Property="Text" Value="Item Returned"/>
+                                        </DataTrigger>
                                     </Label.Triggers>
                                 </Label>
 
