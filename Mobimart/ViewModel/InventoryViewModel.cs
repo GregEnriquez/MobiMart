@@ -29,57 +29,9 @@ namespace MobiMart.ViewModel
         private List<InventoryRecord> _allItems;
         InventoryService inventoryService;
 
-        // private ObservableCollection<Inventory> _allItems; // original list
-
-        // private string _searchText;
-        // public string SearchText
-        // {
-        //     get => _searchText;
-        //     set
-        //     {
-        //         _searchText = value;
-        //         OnPropertyChanged();
-        //         FilterItems(_searchText);
-        //     }
-        // }
-
-        // public ICommand EditCommand { get; set; }
-
         public InventoryViewModel(InventoryService inventoryService)
         {
             this.inventoryService = inventoryService;
-            // InventoryItems = new ObservableCollection<Inventory>();
-            // _allItems = new ObservableCollection<Inventory>();
-
-            // //_allItems.Add(newItemFromDb);
-            // //InventoryItems.Add(newItemFromDb);
-
-            // // sample data (for testing UI)
-            // _allItems.Add(new Inventory
-            // {
-            //     Id = 1,
-            //     ItemName = "Milk",
-            //     TotalAmount = 20,
-            //     RetailPrice = 50,
-            //     ItemType = "Dairy",
-            //     LastModified = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-            // });
-
-            // _allItems.Add(new Inventory
-            // {
-            //     Id = 2,
-            //     ItemName = "Bread",
-            //     TotalAmount = 15,
-            //     RetailPrice = 30,
-            //     ItemType = "Bakery",
-            //     LastModified = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-            // });
-
-            // foreach (var item in _allItems)
-            //     InventoryItems.Add(item);
-            // // command for adding item
-            // AddItemCommand = new Command(AddItem);
-            // EditCommand = new Command<Inventory>(async (item) => await EditItem(item));
         }
 
 
@@ -141,13 +93,6 @@ namespace MobiMart.ViewModel
             InventoryItems = [];
 
             InventoryItems = [.. _allItems.Where(i => i.Name.ToLower().Contains(query.ToLower()))];
-
-            // var filtered = string.IsNullOrWhiteSpace(query)
-            //     ? _allItems
-            //     : _allItems.Where(i => i.ItemName.ToLower().Contains(query.ToLower()));
-
-            // foreach (var item in filtered)
-            //     InventoryItems.Add(item);
         }
 
 
@@ -162,25 +107,5 @@ namespace MobiMart.ViewModel
 
             await Shell.Current.GoToAsync(nameof(SupplierList), true, param);
         }
-        
-
-        // private void AddItem()
-        // {
-        //     var newItem = new Inventory
-        //     {
-        //         Id = _allItems.Count + 1,
-
-        //         LastModified = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-        //     };
-
-        //     _allItems.Add(newItem);
-        //     InventoryItems.Add(newItem);
-        // }
-
-        // private async Task EditItem(Inventory item)
-        // {
-        //     if (item == null) return;
-        //     await Application.Current.MainPage.Navigation.PushAsync(new EditInventory(item));
-        // }
     }
 }

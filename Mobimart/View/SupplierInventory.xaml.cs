@@ -45,6 +45,7 @@ public partial class SupplierInventory : ContentPage
 
 
 
+
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();

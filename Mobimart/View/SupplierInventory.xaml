@@ -108,95 +108,167 @@
                                 </HorizontalStackLayout>
                             </Border>
 
-                            <!-- <Label 
-                                Text="Delivery Id" 
-                                TextColor="White" 
-                                HorizontalTextAlignment="Center"
-                                VerticalTextAlignment="Center"
-                                FontSize="17"
-                                Grid.Column="1"/> -->
+                            <Grid ColumnDefinitions="*, Auto" Grid.Column="1">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding CategoryTappedCommand}" CommandParameter="1"/>
+                                </Grid.GestureRecognizers>
+                                <Label 
+                                    Text="Item Name" 
+                                    TextColor="White" 
+                                    HorizontalTextAlignment="Center"
+                                    VerticalTextAlignment="Center"
+                                    FontSize="17"
+                                    Grid.Column="0"/>
+                                <Image 
+                                    Grid.Column="1" 
+                                    Source="previous_icon.png" 
+                                    Rotation="{Binding Rotation}"
+                                    IsVisible="{Binding VisibleCol1}"/>
+                            </Grid>
 
-                            <Label 
-                                Text="Item Name" 
-                                TextColor="White" 
-                                HorizontalTextAlignment="Center"
-                                VerticalTextAlignment="Center"
-                                FontSize="17"
-                                Grid.Column="1"/>
+                            <Grid ColumnDefinitions="*, Auto" Grid.Column="2">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding CategoryTappedCommand}" CommandParameter="2"/>
+                                </Grid.GestureRecognizers>
+                                <Label 
+                                    Text="Delivery Qty."
+                                    TextColor="White" 
+                                    HorizontalTextAlignment="Center"
+                                    VerticalTextAlignment="Center"
+                                    FontSize="17"
+                                    Grid.Column="0"/>
+                                <Image 
+                                    Grid.Column="1" 
+                                    Source="previous_icon.png" 
+                                    Rotation="{Binding Rotation}"
+                                    IsVisible="{Binding VisibleCol2}"/>
+                            </Grid>
 
-                            <Label 
-                                Text="Delivery Qty."
-                                TextColor="White" 
-                                HorizontalTextAlignment="Center"
-                                VerticalTextAlignment="Center"
-                                FontSize="17"
-                                Grid.Column="2"/>
+                            <Grid ColumnDefinitions="*, Auto" Grid.Column="3">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding CategoryTappedCommand}" CommandParameter="3"/>
+                                </Grid.GestureRecognizers>
+                                <Label 
+                                    Text="Date Delivered" 
+                                    TextColor="White" 
+                                    HorizontalTextAlignment="Center"
+                                    VerticalTextAlignment="Center"
+                                    FontSize="17"
+                                    Grid.Column="0"/>
+                                <Image 
+                                    Grid.Column="1" 
+                                    Source="previous_icon.png" 
+                                    Rotation="{Binding Rotation}"
+                                    IsVisible="{Binding VisibleCol3}"/>
+                            </Grid>
 
-                            <Label 
-                                Text="Date Delivered" 
-                                TextColor="White" 
-                                HorizontalTextAlignment="Center"
-                                VerticalTextAlignment="Center"
-                                FontSize="17"
-                                Grid.Column="3"/>
+                            <Grid ColumnDefinitions="*, Auto" Grid.Column="4">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding CategoryTappedCommand}" CommandParameter="4"/>
+                                </Grid.GestureRecognizers>
+                                <Label 
+                                    Text="Expiration Date" 
+                                    TextColor="White" 
+                                    HorizontalTextAlignment="Center"
+                                    VerticalTextAlignment="Center"
+                                    FontSize="17"
+                                    Grid.Column="0"/>
+                                <Image 
+                                    Grid.Column="1" 
+                                    Source="previous_icon.png" 
+                                    Rotation="{Binding Rotation}"
+                                    IsVisible="{Binding VisibleCol4}"/>
+                            </Grid>
 
-                            <Label 
-                                Text="Expiration Date" 
-                                TextColor="White" 
-                                HorizontalTextAlignment="Center"
-                                VerticalTextAlignment="Center"
-                                FontSize="17"
-                                Grid.Column="4"/>
+                            <Grid ColumnDefinitions="*, Auto" Grid.Column="5">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding CategoryTappedCommand}" CommandParameter="5"/>
+                                </Grid.GestureRecognizers>
+                                <Label 
+                                    Text="Batch Cost" 
+                                    TextColor="White" 
+                                    HorizontalTextAlignment="Center"
+                                    VerticalTextAlignment="Center"
+                                    FontSize="17"
+                                    Grid.Column="0"/>
+                                <Image 
+                                    Grid.Column="1" 
+                                    Source="previous_icon.png" 
+                                    Rotation="{Binding Rotation}"
+                                    IsVisible="{Binding VisibleCol5}"/>
+                            </Grid>
 
-                            <Label 
-                                Text="Batch Cost" 
-                                TextColor="White" 
-                                HorizontalTextAlignment="Center"
-                                VerticalTextAlignment="Center"
-                                FontSize="17"
-                                Grid.Column="5"/>
+                            <Grid ColumnDefinitions="*, Auto" Grid.Column="6">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding CategoryTappedCommand}" CommandParameter="6"/>
+                                </Grid.GestureRecognizers>
+                                <Label 
+                                    Text="Item Type" 
+                                    TextColor="White" 
+                                    HorizontalTextAlignment="Center"
+                                    VerticalTextAlignment="Center"
+                                    FontSize="17"
+                                    Grid.Column="6"/>
+                                <Image 
+                                    Grid.Column="1" 
+                                    Source="previous_icon.png" 
+                                    Rotation="{Binding Rotation}"
+                                    IsVisible="{Binding VisibleCol6}"/>
+                            </Grid>
 
-                            <Label 
-                                Text="Item Type" 
-                                TextColor="White" 
-                                HorizontalTextAlignment="Center"
-                                VerticalTextAlignment="Center"
-                                FontSize="17"
-                                Grid.Column="6"/>
-
-                            <Label 
-                                Text="Consignment Schedule"
-                                TextColor="White" 
-                                HorizontalTextAlignment="Center"
-                                VerticalTextAlignment="Center"
-                                FontSize="17"
-                                Grid.Column="7"
-                                IsVisible="False"> 
-                                <Label.Triggers>
-                                    <DataTrigger TargetType="Label"
+                            <Grid ColumnDefinitions="*, Auto" Grid.Column="7" IsVisible="False">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding CategoryTappedCommand}" CommandParameter="7"/>
+                                </Grid.GestureRecognizers>
+                                <Grid.Triggers>
+                                    <DataTrigger TargetType="Grid"
                                                 Binding="{Binding Supplier.Type}"
                                                 Value="Consignment">
                                         <Setter Property="IsVisible" Value="True"/>
                                     </DataTrigger>
-                                </Label.Triggers>    
-                            </Label>
+                                </Grid.Triggers>
+                                <Label 
+                                    Text="Consignment Schedule"
+                                    TextColor="White" 
+                                    HorizontalTextAlignment="Center"
+                                    VerticalTextAlignment="Center"
+                                    FontSize="17"
+                                    Grid.Column="0"
+                                    IsVisible="False"> 
+                                </Label>
+                                <Image 
+                                    Grid.Column="1" 
+                                    Source="previous_icon.png" 
+                                    Rotation="{Binding Rotation}"
+                                    IsVisible="{Binding VisibleCol7}"/>
+                            </Grid>
 
-                            <Label 
-                                Text="Return By Date"
-                                TextColor="White" 
-                                HorizontalTextAlignment="Center"
-                                VerticalTextAlignment="Center"
-                                FontSize="17"
-                                Grid.Column="8"
-                                IsVisible="False"> 
-                                <Label.Triggers>
-                                    <DataTrigger TargetType="Label"
+                            <Grid ColumnDefinitions="*, Auto" Grid.Column="8" IsVisible="False">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding CategoryTappedCommand}" CommandParameter="8"/>
+                                </Grid.GestureRecognizers>
+                                <Grid.Triggers>
+                                    <DataTrigger TargetType="Grid"
                                                 Binding="{Binding Supplier.Type}"
                                                 Value="Consignment">
                                         <Setter Property="IsVisible" Value="True"/>
                                     </DataTrigger>
-                                </Label.Triggers>
-                            </Label>
+                                </Grid.Triggers>
+                                <Label 
+                                    Text="Return By Date"
+                                    TextColor="White" 
+                                    HorizontalTextAlignment="Center"
+                                    VerticalTextAlignment="Center"
+                                    FontSize="17"
+                                    Grid.Column="0"
+                                    IsVisible="False"> 
+                                </Label>
+                                <Image 
+                                    Grid.Column="1" 
+                                    Source="previous_icon.png" 
+                                    Rotation="{Binding Rotation}"
+                                    IsVisible="{Binding VisibleCol8}"/>
+                            </Grid>
 
                             <!-- <Label 
                                 Text="Item Description" 
