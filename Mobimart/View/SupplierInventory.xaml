@@ -47,17 +47,17 @@
             <BoxView HeightRequest="1" BackgroundColor="#D99B2B" />
 
             <ActivityIndicator IsRunning="True" 
-                        IsVisible="False"
+                        IsVisible="{Binding IsBusy}"
                         Color="#D99B2B" 
                         VerticalOptions="Center" 
                         HorizontalOptions="Center">
-                <ActivityIndicator.Triggers>
+                <!-- <ActivityIndicator.Triggers>
                     <DataTrigger TargetType="ActivityIndicator"
                                 Binding="{Binding SupplierItems.Count}"
                                 Value="0">
                         <Setter Property="IsVisible" Value="True"/>
                     </DataTrigger>
-                </ActivityIndicator.Triggers>
+                </ActivityIndicator.Triggers> -->
             </ActivityIndicator>
 
             <ScrollView Orientation="Both">

@@ -6,8 +6,10 @@ using MobiMart.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,9 +20,9 @@ namespace MobiMart.ViewModel
 
     public partial class SupplierInventoryViewModel : BaseViewModel
     {
-        // public ObservableCollection<WholesaleInventory> supplierItems { get; set; }
-        [ObservableProperty]
-        List<DeliveryRecord> supplierItems;
+        // private ObservableCollection<DeliveryRecord> supplierItems;
+        // public ObservableCollection<DeliveryRecord> SupplierItems { get => supplierItems; set {supplierItems = value; OnPropertyChanged(); } }
+        [ObservableProperty] List<DeliveryRecord> supplierItems;
         [ObservableProperty]
         public Supplier supplier;
         [ObservableProperty]
@@ -46,6 +48,10 @@ namespace MobiMart.ViewModel
             this.inventoryService = inventoryService;
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string name = "") =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
 
         [RelayCommand]
         public async Task AddTapped()
@@ -63,6 +69,8 @@ namespace MobiMart.ViewModel
         [RelayCommand]
         public async Task CategoryTapped(string gridCol)
         {
+            if (IsBusy) return;
+            IsBusy = true;
             VisibleCol1 = false; VisibleCol2 = false; VisibleCol3 = false; VisibleCol4 = false;
             VisibleCol5 = false; VisibleCol6 = false; VisibleCol7 = false; VisibleCol8 = false;
             switch (gridCol)
@@ -109,8 +117,17 @@ namespace MobiMart.ViewModel
                     break;
             }
             Rotation = isDescending ? -90 : 90;
-
-            await RefreshRecords();
+            
+            try
+            {
+                await Task.Run(() => SortRecords());
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+            // await SortRecords();
+            IsBusy = false;
         }
 
 
@@ -128,46 +145,141 @@ namespace MobiMart.ViewModel
 
         private async Task SortRecords()
         {
-            SupplierItems = [];
-            switch (SelectedCategory)
+            using var cts = new CancellationTokenSource();
+            try
             {
-                case DeliveryCategory.Name:
-                    SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => x.ItemName)] : [.. _supplierItems.OrderBy(x => x.ItemName)];
-                    VisibleCol1 = true;
-                    break;
-                case DeliveryCategory.Quantity:
-                    SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => x.QuantityInStock)] : [.. _supplierItems.OrderBy(x => x.QuantityInStock)];
-                    VisibleCol2 = true;
-                    break;
-                case DeliveryCategory.DateDelivered:
-                    SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => DateTime.Parse(x.DateDelivered))] : [.. _supplierItems.OrderBy(x => DateTime.Parse(x.DateDelivered))];
-                    VisibleCol3 = true;
-                    break;
-                case DeliveryCategory.DateExpiry:
-                    SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => DateTime.Parse(x.DateExpire))] : [.. _supplierItems.OrderBy(x => DateTime.Parse(x.DateExpire))];
-                    VisibleCol4 = true;
-                    break;
-                case DeliveryCategory.BatchCost:
-                    SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => x.BatchCostPrice)] : [.. _supplierItems.OrderBy(x => x.BatchCostPrice)];
-                    VisibleCol5 = true;
-                    break;
-                case DeliveryCategory.ItemType:
-                    SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => x.ItemType)] : [.. _supplierItems.OrderBy(x => x.ItemType)];
-                    VisibleCol6 = true;
-                    break;
-                case DeliveryCategory.ConsignmentSched:
-                    VisibleCol7 = true;
-                    SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => x.ConsignmentSchedule)] : [.. _supplierItems.OrderBy(x => x.ConsignmentSchedule)];
-                    break;
-                case DeliveryCategory.DateReturn:
-                    VisibleCol8 = true;
-                    SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => DateTime.Parse(x.ReturnByDate))] : [.. _supplierItems.OrderBy(x => DateTime.Parse(x.ReturnByDate))];
-                    break;
-                default:
-                    SupplierItems = [.. _supplierItems];
-                    break;
-
+                
+                SupplierItems = [];
+                switch (SelectedCategory)
+                {
+                    case DeliveryCategory.Name:
+                        SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => x.ItemName)] : [.. _supplierItems.OrderBy(x => x.ItemName)];
+                        VisibleCol1 = true;
+                        break;
+                    case DeliveryCategory.Quantity:
+                        SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => x.QuantityInStock)] : [.. _supplierItems.OrderBy(x => x.QuantityInStock)];
+                        VisibleCol2 = true;
+                        break;
+                    case DeliveryCategory.DateDelivered:
+                        SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => DateTime.Parse(x.DateDelivered))] : [.. _supplierItems.OrderBy(x => DateTime.Parse(x.DateDelivered))];
+                        VisibleCol3 = true;
+                        break;
+                    case DeliveryCategory.DateExpiry:
+                        SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => DateTime.Parse(x.DateExpire))] : [.. _supplierItems.OrderBy(x => DateTime.Parse(x.DateExpire))];
+                        SupplierItems = [..SupplierItems.Where(x => x.QuantityInStock > 0)];
+                        VisibleCol4 = true;
+                        break;
+                    case DeliveryCategory.BatchCost:
+                        SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => x.BatchCostPrice)] : [.. _supplierItems.OrderBy(x => x.BatchCostPrice)];
+                        VisibleCol5 = true;
+                        break;
+                    case DeliveryCategory.ItemType:
+                        SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => x.ItemType)] : [.. _supplierItems.OrderBy(x => x.ItemType)];
+                        VisibleCol6 = true;
+                        break;
+                    case DeliveryCategory.ConsignmentSched:
+                        VisibleCol7 = true;
+                        SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => x.ConsignmentSchedule)] : [.. _supplierItems.OrderBy(x => x.ConsignmentSchedule)];
+                        break;
+                    case DeliveryCategory.DateReturn:
+                        VisibleCol8 = true;
+                        SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => DateTime.Parse(x.ReturnByDate))] : [.. _supplierItems.OrderBy(x => DateTime.Parse(x.ReturnByDate))];
+                        break;
+                    default:
+                        SupplierItems = [.. _supplierItems];
+                        break;
+                }
             }
+            catch (OperationCanceledException)
+            {
+                cts.Cancel();
+            }
+            finally
+            {
+                cts.Dispose();
+            }
+
+            // SupplierItems = [];
+            // switch (SelectedCategory)
+            // {
+            //     case DeliveryCategory.Name:
+            //         SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => x.ItemName)] : [.. _supplierItems.OrderBy(x => x.ItemName)];
+            //         VisibleCol1 = true;
+            //         break;
+            //     case DeliveryCategory.Quantity:
+            //         SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => x.QuantityInStock)] : [.. _supplierItems.OrderBy(x => x.QuantityInStock)];
+            //         VisibleCol2 = true;
+            //         break;
+            //     case DeliveryCategory.DateDelivered:
+            //         SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => DateTime.Parse(x.DateDelivered))] : [.. _supplierItems.OrderBy(x => DateTime.Parse(x.DateDelivered))];
+            //         VisibleCol3 = true;
+            //         break;
+            //     case DeliveryCategory.DateExpiry:
+            //         SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => DateTime.Parse(x.DateExpire))] : [.. _supplierItems.OrderBy(x => DateTime.Parse(x.DateExpire))];
+            //         VisibleCol4 = true;
+            //         break;
+            //     case DeliveryCategory.BatchCost:
+            //         SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => x.BatchCostPrice)] : [.. _supplierItems.OrderBy(x => x.BatchCostPrice)];
+            //         VisibleCol5 = true;
+            //         break;
+            //     case DeliveryCategory.ItemType:
+            //         SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => x.ItemType)] : [.. _supplierItems.OrderBy(x => x.ItemType)];
+            //         VisibleCol6 = true;
+            //         break;
+            //     case DeliveryCategory.ConsignmentSched:
+            //         VisibleCol7 = true;
+            //         SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => x.ConsignmentSchedule)] : [.. _supplierItems.OrderBy(x => x.ConsignmentSchedule)];
+            //         break;
+            //     case DeliveryCategory.DateReturn:
+            //         VisibleCol8 = true;
+            //         SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => DateTime.Parse(x.ReturnByDate))] : [.. _supplierItems.OrderBy(x => DateTime.Parse(x.ReturnByDate))];
+            //         break;
+            //     default:
+            //         SupplierItems = [.. _supplierItems];
+            //         break;
+            // }
+
+            // SupplierItems = [];
+            // switch (SelectedCategory)
+            // {
+            //     case DeliveryCategory.Name:
+            //         SupplierItems = isDescending ? new ObservableCollection<DeliveryRecord>(_supplierItems.OrderByDescending(x => x.ItemName)) : new ObservableCollection<DeliveryRecord>(_supplierItems.OrderBy(x => x.ItemName));
+            //         VisibleCol1 = true;
+            //         break;
+            //     case DeliveryCategory.Quantity:
+            //         SupplierItems = isDescending ? new ObservableCollection<DeliveryRecord>(_supplierItems.OrderByDescending(x => x.QuantityInStock)) : new ObservableCollection<DeliveryRecord>(_supplierItems.OrderBy(x => x.QuantityInStock));
+            //         VisibleCol2 = true;
+            //         break;
+            //     case DeliveryCategory.DateDelivered:
+            //         SupplierItems = isDescending ? new ObservableCollection<DeliveryRecord>(_supplierItems.OrderByDescending(x => DateTime.Parse(x.DateDelivered))) : new ObservableCollection<DeliveryRecord>(_supplierItems.OrderBy(x => DateTime.Parse(x.DateDelivered)));
+            //         VisibleCol3 = true;
+            //         break;
+            //     case DeliveryCategory.DateExpiry:
+            //         SupplierItems = isDescending ? new ObservableCollection<DeliveryRecord>(_supplierItems.OrderByDescending(x => DateTime.Parse(x.DateExpire))) : new ObservableCollection<DeliveryRecord>(_supplierItems.OrderBy(x => DateTime.Parse(x.DateExpire)));
+            //         VisibleCol4 = true;
+            //         break;
+            //     case DeliveryCategory.BatchCost:
+            //         // SupplierItems = isDescending ? new ObservableCollection<DeliveryRecord>(_supplierItems.OrderByDescending(x => x.BatchCostPrice)) : new ObservableCollection<DeliveryRecord>(_supplierItems.OrderBy(x => x.BatchCostPrice));
+            //         if (isDescending) SupplierItems.OrderByDescending(x => x.BatchCostPrice);
+            //         else SupplierItems.OrderBy(x => x.BatchCostPrice);
+            //         VisibleCol5 = true;
+            //         break;
+            //     case DeliveryCategory.ItemType:
+            //         SupplierItems = isDescending ? new ObservableCollection<DeliveryRecord>(_supplierItems.OrderByDescending(x => x.ItemType)) : new ObservableCollection<DeliveryRecord>(_supplierItems.OrderBy(x => x.ItemType));
+            //         VisibleCol6 = true;
+            //         break;
+            //     case DeliveryCategory.ConsignmentSched:
+            //         VisibleCol7 = true;
+            //         SupplierItems = isDescending ? new ObservableCollection<DeliveryRecord>(_supplierItems.OrderByDescending(x => x.ConsignmentSchedule)) : new ObservableCollection<DeliveryRecord>(_supplierItems.OrderBy(x => x.ConsignmentSchedule));
+            //         break;
+            //     case DeliveryCategory.DateReturn:
+            //         VisibleCol8 = true;
+            //         SupplierItems = isDescending ? new ObservableCollection<DeliveryRecord>(_supplierItems.OrderByDescending(x => DateTime.Parse(x.ReturnByDate))) : new ObservableCollection<DeliveryRecord>(_supplierItems.OrderBy(x => DateTime.Parse(x.ReturnByDate)));
+            //         break;
+            //     default:
+            //         SupplierItems = new ObservableCollection<DeliveryRecord>(_supplierItems);
+            //         break;
+            // }
         }
     }
 }
