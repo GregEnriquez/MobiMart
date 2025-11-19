@@ -21,7 +21,7 @@ public class UserService
             if (DeviceInfo.DeviceType == DeviceType.Virtual)
                 baseUrl = "http://10.0.2.2:5199"; // emulator
             else
-                baseUrl = "http://172.20.10.5:5199"; // physical device (replace with server [LAN] IP)
+                baseUrl = "https://app-mobimart-dev-southeastasia-01.azurewebsites.net"; // physical device (replace with server [LAN] IP)
         }
         else
         {

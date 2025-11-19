@@ -49,7 +49,7 @@ namespace MobiMart.ViewModel
         SalesService salesService;
         NotificationService notificationService;
 
-        private Transaction transactionUsingBarcode;
+        private Transaction? transactionUsingBarcode;
 
 
         public TransactionViewModel(InventoryService inventoryService, SalesService salesService, NotificationService notificationService)
@@ -381,8 +381,8 @@ namespace MobiMart.ViewModel
             var item = AllItems.Find(x => x.Barcode.Equals(barcode));
             if (item is null) return false;
 
-            transactionUsingBarcode.BarcodeId = barcode;
-            transactionUsingBarcode.SelectedItem = item;
+            transactionUsingBarcode!.BarcodeId = barcode;
+            transactionUsingBarcode!.SelectedItem = item;
 
             return true;
         }
@@ -402,8 +402,6 @@ namespace MobiMart.ViewModel
             transactionUsingBarcode = transactionItem;
         }
 
-
-        [RelayCommand]
         public void HideScanner()
         {
             IsScannerVisible = false;
@@ -412,7 +410,7 @@ namespace MobiMart.ViewModel
 
 
         [RelayCommand]
-        public void ToggleBarcode(Transaction transactionItem)
+        public static void ToggleBarcode(Transaction transactionItem)
         {
             transactionItem.IsBarcodeEntry = !transactionItem.IsBarcodeEntry;
         }

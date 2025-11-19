@@ -59,7 +59,7 @@ public partial class AddSupplierItem : ContentPage
 		InitializeComponent();
 		BindingContext = viewModel;
 
-		barcodeReader.Options = new BarcodeReaderOptions
+		invBarcodeReader.Options = new BarcodeReaderOptions
 		{
 			Formats = BarcodeFormat.Ean13,
 			TryHarder = true
@@ -82,16 +82,26 @@ public partial class AddSupplierItem : ContentPage
 				await Toast.Make(message, ToastDuration.Short, 14).Show();
 			});
 
-			barcodeReader.IsTorchOn = false;
-			await vm.HideScanner();
+			invBarcodeReader.IsTorchOn = false;
+			vm.HideScanner();
 		}
 	}
 
 
 	private void onPressedTorchButton(object sender, EventArgs e)
 	{
-		barcodeReader.IsTorchOn = !barcodeReader.IsTorchOn;
+		invBarcodeReader.IsTorchOn = !invBarcodeReader.IsTorchOn;
 	}
+
+
+	private void onPressedCloseButton(object sender, EventArgs e)
+    {
+        invBarcodeReader.IsTorchOn = false;
+		if (BindingContext is AddSupplierItemViewModel vm)
+        {
+            vm.HideScanner();
+        }
+    }
 
 
 	private async void OnBarcodeEntryTextChanged(object sender, TextChangedEventArgs e)

@@ -173,15 +173,14 @@
                                         <Entry Text="{Binding Price, Mode=TwoWay}" Keyboard="Numeric" WidthRequest="50" HorizontalOptions="Center" IsEnabled="False" TextColor="#6D5206" Placeholder="0" HorizontalTextAlignment="Center"/>
                                     </Border>
 
-                                    <Button Text="X"
-                                        Grid.Column="3"
-                                        BackgroundColor="#FFB9680C"
-                                        TextColor="White"
-                                        WidthRequest="25"
-                                        HeightRequest="25"
-                                        CornerRadius="20"
-                                        Command="{Binding BindingContext.DeleteTransactionCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
-                                        CommandParameter="{Binding .}"/>
+                                    <VerticalStackLayout Grid.Column="3">
+                                        <Button Text="X"
+                                            BackgroundColor="#FFB9680C"
+                                            TextColor="White"
+                                            CornerRadius="48"
+                                            Command="{Binding BindingContext.DeleteTransactionCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                            CommandParameter="{Binding .}"/>
+                                    </VerticalStackLayout>
                                 </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
@@ -250,13 +249,13 @@
             <VerticalStackLayout
                 VerticalOptions="Center"
                 HorizontalOptions="Center">
-                <zxing:CameraBarcodeReaderView
+                <!-- <zxing:CameraBarcodeReaderView
                     x:Name="barcodeReader"
                     HorizontalOptions="Fill"
                     VerticalOptions="Fill"
                     HeightRequest="250"
                     WidthRequest="350"
-                    BarcodesDetected="BarcodeReader_BarcodesDetected"/>
+                    BarcodesDetected="BarcodeReader_BarcodesDetected"/> -->
                 <HorizontalStackLayout 
                     Margin="0,50,0,0"
                     HorizontalOptions="Center"
@@ -269,7 +268,7 @@
                             WidthRequest="40"
                             HeightRequest="40"
                             CornerRadius="20"
-                            Command="{Binding HideScannerCommand}"/>
+                            Pressed="OnPressedCloseButton"/>
                     <Button Text="T"
                             BackgroundColor="Green"
                             TextColor="White"

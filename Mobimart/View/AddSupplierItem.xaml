@@ -295,7 +295,7 @@
                 VerticalOptions="Center"
                 HorizontalOptions="Center">
                 <zxing:CameraBarcodeReaderView
-                    x:Name="barcodeReader"
+                    x:Name="invBarcodeReader"
                     HorizontalOptions="Fill"
                     VerticalOptions="Fill"
                     HeightRequest="250"
@@ -313,7 +313,7 @@
                             WidthRequest="40"
                             HeightRequest="40"
                             CornerRadius="20"
-                            Command="{Binding HideScannerCommand}"/>
+                            Pressed="onPressedCloseButton"/>
                     <Button Text="T"
                             BackgroundColor="Green"
                             TextColor="White"

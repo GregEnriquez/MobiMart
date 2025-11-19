@@ -267,8 +267,7 @@ namespace MobiMart.ViewModel
         }
 
 
-        [RelayCommand]
-        public async Task HideScanner()
+        public void HideScanner()
         {
             IsScannerVisible = false;
         }

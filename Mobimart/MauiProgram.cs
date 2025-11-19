@@ -76,7 +76,7 @@ namespace MobiMart
             builder.Services.AddSingleton<BusinessPage>();
             builder.Services.AddSingleton<EmployeeTablePage>();
             builder.Services.AddSingleton<InventoryListPage>();
-            builder.Services.AddSingleton<TransactionPage>();
+            builder.Services.AddTransient<TransactionPage>();
             builder.Services.AddSingleton<SalesHistory>();
             builder.Services.AddSingleton<SupplierList>();
             builder.Services.AddTransient<EditInventoryPopup>();

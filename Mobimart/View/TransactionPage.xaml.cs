@@ -4,11 +4,16 @@ using CommunityToolkit.Maui.Core;
 using MobiMart.Model;
 using MobiMart.ViewModel;
 using ZXing.Net.Maui;
+using ZXing.Net.Maui.Controls;
 
 namespace MobiMart.View;
 
 public partial class TransactionPage : ContentPage
 {
+
+    private CameraBarcodeReaderView? barcodeReader;
+
+
     public TransactionPage(TransactionViewModel viewModel)
     {
         InitializeComponent();
@@ -78,8 +83,17 @@ public partial class TransactionPage : ContentPage
     
     private void OnPressedTorchButton(object sender, EventArgs e)
 	{
-		barcodeReader.IsTorchOn = !barcodeReader.IsTorchOn;
+		barcodeReader!.IsTorchOn = !barcodeReader.IsTorchOn;
 	}
+
+    private void OnPressedCloseButton(object sender, EventArgs e)
+    {
+        barcodeReader!.IsTorchOn = false;
+        if (BindingContext is TransactionViewModel vm)
+        {
+            vm.HideScanner();
+        }
+    }
 
 
     private void BarcodeReader_BarcodesDetected(object sender, BarcodeDetectionEventArgs e)
@@ -98,7 +112,7 @@ public partial class TransactionPage : ContentPage
                 });
             }
 
-            barcodeReader.IsTorchOn = false;
+            barcodeReader!.IsTorchOn = false;
             vm.HideScanner();
         }
     }
@@ -107,10 +121,33 @@ public partial class TransactionPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        barcodeReader = new CameraBarcodeReaderView
+        {
+            HorizontalOptions = LayoutOptions.Fill,
+            VerticalOptions = LayoutOptions.Fill,
+            IsDetecting = true,
+            HeightRequest = 250,
+            WidthRequest = 350
+        };
+        barcodeReader.BarcodesDetected += BarcodeReader_BarcodesDetected;
+
+        ((VerticalStackLayout)ScannerOverlay.Children.First()).Children.Insert(0, barcodeReader);
 
         if (BindingContext is TransactionViewModel vm)
         {
             await vm.OnAppearing();
         }
+    }
+
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        if (barcodeReader is null) return;
+
+        barcodeReader.IsDetecting = false;
+        barcodeReader.BarcodesDetected -= BarcodeReader_BarcodesDetected;
+        ((VerticalStackLayout)ScannerOverlay.Children.First()).Children.Remove(barcodeReader);
+        barcodeReader = null;
     }
 }

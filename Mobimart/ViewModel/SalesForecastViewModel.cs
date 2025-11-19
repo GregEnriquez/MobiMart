@@ -22,6 +22,7 @@ public partial class SalesForecastViewModel : BaseViewModel
     List<SalesRecommendation> salesRecommendations;
 
     MonthlyForecastInstance? monthlyForecast;
+    bool askingAI = false;
 
     SalesService salesService;
     InventoryService inventoryService;
@@ -45,9 +46,9 @@ public partial class SalesForecastViewModel : BaseViewModel
         this.businessService = businessService;
 
         // Example placeholder data (replace later with real data or API call)
-        ForecastedRevenue = "₱50,000";
-        CurrentRevenue = "₱32,500";
-        Recommendation = "Start of new School Year: Expect higher demand for school supplies and snacks.";
+        ForecastedRevenue = "0";
+        CurrentRevenue = "0";
+        Recommendation = "fin.";
     }
 
 
@@ -62,38 +63,43 @@ public partial class SalesForecastViewModel : BaseViewModel
         SalesRecommendations = [];
         // await businessService.DeleteMonthlyForecastInstance(); //debug
         monthlyForecast = await businessService.GetMonthlyForecastInstance();
-        if (monthlyForecast is not null 
-        && DateTime.Parse(monthlyForecast.DateGenerated).Date < DateTime.Now.Date)
+        if ( (monthlyForecast is not null 
+        && monthlyForecast.Response.Contains("Error")) ||
+        (monthlyForecast is not null 
+        && DateTime.Parse(monthlyForecast.DateGenerated).Date < DateTime.Now.Date))
         {
             await businessService.DeleteMonthlyForecastInstance();
             monthlyForecast = null;
         }
-        if (monthlyForecast is null)
+        if (monthlyForecast is null && !askingAI)
         {
             try
             {
+                askingAI = true;
                 monthlyForecast = await geminiService.GenerateMonthlyForecast(sales);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                // if (e.Message.Equals("Connection failure"))
-
-                SalesRecommendations = new List<SalesRecommendation> ()
-                {
+                SalesRecommendations =
+                [
                     new ()
                     {
-                    Title = "No internet connection",
+                    Title = "Unsatable or no internet connection",
                     Details = "Can't connect to the server for generation of insights and recommendations."    
                     }
-                };
+                ];
                 return;
+            }
+            finally
+            {
+                askingAI = false;
             }
             await businessService.AddMonthlyForecastInstance(monthlyForecast);
         }
         // convert the response revenue report
         try
         {
-            string og = monthlyForecast.Response;
+            string og = monthlyForecast!.Response;
             monthlyForecast.Response = monthlyForecast.Response.Replace("```json", "");
             monthlyForecast.Response = monthlyForecast.Response.Replace("```", "");
             RevenueReport report = JsonSerializer.Deserialize<RevenueReport>(monthlyForecast.Response)!;
@@ -102,6 +108,7 @@ public partial class SalesForecastViewModel : BaseViewModel
         catch (Exception e)
         {
             Debug.WriteLine(e.StackTrace);
+            SalesRecommendations = [new SalesRecommendation() {Title = "Error" + monthlyForecast!.DateGenerated, Details=monthlyForecast!.Response}];
         }
     }
 
@@ -143,8 +150,8 @@ public partial class SalesForecastViewModel : BaseViewModel
         BarChart = new BarChart()
         {
             Entries = entries,
-            LabelTextSize = 46f,
-            ValueLabelTextSize = 46f,
+            LabelTextSize = 32f,
+            ValueLabelTextSize = 32f,
             ValueLabelOption = ValueLabelOption.OverElement,
             LabelOrientation = Orientation.Horizontal,
             ValueLabelOrientation = Orientation.Horizontal,
