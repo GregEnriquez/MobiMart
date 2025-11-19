@@ -22,7 +22,7 @@ public static class UsersEndpoints
             // return Results.BadRequest();
         });
 
-        // GET /users/1
+        // GET /users/email@sample.com
         group.MapGet("/{email}", async (string email, MobiMartContext dbContext) =>
         {
             User? user = await dbContext.Users.FirstOrDefaultAsync(x => x.Email == email);

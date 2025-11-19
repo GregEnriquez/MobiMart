@@ -18,7 +18,7 @@ Content-Type: application/json
 
 
 ###
-GET {{hostAddress}}/users
+GET {{hostAddress}}/users/fxyrus@gmail.com
 
 
 ###
