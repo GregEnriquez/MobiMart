@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/044b34e6-ce91-4b70-ae6d-a8273b4c949c/resourceGroups/rg-mobimart-dev-southeastasia-01/providers/Microsoft.Web/sites/app-mobimart-dev-southeastasia-01",
+    "appService.deploySubpath": "MobiMart.Api"
+}

@@ -10,10 +10,12 @@ public class User
     public required string LastName { get; set; }
     public required string Email { get; set; }
     public required string Password { get; set; }
+    public int PasswordLength { get; set; }
     public DateOnly BirthDate { get; set; }
     public int Age { get; set; }
     public string PhoneNumber { get; set; } = "";
     public required string EmployeeType { get; set; }
+    public DateTime LastModified { get; set; } 
     public string? RefreshToken { get; set; }
     public DateTime? RefreshTokenExpiryTime { get; set; }
 }

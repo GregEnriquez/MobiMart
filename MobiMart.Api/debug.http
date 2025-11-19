@@ -1,6 +1,8 @@
+@hostAddress = https://app-mobimart-dev-southeastasia-01.azurewebsites.net
+
 
 ###
-POST http://localhost:5198/users/
+POST {{hostAddress}}/users/
 Content-Type: application/json
 
 {
@@ -16,7 +18,11 @@ Content-Type: application/json
 
 
 ###
-PUT http://localhost:5198/businesses/2
+GET {{hostAddress}}/users
+
+
+###
+POST {{hostAddress}}/businesses/
 Content-Type: application/json
 
 {
@@ -31,12 +37,12 @@ DELETE http://localhost:5198/users/2
 
 
 ###
-GET http://localhost:5198/businesses/2
+GET {{hostAddress}}/businesses/1
 
 
 
 ###
-POST http://localhost:5198/inventories
+POST {{hostAddress}}/inventories
 Content-Type: application/json
 
 {
@@ -111,8 +117,7 @@ Content-Type: application/json
 
 
 ###
-GET http://localhost:5198/
-
+GET {{hostAddress}}
 
 ###
 GET http://localhost:5198/wholesale-inventories/1
@@ -121,12 +126,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hc
 
 
 ### authentication
-POST http://localhost:5198/auth/login
-Content-Type: application/json
+POST {{hostAddress}}/auth/login/
 
+Content-Type: application/json
 {
-    "email": "fxyrus26@gmail.com",
-    "password": "myPassword123"
+    "email": "fxyrus@gmail.com",
+    "password": "jake1234"
 } 
 
 

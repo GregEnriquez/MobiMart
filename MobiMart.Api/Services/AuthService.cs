@@ -39,12 +39,14 @@ public class AuthService(MobiMartContext context, IConfiguration configuration) 
             LastName = "",
             Email = "",
             Password = "",
-            EmployeeType = ""
+            EmployeeType = "",
+            LastModified = DateTime.Now
         };
         var hashedPassword = new PasswordHasher<User>().HashPassword(user, request.Password);
 
         user.Email = request.Email;
         user.Password = hashedPassword;
+        user.PasswordLength = request.Password.Length;
 
         context.Users.Add(user);
         await context.SaveChangesAsync();
