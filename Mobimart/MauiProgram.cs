@@ -30,7 +30,7 @@ namespace MobiMart
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 })
                 .UseBarcodeReader();
-            builder.Services.AddSingleton<AppShell>();
+            builder.Services.AddTransient<AppShell>();
 
             // inject services
             builder.Services.AddSingleton<UserService>();
@@ -44,41 +44,42 @@ namespace MobiMart
             builder.Services.AddSingleton<GeminiService>();
 
             // inject viewmodels
-            builder.Services.AddSingleton<LoginViewModel>();
-            builder.Services.AddSingleton<SignUpViewModel>();
-            builder.Services.AddSingleton<UserPageViewModel>();
-            builder.Services.AddSingleton<BusinessPageViewModel>();
-            builder.Services.AddSingleton<FlyoutMenuViewModel>();
-            builder.Services.AddSingleton<AddSupplierViewModel>();
-            builder.Services.AddSingleton<CalendarViewModel>();
-            builder.Services.AddSingleton<DailySalesViewModel>();
-            builder.Services.AddSingleton<IncomeSummaryViewModel>();
-            builder.Services.AddSingleton<SalesForecastViewModel>();
-            builder.Services.AddSingleton<EmployeeTablePageViewModel>();
-            builder.Services.AddSingleton<SupplierListViewModel>();
-            builder.Services.AddSingleton<SupplierInfoViewModel>();
-            builder.Services.AddSingleton<AddSupplierItemViewModel>();
-            builder.Services.AddSingleton<SupplierInventoryViewModel>();
-            builder.Services.AddSingleton<InventoryViewModel>();
-            builder.Services.AddSingleton<EditInventoryPopupViewModel>();
-            builder.Services.AddSingleton<EditSuppInventoryViewModel>();
-            builder.Services.AddSingleton<TransactionViewModel>();
-            builder.Services.AddSingleton<SalesHistoryViewModel>();
-            builder.Services.AddSingleton<ViewTransactionViewModel>();
-            builder.Services.AddSingleton<AddDeliveryReminderViewModel>();
-            builder.Services.AddSingleton<MessageSupplierViewModel>();
-            builder.Services.AddSingleton<AddContactsViewModel>();
-            builder.Services.AddSingleton<ContractsViewModel>();
+            builder.Services.AddTransient<SignUpViewModel>();
+            builder.Services.AddTransient<LoginViewModel>();
+            builder.Services.AddTransient<UserPageViewModel>();
+            builder.Services.AddTransient<BusinessPageViewModel>();
+            builder.Services.AddTransient<FlyoutMenuViewModel>();
+            builder.Services.AddTransient<AddSupplierViewModel>();
+            builder.Services.AddTransient<CalendarViewModel>();
+            builder.Services.AddTransient<DailySalesViewModel>();
+            builder.Services.AddTransient<IncomeSummaryViewModel>();
+            builder.Services.AddTransient<SalesForecastViewModel>();
+            builder.Services.AddTransient<EmployeeTablePageViewModel>();
+            builder.Services.AddTransient<SupplierListViewModel>();
+            builder.Services.AddTransient<SupplierInfoViewModel>();
+            builder.Services.AddTransient<AddSupplierItemViewModel>();
+            builder.Services.AddTransient<SupplierInventoryViewModel>();
+            builder.Services.AddTransient<InventoryViewModel>();
+            builder.Services.AddTransient<EditInventoryPopupViewModel>();
+            builder.Services.AddTransient<EditSuppInventoryViewModel>();
+            builder.Services.AddTransient<TransactionViewModel>();
+            builder.Services.AddTransient<SalesHistoryViewModel>();
+            builder.Services.AddTransient<ViewTransactionViewModel>();
+            builder.Services.AddTransient<AddDeliveryReminderViewModel>();
+            builder.Services.AddTransient<MessageSupplierViewModel>();
+            builder.Services.AddTransient<AddContactsViewModel>();
+            builder.Services.AddTransient<ContractsViewModel>();
 
             // inject views
-            builder.Services.AddSingleton<SignUpPage>();
-            builder.Services.AddSingleton<UserPage>();
-            builder.Services.AddSingleton<BusinessPage>();
-            builder.Services.AddSingleton<EmployeeTablePage>();
-            builder.Services.AddSingleton<InventoryListPage>();
+            builder.Services.AddTransient<MainPage>();
+            builder.Services.AddTransient<SignUpPage>();
+            builder.Services.AddTransient<UserPage>();
+            builder.Services.AddTransient<BusinessPage>();
+            builder.Services.AddTransient<EmployeeTablePage>();
+            builder.Services.AddTransient<InventoryListPage>();
             builder.Services.AddTransient<TransactionPage>();
-            builder.Services.AddSingleton<SalesHistory>();
-            builder.Services.AddSingleton<SupplierList>();
+            builder.Services.AddTransient<SalesHistory>();
+            builder.Services.AddTransient<SupplierList>();
             builder.Services.AddTransient<EditInventoryPopup>();
             builder.Services.AddTransient<EditSupplierInventory>();
         

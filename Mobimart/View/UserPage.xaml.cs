@@ -29,6 +29,9 @@ public partial class UserPage : ContentPage
 		
 		if (BindingContext is UserPageViewModel vm)
 		{
+			// If the MainPage is NOT the AppShell, it means we are transitioning from logout to login.
+			if (Application.Current!.Windows[0].Page is not AppShell) return;
+
 			await vm.UpdateInfo();
 		}
     }

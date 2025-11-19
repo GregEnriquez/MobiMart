@@ -17,12 +17,12 @@
     FlyoutBackgroundColor="#FBE7B3">
 
     
-    <FlyoutItem FlyoutItemIsVisible="False">
+    <!-- <FlyoutItem FlyoutItemIsVisible="False">
         <ShellContent
             Title="Home"
             ContentTemplate="{DataTemplate view:MainPage}"
-            Route="MainPage" />
-    </FlyoutItem>
+            Route="MainPage"/>
+    </FlyoutItem> -->
 
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems" Title="Navbar">
         <ShellContent

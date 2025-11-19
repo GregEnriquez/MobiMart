@@ -51,7 +51,7 @@ public class UserService
         await Init();
 
         // check for an active user instance
-        UserInstance userInstance = null;
+        UserInstance? userInstance = null;
         userInstance = await db!.Table<UserInstance>().FirstOrDefaultAsync();
 
         if (userInstance is null)
@@ -62,11 +62,20 @@ public class UserService
 
         // if refresh token validity is expired
         DateTime expiry = DateTime.Parse(userInstance.RefreshTokenExpiryTime);
-        if (expiry < DateTime.Today)
+        if (DateTime.Today > expiry)
         {
             // logout the user
             await LogoutUserAsync();
             return false;
+        }
+        // if there is atleast 2 days before token expires, just let bro in and dont bother refreshing bro's token
+        else if (DateTime.Today < expiry.AddDays(-2))
+        {
+            // fake loading
+            await Task.Delay(1000);
+            // attach authorization header to the http client
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userInstance.AccessToken);
+            return true;
         }
 
         // else, try to refresh the tokens (online)

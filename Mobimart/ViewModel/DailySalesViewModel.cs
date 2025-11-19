@@ -42,7 +42,6 @@ namespace MobiMart.ViewModel
         public DailySalesViewModel(SalesService salesService, InventoryService inventoryService, SupplierService supplierService)
         {
             Title = "Daily Sales";
-            LoadDailyData(CurrentDate);
 
             this.salesService = salesService;
             this.inventoryService = inventoryService;
@@ -52,25 +51,24 @@ namespace MobiMart.ViewModel
         [RelayCommand]
         private void PreviousDay()
         {
-            CurrentDate = CurrentDate.AddDays(-1);
-            LoadDailyData(CurrentDate);
+            // CurrentDate = CurrentDate.AddDays(-1);
+            // LoadDailyData(CurrentDate);
         }
 
         [RelayCommand]
         private void NextDay()
         {
-            CurrentDate = CurrentDate.AddDays(1);
-            LoadDailyData(CurrentDate);
+            // CurrentDate = CurrentDate.AddDays(1);
+            // LoadDailyData(CurrentDate);
         }
 
         [RelayCommand]
         private async void SelectDate()
         {
-
-            await App.Current!.MainPage!.DisplayAlert(
-                "Date tapped",
-                $"You tapped on {CurrentDate:D}",
-                "OK");
+            // await App.Current!.MainPage!.DisplayAlert(
+            //     "Date tapped",
+            //     $"You tapped on {CurrentDate:D}",
+            //     "OK");
         }
 
         private void LoadDailyData(DateTime date)
@@ -148,9 +146,9 @@ namespace MobiMart.ViewModel
                     if (itemsSold.ContainsKey(item.Barcode))
                     {
                         itemsSold[item.Barcode] += item.Price;
-                        // var i = ItemsSold.Find(x => x.Barcode.Equals(item.Barcode))!;
-                        // i.Amount += item.Quantity;
-                        // i.Total += item.Price;
+                        var i = ItemsSold.Find(x => x.Barcode.Equals(item.Barcode))!;
+                        i.Amount += item.Quantity;
+                        i.Total += item.Price;
                         continue;
                     }
                     itemsSold.Add(item.Barcode, item.Price);

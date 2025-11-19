@@ -1,5 +1,7 @@
 using System;
 using System.Diagnostics;
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MobiMart.Service;
@@ -29,6 +31,7 @@ public partial class LoginViewModel : BaseViewModel
         //     }
         //     IsBusy = false;
         // });
+        IsBusy = true;
     }
 
 
@@ -62,7 +65,12 @@ public partial class LoginViewModel : BaseViewModel
         // login is succesful (do something)
         Email = "";
         Password = "";
-        await Shell.Current.GoToAsync("//UserPage", true);
+        await Toast.Make("Login Succesful", ToastDuration.Short, 14).Show();
+
+        // await Shell.Current.GoToAsync("//UserPage", true);
+        await Task.Delay(500); //fake loading
+        App.SwitchToShell();
+        
         IsBusy = false;
     }
 
@@ -70,7 +78,6 @@ public partial class LoginViewModel : BaseViewModel
     [RelayCommand]
     async Task GoToSignup()
     {
-        // await Navigation.PushAsync(new SignUpPage());
         Debug.WriteLine("I am here");
         await Shell.Current.GoToAsync($"{nameof(SignUpPage)}", true);
     }
@@ -82,8 +89,14 @@ public partial class LoginViewModel : BaseViewModel
         // await userService.LogoutUserAsync();
         if (await userService.ResumeUserInstanceAsync())
         {
-            await Shell.Current.GoToAsync("//UserPage", true);
+            await Toast.Make("Login Session Resumed", ToastDuration.Short, 14).Show();
+
+            // await Shell.Current.GoToAsync("//UserPage", false);
+            await Task.Delay(500); //fake loading
+            App.SwitchToShell();
+
             IsBusy = false;
+            return;
         }
         IsBusy = false;
     }

@@ -1,9 +1,12 @@
 using System;
 using System.Diagnostics;
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MobiMart.Model;
 using MobiMart.Service;
+using MobiMart.View;
 
 namespace MobiMart.ViewModel;
 
@@ -69,7 +72,12 @@ public partial class FlyoutMenuViewModel : BaseViewModel
         IsUserInBusiness = false;
         IsUserOwner = false;
 
-        await Shell.Current.GoToAsync("//MainPage", true);
+        // await Shell.Current.GoToAsync("///MainPage", true);
+        await Toast.Make("Account Logged Out", ToastDuration.Short, 14).Show();
+        Shell.Current.FlyoutIsPresented = false;
+        await Task.Delay(500); //fake loading
+        App.SwitchToLogin();
+
         IsBusy = false;
     }
 

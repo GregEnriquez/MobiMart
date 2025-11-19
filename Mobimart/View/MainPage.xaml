@@ -6,6 +6,7 @@
              xmlns:viewmodel="clr-namespace:MobiMart.ViewModel"
              x:DataType="viewmodel:LoginViewModel"
              Shell.FlyoutBehavior="Disabled"
+             NavigationPage.HasNavigationBar="False"
              x:Class="MobiMart.View.MainPage"
              BackgroundColor="#FDF4DC"
              Title="{Binding Title}">

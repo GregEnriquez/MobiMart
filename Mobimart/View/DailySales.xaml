@@ -13,12 +13,12 @@
             <VerticalStackLayout Padding="10" Spacing="15">
                 <!-- navigation of dates -->
                 <Grid ColumnDefinitions="40,*,40" VerticalOptions="Center" Padding="10,0">
-                    <Button Text="«"
+                    <!-- <Button Text="«"
                             FontSize="20"
                             BackgroundColor="Transparent"
                             HorizontalOptions="Center"
                             VerticalOptions="Center"
-                            Command="{Binding PreviousDayCommand}"/>
+                            Command="{Binding PreviousDayCommand}"/> -->
 
                     <Label Text="{Binding CurrentDate, StringFormat='{0:MMMM dd, yyyy}'}"
                            FontSize="18"
@@ -32,13 +32,13 @@
                         </Label.GestureRecognizers>
                     </Label>
 
-                    <Button Text="»"
+                    <!-- <Button Text="»"
                             FontSize="20"
                             BackgroundColor="Transparent"
                             HorizontalOptions="Center"
                             VerticalOptions="Center"
                             Grid.Column="2"
-                            Command="{Binding NextDayCommand}"/>
+                            Command="{Binding NextDayCommand}"/> -->
                 </Grid>
 
                 <!-- Previous Balance -->

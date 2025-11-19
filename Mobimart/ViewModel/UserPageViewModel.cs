@@ -104,6 +104,8 @@ public partial class UserPageViewModel : BaseViewModel
     public async Task UpdateInfo()
     {
         var userInstance = await userService.GetUserInstanceAsync();
+        if (userInstance is null) return; // no account is logged in or in the middle of logging out
+
         var user = await userService.GetUserAsync(userInstance.UserId);
 
         IsBusy = true;
