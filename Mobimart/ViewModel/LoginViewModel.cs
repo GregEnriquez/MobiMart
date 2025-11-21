@@ -78,8 +78,17 @@ public partial class LoginViewModel : BaseViewModel
     [RelayCommand]
     async Task GoToSignup()
     {
-        Debug.WriteLine("I am here");
-        await Shell.Current.GoToAsync($"{nameof(SignUpPage)}", true);
+        // Debug.WriteLine("I am here");
+        // await Shell.Current.GoToAsync($"{nameof(SignUpPage)}", true);
+        // await Task.Delay(500); //fake loading
+        // App.SwitchToRegister();
+
+        var signUpPage = IPlatformApplication.Current!.Services.GetRequiredService<SignUpPage>();
+
+        if (Application.Current!.Windows[0].Page is NavigationPage navPage)
+        {
+            await navPage.PushAsync(signUpPage);
+        }
     }
 
 

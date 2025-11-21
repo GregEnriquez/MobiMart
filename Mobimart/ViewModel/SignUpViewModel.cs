@@ -26,7 +26,7 @@ public partial class SignUpViewModel : BaseViewModel
 
     public SignUpViewModel(UserService userService)
     {
-        Title = "SAMPLE LANG HEHE";
+        Title = "Sign Up";
         this.userService = userService;
     }
 
@@ -43,7 +43,8 @@ public partial class SignUpViewModel : BaseViewModel
             IsBusy = false;
             return;
         }
-
+        
+        var navPage = Application.Current!.Windows[0].Page as NavigationPage;
         try
         {
             if (!await userService.RegisterUserAsync(Email, Password))
@@ -56,24 +57,24 @@ public partial class SignUpViewModel : BaseViewModel
         catch (HttpRequestException e)
         {
             IsBusy = false;
-            await Shell.Current.DisplayAlert("Connection Error", e.Message, "OK");
+            await navPage!.DisplayAlert("Connection Error", e.Message, "OK");
             return;
         }
         catch (TaskCanceledException e)
         {
             IsBusy = false;
-            await Shell.Current.DisplayAlert("Timeout Error", e.Message, "OK");
+            await navPage!.DisplayAlert("Timeout Error", e.Message, "OK");
             return;
         }
         catch (Exception e)
         {
             IsBusy = false;
-            await Shell.Current.DisplayAlert("Error", e.Message, "OK");
+            await navPage!.DisplayAlert("Error", e.Message, "OK");
             return;
         }
 
-        bool answer = await Shell.Current.DisplayAlert("Success", "Account has been registered", "OK", "GO BACK");
-        if (answer) await Shell.Current.GoToAsync("..");
+        bool answer = await navPage!.DisplayAlert("Success", "Account has been registered", "OK", "GO BACK");
+        if (answer) await navPage!.PopAsync();
 
         IsBusy = false;
         Email = "";

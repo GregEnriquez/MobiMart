@@ -19,7 +19,7 @@ namespace MobiMart
             // Routing.RegisterRoute(nameof(UserPage), typeof(UserPage));
             // Routing.RegisterRoute(nameof(BusinessPage), typeof(BusinessPage));
 
-            Routing.RegisterRoute(nameof(SignUpPage), typeof(SignUpPage));
+            // Routing.RegisterRoute(nameof(SignUpPage), typeof(SignUpPage));
             Routing.RegisterRoute(nameof(EmployeeTablePage), typeof(EmployeeTablePage));
             Routing.RegisterRoute(nameof(ViewTransaction), typeof(ViewTransaction));
             Routing.RegisterRoute(nameof(SupplierInformation), typeof(SupplierInformation));

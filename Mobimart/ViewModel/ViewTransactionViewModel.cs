@@ -68,6 +68,7 @@ public partial class ViewTransactionViewModel : BaseViewModel
                 invItem.TotalAmount += salesItem.Quantity;
                 await inventoryService.UpdateInventoryAsync(invItem);
             }
+            // or add a new one if the inventory for that delivery record is not present already
             else
             {
                 invItem = new Inventory()
@@ -82,7 +83,7 @@ public partial class ViewTransactionViewModel : BaseViewModel
 
             // update transaction total
             var transaction = await salesService.GetSalesTransactionAsync(Record.TransactionId);
-            transaction.TotalPrice -= salesItem.Price * salesItem.Quantity;
+            transaction.TotalPrice -= salesItem.Price;
             transaction.Change = transaction.Payment - transaction.TotalPrice;
             await salesService.UpdateSalesTransactionAsync(transaction);
 
