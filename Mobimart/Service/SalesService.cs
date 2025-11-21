@@ -89,6 +89,18 @@ public class SalesService
     }
 
 
+    public async Task<List<SalesItem>> GetSalesItemsAsync(int transactionId)
+    {
+        await Init();
+        int businessId = -1;
+        if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
+        {
+            businessId = vm.BusinessId;
+        }
+
+        return await db!.Table<SalesItem>().Where(x => x.TransactionId == transactionId).ToListAsync();
+    }
+
 
     public async Task<List<SalesRecord>> GetSalesRecordsAsync(DateTime date)
     {

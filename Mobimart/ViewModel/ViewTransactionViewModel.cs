@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Maui.Controls.Handlers.Compatibility;
 using MobiMart.Model;
 using MobiMart.Service;
 
@@ -89,6 +90,12 @@ public partial class ViewTransactionViewModel : BaseViewModel
 
             // delete transaction item
             await salesService.DeleteSalesItemTransactionAsync(salesItem);
+        }
+
+        // delete transaction record if there are no sales item
+        if ((await salesService.GetSalesItemsAsync(Record.TransactionId)).Count <= 0)
+        {
+            await salesService.DeleteSalesTransactionAsync(Record.TransactionId);
         }
 
         await Shell.Current.GoToAsync("..");
