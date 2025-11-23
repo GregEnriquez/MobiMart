@@ -40,6 +40,8 @@ public partial class FlyoutMenuViewModel : BaseViewModel
         this.notificationService = notificationService;
         this.inventoryService = inventoryService;
 
+        user = null;
+
         // Task.Run(async () =>
         // {
         //     var userInstance = await userService.GetUserInstanceAsync();
@@ -84,13 +86,10 @@ public partial class FlyoutMenuViewModel : BaseViewModel
 
     public async Task UpdateInfo()
     {
-        if (user is null)
-        {
-            var userInstance = await userService.GetUserInstanceAsync();
-            if (userInstance is null) return;
-            user = await userService.GetUserAsync(userInstance.UserId);
-            business = await businessService.GetBusinessAsync(user.BusinessRefId);
-        }
+        var userInstance = await userService.GetUserInstanceAsync();
+        if (userInstance is null) return;
+        user = await userService.GetUserAsync(userInstance.UserId);
+        business = await businessService.GetBusinessAsync(user.BusinessRefId);
 
         Username = "";
         BusinessName = "";
@@ -100,7 +99,7 @@ public partial class FlyoutMenuViewModel : BaseViewModel
 
         if (business is not null)
         {
-            if (!user.EmployeeType.Equals("") && user.EmployeeType is not null)
+            if (!user.EmployeeType.Equals(""))
             {
                 Username += $" |{user.EmployeeType}";
                 IsUserOwner = user.EmployeeType.ToLower().Equals("owner");
@@ -109,7 +108,7 @@ public partial class FlyoutMenuViewModel : BaseViewModel
                 BusinessName = business!.Name;
                 BusinessId = business.Id;
             }
-            else if (user.EmployeeType is null || user.EmployeeType.Equals(""))
+            else if (user.EmployeeType.Equals(""))
             {
                 IsUserInBusiness = false;
                 IsUserOwner = false;
@@ -121,7 +120,7 @@ public partial class FlyoutMenuViewModel : BaseViewModel
             IsUserOwner = false;
         }
 
-        // update reminders
+        // update reminders only once a day
         if (!isRemindersUpdated)
         {
             await notificationService.CheckAndScheduleNotificationsAsync(inventoryService);

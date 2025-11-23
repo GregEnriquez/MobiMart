@@ -28,6 +28,8 @@ public partial class UserPageViewModel : BaseViewModel
     string businessCode = "";
     [ObservableProperty]
     bool notJoinedBusiness = true;
+    [ObservableProperty]
+    bool isPending = false;
 
     UserService userService;
     BusinessService businessService;
@@ -117,12 +119,12 @@ public partial class UserPageViewModel : BaseViewModel
         PhoneNumber = "";
         BusinessCode = "";
         NotJoinedBusiness = true;
+        IsPending = false;
 
         FullName = user.FirstName + " " + user.LastName;
         Email = user.Email;
         Password = "********";
         Age = user.Age;
-        // Birthday = DateOnly.ParseExact(user.BirthDate, "yyyy-MM-dd");
         Birthday = DateOnly.ParseExact(user.BirthDate, "yyyy-MM-dd").ToDateTime(TimeOnly.MinValue);
         PhoneNumber = user.PhoneNumber;
 
@@ -132,11 +134,12 @@ public partial class UserPageViewModel : BaseViewModel
             BusinessCode = business.Code;
             NotJoinedBusiness = false;
         }
-
         if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
         {
             NotJoinedBusiness = !vm.IsUserInBusiness;
         }
+        
+        IsPending = !NotJoinedBusiness && user.EmployeeType.Equals("pending");
 
         IsBusy = false;
     }
@@ -181,8 +184,40 @@ public partial class UserPageViewModel : BaseViewModel
         user.EmployeeType = "pending";
         await userService.UpdateUserAsync(user);
         await UpdateInfo();
+        NotJoinedBusiness = false;
+        IsPending = true;
 
 
         IsBusy = false;
+    }
+
+
+    [RelayCommand]
+    public async Task CancelRequest()
+    {
+        if (IsBusy) return;
+        IsBusy = true;
+
+        var userInstance = await userService.GetUserInstanceAsync();
+        var user = await userService.GetUserAsync(userInstance.UserId);
+        var business = await businessService.GetBusinessAsync(BusinessCode);
+
+        bool confirm = await Shell.Current.DisplayAlert(
+            "Confirm Join",
+            $"Are you sure you want to cancel your request to join {business.Name}?",
+            "Yes", "No"
+        );
+
+        if (confirm)
+        {
+            user.EmployeeType = "";
+            user.BusinessRefId = -1;
+            await userService.UpdateUserAsync(user);
+            await UpdateInfo();
+            NotJoinedBusiness = true;
+            IsPending = false;
+        }
+
+        IsBusy = false;        
     }
 }

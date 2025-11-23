@@ -58,6 +58,7 @@ public partial class BusinessPageViewModel : BaseViewModel
         var user = await userService.GetUserAsync(userInstance.UserId);
         var business = await businessService.GetBusinessAsync(user.BusinessRefId);
 
+        // for update only
         if (business is not null)
         {
             business.Name = BusinessName;
@@ -67,9 +68,9 @@ public partial class BusinessPageViewModel : BaseViewModel
         }
 
         // input validation (make sure user has info when creating a business)
-        if (BusinessName.Equals("") || BusinessAddress.Equals(""))
+        if (BusinessName.Equals("") || BusinessAddress.Equals("") || BusinessName is null || BusinessAddress is null)
         {
-            await Toast.Make("Complete business details first", ToastDuration.Short, 14).Show();
+            await Toast.Make("Complete business info first", ToastDuration.Short, 14).Show();
             return;
         }
         if (user.FirstName is null || user.LastName is null || user.FirstName.Equals("") || user.LastName.Equals(""))
@@ -77,6 +78,14 @@ public partial class BusinessPageViewModel : BaseViewModel
             await Toast.Make("Complete your profile before registering a business", ToastDuration.Short, 14).Show();
             return;
         }
+
+        bool confirm = await Shell.Current.DisplayAlert(
+            "Confirm Join",
+            $"Are you sure you want to create a business named {BusinessName} located at {BusinessAddress}?\n\n" +
+            "This action is irreversible and this account will forever be bound to this business as its owner",
+            "Yes", "No"
+        );
+        if (!confirm) return;
 
 
         var random = new Random();
