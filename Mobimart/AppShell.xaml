@@ -36,22 +36,22 @@
             Route="BusinessPage"/>
 
         <ShellContent
-            IsVisible="{Binding IsUserInBusiness}"
+            IsVisible="{Binding IsUserEmployee}"
             Title="Supplier List"
             ContentTemplate="{DataTemplate view:SupplierList}"
             Route="SupplierListWrapper"/>
         <ShellContent
-            IsVisible="{Binding IsUserInBusiness}"
+            IsVisible="{Binding IsUserEmployee}"
             Title="Inventory"
             ContentTemplate="{DataTemplate view:InventoryListPage}"
             Route="InventoryListPage" />
         <ShellContent
-            IsVisible="{Binding IsUserInBusiness}"
+            IsVisible="{Binding IsUserEmployee}"
             Title="Transaction"
             ContentTemplate="{DataTemplate view:TransactionPage}"
             Route="TransactionPage" />
         <ShellContent
-            IsVisible="{Binding IsUserInBusiness}"
+            IsVisible="{Binding IsUserEmployee}"
             Title="Sales History"
             ContentTemplate="{DataTemplate view:SalesHistory}"
             Route="SalesHistory" />

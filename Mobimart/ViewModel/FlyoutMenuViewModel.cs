@@ -27,6 +27,8 @@ public partial class FlyoutMenuViewModel : BaseViewModel
     bool isUserInBusiness = false;
     [ObservableProperty]
     bool isUserOwner = false;
+    [ObservableProperty]
+    bool isUserEmployee = false;
 
     User? user;
     Business? business;
@@ -103,8 +105,9 @@ public partial class FlyoutMenuViewModel : BaseViewModel
             {
                 Username += $" |{user.EmployeeType}";
                 IsUserOwner = user.EmployeeType.ToLower().Equals("owner");
-
                 IsUserInBusiness = true;
+                IsUserEmployee = IsUserOwner || user.EmployeeType.ToLower().Equals("employee");
+
                 BusinessName = business!.Name;
                 BusinessId = business.Id;
             }
@@ -112,12 +115,14 @@ public partial class FlyoutMenuViewModel : BaseViewModel
             {
                 IsUserInBusiness = false;
                 IsUserOwner = false;
+                IsUserEmployee = false;
             }
         }
         else
         {
             IsUserInBusiness = false;
             IsUserOwner = false;
+            IsUserEmployee = false;
         }
 
         // update reminders only once a day
