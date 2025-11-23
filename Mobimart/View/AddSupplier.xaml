@@ -66,7 +66,7 @@
                 Stroke="#A9882D"
                 StrokeThickness="1.5"
                 StrokeShape="RoundRectangle 10,10,10,10">
-                <Entry Placeholder="Enter Supplier Number" Text="{Binding Number}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                <Entry Placeholder="Enter Supplier Number" Keyboard="Telephone" Text="{Binding Number}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
             </Border>
 
             <Label Text="Supplier Email" FontAttributes="Bold" TextColor="#6F4E37" />
