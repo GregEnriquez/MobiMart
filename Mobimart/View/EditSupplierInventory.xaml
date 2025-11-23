@@ -167,7 +167,7 @@
 
 
                 <Button 
-                Text="Delete From Inventory"
+                Text="Delete Delivery Record"
                 BackgroundColor="#D99B2B" 
                 TextColor="White"
                 CornerRadius="10"

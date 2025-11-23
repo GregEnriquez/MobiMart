@@ -4,12 +4,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MobiMart.Model;
 using MobiMart.Service;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MobiMart.ViewModel
 {
@@ -32,9 +26,11 @@ namespace MobiMart.ViewModel
         [ObservableProperty]
         int? wDelivQuantity;
         [ObservableProperty]
-        float? wBatchCost;
+        string wBatchCostText;
+        float? WBatchCost;
         [ObservableProperty]
-        float? wUnitCost;
+        string wUnitCostText;
+        float? WUnitCost;
         [ObservableProperty]
         bool isBatchCost = true;
         [ObservableProperty]
@@ -55,6 +51,8 @@ namespace MobiMart.ViewModel
         UserService userService;
         BusinessService businessService;
         NotificationService notificationService;
+
+        private bool _isCalculatingCost = false;
 
         public AddSupplierItemViewModel(
             InventoryService inventoryService,
@@ -171,7 +169,7 @@ namespace MobiMart.ViewModel
             // -- SAVE DELIVERY RECORD --
             if (WBatchCost == null || !IsBatchCost)
             {
-                WBatchCost = WUnitCost * WDelivQuantity;
+                // WBatchCost = WUnitCost * WDelivQuantity;
             }
             var _dateExpire = (DateTime)WDateExpire!;
             var delivery = new Delivery()
@@ -251,8 +249,8 @@ namespace MobiMart.ViewModel
             WItemType = "";
             WRetailPrice = null;
             WDelivQuantity = null;
-            WUnitCost = null;
-            WBatchCost = null;
+            WUnitCost = null; WUnitCostText = "";
+            WBatchCost = null; WBatchCostText = "";
             WConsignmentSchedule = "";
             string message = "item/s added to inventory";
             if (!IsFromInventory) message = "Delivery recorded and " + message;
@@ -270,6 +268,60 @@ namespace MobiMart.ViewModel
         public void HideScanner()
         {
             IsScannerVisible = false;
+        }
+
+
+        partial void OnWBatchCostTextChanged(string value)
+        {
+            if (_isCalculatingCost) return;
+
+            try
+            {
+                _isCalculatingCost = true;
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    WBatchCost = float.Parse(value);
+                    if (WDelivQuantity > 0 ) {
+                        WUnitCost = WBatchCost / WDelivQuantity;
+                        WUnitCostText = "" + WUnitCost;
+                    }
+                }
+                else {
+                    WUnitCost = null; WUnitCostText = "";
+                    WBatchCost = null; WBatchCostText = "";
+                }
+            }
+            finally
+            {
+                _isCalculatingCost = false;
+            }
+        }
+
+
+        partial void OnWUnitCostTextChanged(string value)
+        {
+            if (_isCalculatingCost) return;
+
+            try
+            {
+                _isCalculatingCost = true;
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    WUnitCost = float.Parse(value);
+                    if (WDelivQuantity > 0) {
+                        WBatchCost = WUnitCost * WDelivQuantity;
+                        WBatchCostText = "" + WBatchCost;
+                    }
+                }
+                else {
+                    WBatchCost = null; WBatchCostText = "";
+                    WUnitCost = null; WUnitCostText = "";
+                }
+            }
+            finally
+            {
+                _isCalculatingCost = false;
+            }
         }
 
 

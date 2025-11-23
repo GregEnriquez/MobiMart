@@ -230,7 +230,7 @@
                         IsVisible="{Binding IsBatchCost}">
                     <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
                         <Entry Placeholder="Enter Batch Cost" 
-                            Text="{Binding WBatchCost}" 
+                            Text="{Binding WBatchCostText}"
                             BackgroundColor="#F8ECC6" 
                             TextColor="#A9882D"
                             Keyboard="Numeric"/>
@@ -256,7 +256,7 @@
                     </Border.Triggers>
                     <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
                         <Entry Placeholder="Enter Unit Cost" 
-                            Text="{Binding WUnitCost}" 
+                            Text="{Binding WUnitCostText}" 
                             BackgroundColor="#F8ECC6" 
                             TextColor="#A9882D"
                             Keyboard="Numeric"/>

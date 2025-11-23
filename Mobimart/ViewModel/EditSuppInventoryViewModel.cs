@@ -103,7 +103,7 @@ namespace MobiMart.ViewModel
             );
 
             if (!confirm) return;
-            await inventoryService!.DeleteInventory(inventory);
+            if (inventory is not null) await inventoryService!.DeleteInventory(inventory);
             if (IsEditDelivery) await inventoryService!.DeleteDelivery(delivery);
             await Toast.Make("Record has been deleted", ToastDuration.Short, 14).Show();
             await Shell.Current.GoToAsync("..", true);
