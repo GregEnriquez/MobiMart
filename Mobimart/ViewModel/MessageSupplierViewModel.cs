@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using MobiMart.Model;
 using MobiMart.Service;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace MobiMart.ViewModel;
 
@@ -32,12 +33,19 @@ public partial class MessageSupplierViewModel : BaseViewModel
         this.userService = userService;
         this.businessService = businessService;
         RequestedItems = [new MessageRequest()];
+        RequestedItems[^1].PropertyChanged += OnMessageRequestPropertyChanged;
     }
 
     [RelayCommand]
     private async Task AddItem()
     {
+        if (RequestedItems.Count == AllItems.Count)
+        {
+            await Toast.Make("Can't add any more items", ToastDuration.Short, 14).Show();
+            return;
+        }
         RequestedItems.Add(new MessageRequest());
+        RequestedItems[^1].PropertyChanged += OnMessageRequestPropertyChanged;
     }
 
 
@@ -98,7 +106,8 @@ public partial class MessageSupplierViewModel : BaseViewModel
         Message = $"""
         From: {businessName}, {requesteeName}
 
-        deliver m q d2 sa {businessAddress} ng mg gani2:
+        Requesting to deliver these items on {businessAddress}:
+
 
         """;
 
@@ -109,6 +118,14 @@ public partial class MessageSupplierViewModel : BaseViewModel
         }
     }
 
+
+    private void OnMessageRequestPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(MessageRequest.Quantity))
+        {
+            UpdateMessage();
+        }
+    }
 
 
     public async Task OnAppearing()

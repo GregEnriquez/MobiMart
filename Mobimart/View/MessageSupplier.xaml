@@ -110,7 +110,7 @@
                         BackgroundColor="#F8ECC6"
                         FontSize="16"
                         AutoSize="TextChanges"
-                        HeightRequest="100"/>
+                        HeightRequest="250"/>
             </Border>
 
             <Button 
