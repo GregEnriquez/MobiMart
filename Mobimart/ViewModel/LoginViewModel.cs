@@ -21,16 +21,6 @@ public partial class LoginViewModel : BaseViewModel
     {
         this.userService = userService;
 
-        // Task.Run(async () =>
-        // {
-        //     IsBusy = true;
-        //     if (await userService.ResumeUserInstanceAsync())
-        //     {
-        //         await Shell.Current.GoToAsync("//UserPage", true);
-        //         IsBusy = false;
-        //     }
-        //     IsBusy = false;
-        // });
         IsBusy = true;
     }
 
@@ -38,6 +28,7 @@ public partial class LoginViewModel : BaseViewModel
     [RelayCommand]
     async Task LoginUser()
     {
+        var navPage = Application.Current!.Windows[0].Page as NavigationPage;
         try
         {
             IsBusy = true;
@@ -46,19 +37,19 @@ public partial class LoginViewModel : BaseViewModel
         catch (HttpRequestException e)
         {
             IsBusy = false;
-            await Shell.Current.DisplayAlert("Connection Error", e.Message, "OK");
+            await navPage!.DisplayAlert("Connection Error", e.Message, "OK");
             return;
         }
         catch (TaskCanceledException e)
         {
             IsBusy = false;
-            await Shell.Current.DisplayAlert("Timeout Error", e.Message, "OK");
+            await navPage!.DisplayAlert("Timeout Error", e.Message, "OK");
             return;
         }
         catch (Exception e)
         {
             IsBusy = false;
-            await Shell.Current.DisplayAlert("Error", e.Message, "OK");
+            await navPage!.DisplayAlert("Error", e.Message, "OK");
             return;
         }
 
