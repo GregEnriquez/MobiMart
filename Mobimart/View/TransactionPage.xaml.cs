@@ -12,7 +12,7 @@ public partial class TransactionPage : ContentPage
 {
 
     private CameraBarcodeReaderView? barcodeReader;
-
+    private bool _isProcessing = false;
 
     public TransactionPage(TransactionViewModel viewModel)
     {
@@ -79,6 +79,14 @@ public partial class TransactionPage : ContentPage
                 entry.Focus();
 			}
 		}
+        else
+        {
+            if (BindingContext is TransactionViewModel vm)
+            {
+                Entry entry = (Entry)sender;
+                vm.UnpickItem((Transaction) entry.BindingContext);
+            }
+        }
     }
     
     private void OnPressedTorchButton(object sender, EventArgs e)
@@ -88,6 +96,7 @@ public partial class TransactionPage : ContentPage
 
     private void OnPressedCloseButton(object sender, EventArgs e)
     {
+        barcodeReader!.IsDetecting = false;
         barcodeReader!.IsTorchOn = false;
         if (BindingContext is TransactionViewModel vm)
         {
@@ -96,24 +105,45 @@ public partial class TransactionPage : ContentPage
     }
 
 
-    private void BarcodeReader_BarcodesDetected(object sender, BarcodeDetectionEventArgs e)
+    private void OnShowScannerClicked(object sender, EventArgs e)
     {
+        barcodeReader!.IsDetecting = true;
+        if (BindingContext is TransactionViewModel vm)
+        {
+            vm.ShowScanner((Transaction) ((ImageButton)sender).BindingContext);
+        }
+    }
+
+
+    private void BarcodeReader_BarcodesDetected(object? sender, BarcodeDetectionEventArgs e)
+    {
+        if (_isProcessing) return; //ensures that one frame is only processed
+        _isProcessing = true;
+
+        barcodeReader!.IsDetecting = false; //ensures that scanner dont scan after one successful scan
         var first = e.Results?.FirstOrDefault();
-        if (first is null) return;
+        if (first is null) {
+            _isProcessing = false;
+            return;
+        }
 
         if (BindingContext is TransactionViewModel vm)
         {
             bool hasRecord = vm.PickItem(first.Value);
-            if (!hasRecord)
-            {
-                Dispatcher.Dispatch(async () =>
-                {
-                    await Toast.Make("No item found with that barcode", ToastDuration.Short, 14).Show();
-                });
-            }
 
-            barcodeReader!.IsTorchOn = false;
-            vm.HideScanner();
+            Dispatcher.Dispatch(async () => {
+                if (hasRecord) {
+                    await Toast.Make(first.Value + " added", ToastDuration.Short, 14).Show();
+                    barcodeReader!.IsTorchOn = false;
+                    vm.HideScanner();
+                }
+                else {
+                    await Toast.Make(first.Value + " is not found OR already added", ToastDuration.Short, 14).Show(); 
+                    barcodeReader.IsDetecting = true; //allow scan again
+                }
+                
+                _isProcessing = false;
+            });
         }
     }
 
@@ -125,13 +155,25 @@ public partial class TransactionPage : ContentPage
         {
             HorizontalOptions = LayoutOptions.Fill,
             VerticalOptions = LayoutOptions.Fill,
-            IsDetecting = true,
             HeightRequest = 250,
-            WidthRequest = 350
+            WidthRequest = 350,
+            IsDetecting = false
+        };
+        barcodeReader.Options = new BarcodeReaderOptions
+        {
+            Formats = BarcodeFormat.Ean13,
+            AutoRotate = false,
+            Multiple = false,
+            TryHarder = true
         };
         barcodeReader.BarcodesDetected += BarcodeReader_BarcodesDetected;
 
-        ((VerticalStackLayout)ScannerOverlay.Children.First()).Children.Insert(0, barcodeReader);
+        ((VerticalStackLayout)TransactionScannerOverlay.Children.First()).Children.Insert(0, barcodeReader);
+        
+        // Dispatcher.Dispatch(() =>
+        // {
+        //     barcodeReader.IsDetecting = true;
+        // });
 
         if (BindingContext is TransactionViewModel vm)
         {
@@ -147,7 +189,7 @@ public partial class TransactionPage : ContentPage
 
         barcodeReader.IsDetecting = false;
         barcodeReader.BarcodesDetected -= BarcodeReader_BarcodesDetected;
-        ((VerticalStackLayout)ScannerOverlay.Children.First()).Children.Remove(barcodeReader);
+        ((VerticalStackLayout)TransactionScannerOverlay.Children.First()).Children.Remove(barcodeReader);
         barcodeReader = null;
     }
 }

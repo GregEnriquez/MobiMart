@@ -173,8 +173,25 @@ namespace MobiMart.ViewModel
                 return;
             }
 
-            transactionItem.IsBarcodeEntry = false;
+            // accessing the barcode entry
+            if (picker.Parent is Grid innerGrid && 
+                innerGrid.Parent is Border border && 
+                border.Parent is Grid rootGrid)
+            {   
+                foreach (var child in rootGrid.Children)
+                {
+                    if (child is Border border1 && border1.Content is Grid innerGrid1)
+                    {
+                        var entry = innerGrid1.Children.OfType<Entry>().FirstOrDefault();
+                        if (entry is not null) {
+                            entry.Text = item.Barcode;
+                            break;
+                        }
+                    }
+                }
+            }
 
+            transactionItem.IsBarcodeEntry = false;
             IsBusy = false;
         }
 
@@ -381,6 +398,16 @@ namespace MobiMart.ViewModel
             var item = AllItems.Find(x => x.Barcode.Equals(barcode));
             if (item is null) return false;
 
+            foreach (var existingTransaction in Items)
+            {
+                if (Object.ReferenceEquals(transactionUsingBarcode, existingTransaction)) continue;
+                if (!item.Name.Equals(existingTransaction.ItemName)) continue;
+                
+                transactionUsingBarcode!.BarcodeId = "";
+                transactionUsingBarcode!.SelectedItem = null;
+                return false;
+            }
+
             transactionUsingBarcode!.BarcodeId = barcode;
             transactionUsingBarcode!.SelectedItem = item;
 
@@ -395,7 +422,13 @@ namespace MobiMart.ViewModel
         }
 
 
-        [RelayCommand]
+        public void UnpickItem(Transaction transactionItem)
+        {
+            transactionItem.BarcodeId = "";
+            transactionItem.SelectedItem = null;
+        }
+
+
         public void ShowScanner(Transaction transactionItem)
         {
             IsScannerVisible = true;

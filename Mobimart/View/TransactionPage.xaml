@@ -129,7 +129,7 @@
                                             <Entry Grid.Column="0"
                                                 Placeholder="Enter Barcode" 
                                                 Keyboard="Numeric"
-                                                   Text="{Binding BarcodeId}"
+                                                Text="{Binding BarcodeId}"
                                                 TextChanged="OnBarcodeEntryTextChanged"
                                                 BackgroundColor="Transparent"
                                                 TextColor="#FF7C631E"
@@ -142,7 +142,7 @@
                                                         BackgroundColor="Transparent" 
                                                         WidthRequest="10" 
                                                         HeightRequest="10"
-                                                        Command="{Binding BindingContext.ShowScannerCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" 
+                                                        Clicked="OnShowScannerClicked"
                                                         HorizontalOptions="Center"
                                                         VerticalOptions="Center"/>
 
@@ -238,17 +238,25 @@
 
 <!-- =================================================================================================================== -->
 
-        <Grid x:Name="ScannerOverlay"
+        <!-- <Grid x:Name="TransactionScannerOverlay"
             BackgroundColor="Transparent"
             IsVisible="{Binding IsScannerVisible}"
             InputTransparent="False"
             AbsoluteLayout.LayoutFlags="All"
             AbsoluteLayout.LayoutBounds="0,0,1,1"
+            ZIndex="10"> -->
+        <Grid x:Name="TransactionScannerOverlay"
+            BackgroundColor="Transparent"
+            IsVisible="{Binding IsScannerVisible}"
+            InputTransparent="False"
+            Grid.Row="0"
+            Grid.RowSpan="5"
             ZIndex="10">
 
             <VerticalStackLayout
                 VerticalOptions="Center"
                 HorizontalOptions="Center">
+                <!-- commented because: manually added the barcode in the .cs code -->
                 <!-- <zxing:CameraBarcodeReaderView
                     x:Name="barcodeReader"
                     HorizontalOptions="Fill"
