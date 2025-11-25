@@ -11,7 +11,7 @@ using MobiMart.Api.Data;
 namespace MobiMart.Api.Data.Migrations
 {
     [DbContext(typeof(MobiMartContext))]
-    [Migration("20251125071613_InitialSyncRefactor")]
+    [Migration("20251125100352_InitialSyncRefactor")]
     partial class InitialSyncRefactor
     {
         /// <inheritdoc />
@@ -151,7 +151,7 @@ namespace MobiMart.Api.Data.Migrations
                     b.Property<DateTimeOffset>("LastUpdatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("ReturnByDate")
+                    b.Property<DateTimeOffset?>("ReturnByDate")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("SupplierId")

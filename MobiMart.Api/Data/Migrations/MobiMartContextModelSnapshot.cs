@@ -148,7 +148,7 @@ namespace MobiMart.Api.Data.Migrations
                     b.Property<DateTimeOffset>("LastUpdatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("ReturnByDate")
+                    b.Property<DateTimeOffset?>("ReturnByDate")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("SupplierId")

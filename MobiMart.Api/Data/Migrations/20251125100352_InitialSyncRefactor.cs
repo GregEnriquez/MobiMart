@@ -76,7 +76,7 @@ namespace MobiMart.Api.Data.Migrations
                     ExpirationDate = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
                     BatchWorth = table.Column<decimal>(type: "TEXT", nullable: false),
                     ConsignmentSchedule = table.Column<string>(type: "TEXT", nullable: false),
-                    ReturnByDate = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
+                    ReturnByDate = table.Column<DateTimeOffset>(type: "TEXT", nullable: true),
                     LastUpdatedAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
