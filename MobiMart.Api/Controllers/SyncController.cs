@@ -30,6 +30,30 @@ public class SyncController(MobiMartContext db) : ControllerBase
         var businesses = await db.Businesses.AsNoTracking()
             .Where(x => x.LastUpdatedAt > timestamp).ToListAsync();
 
+        // if no businessId is given it just means the client who requested
+        // is currently not affiliated with any business yet (client is a new user)
+        if (businessId == Guid.Empty)
+        {
+            var businessOnlyResponse = new SyncPullDto(
+                Businesses: businesses.Select(x => x.ToDto()).ToList(),
+                Items: [],
+                Descriptions: [],
+                Inventory: [],
+                Suppliers: [],
+                Deliveries: [],
+                CompletedContracts: [],
+                CompletedContractItems: [],
+                Transactions: [],
+                SalesItems: [],
+                Reminders: [],
+                Forecasts: [],
+                // Critical: Tell the client the exact time of this snapshot
+                ServerTimestamp: DateTimeOffset.UtcNow 
+            );
+
+            return Ok(businessOnlyResponse);
+        }
+
         var users = await db.Users.AsNoTracking()
             .Where(x => x.BusinessId == businessId && x.LastUpdatedAt > timestamp).ToListAsync();
 
