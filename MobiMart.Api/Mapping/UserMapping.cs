@@ -10,7 +10,7 @@ public static class UserMapping
     {
         return new User()
         {
-            Id = Guid.NewGuid(),
+            Id = newUser.Id,
             LastUpdatedAt = newUser.LastUpdatedAt,
             IsDeleted = newUser.IsDeleted,
             BusinessId = newUser.BusinessId,

@@ -31,6 +31,7 @@ public record class UpdateUserDto(
 );
 
 public record class CreateUserDto(
+    Guid Id,
     Guid BusinessId,
     [Required][StringLength(50)] string FirstName,
     [Required][StringLength(50)] string LastName,

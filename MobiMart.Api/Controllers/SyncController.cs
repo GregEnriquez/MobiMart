@@ -27,8 +27,8 @@ public class SyncController(MobiMartContext db) : ControllerBase
         // fetch only records modified AFTER the client's last sync
         // AsNoTracking() makes reads faster since we aren't updating them here.
         
-        var businesses = await db.Businesses.AsNoTracking()
-            .Where(x => x.LastUpdatedAt > timestamp).ToListAsync();
+        var businesses = (await db.Businesses.AsNoTracking().ToListAsync())
+            .Where(x => x.LastUpdatedAt > timestamp);
 
         // if no businessId is given it just means the client who requested
         // is currently not affiliated with any business yet (client is a new user)
@@ -36,6 +36,7 @@ public class SyncController(MobiMartContext db) : ControllerBase
         {
             var businessOnlyResponse = new SyncPullDto(
                 Businesses: businesses.Select(x => x.ToDto()).ToList(),
+                Users: [],
                 Items: [],
                 Descriptions: [],
                 Inventory: [],
@@ -54,47 +55,59 @@ public class SyncController(MobiMartContext db) : ControllerBase
             return Ok(businessOnlyResponse);
         }
 
-        var users = await db.Users.AsNoTracking()
-            .Where(x => x.BusinessId == businessId && x.LastUpdatedAt > timestamp).ToListAsync();
+        var users = (await db.Users.AsNoTracking()
+            .Where(x => x.BusinessId == businessId).ToListAsync())
+            .Where(x => x.LastUpdatedAt >= timestamp).ToList();
 
-        var items = await db.Items.AsNoTracking()
-            .Where(x => x.BusinessId == businessId && x.LastUpdatedAt > timestamp).ToListAsync();
+        var items = (await db.Items.AsNoTracking()
+            .Where(x => x.BusinessId == businessId).ToListAsync())
+            .Where(x => x.LastUpdatedAt >= timestamp).ToList();
         
         // JOIN LOGIC (expensive on cpu)
-        var descriptions = await db.Descriptions.AsNoTracking()
-            .Where(x => db.Items.Any(i => i.Id == x.ItemId && i.BusinessId == businessId) && x.LastUpdatedAt > timestamp).ToListAsync();
+        var descriptions = (await db.Descriptions.AsNoTracking()
+            .Where(x => db.Items.Any(i => i.Id == x.ItemId && i.BusinessId == businessId)).ToListAsync())
+            .Where(x => x.LastUpdatedAt >= timestamp).ToList();
 
-        var inventories = await db.Inventories.AsNoTracking()
-            .Where(x => x.BusinessId == businessId && x.LastUpdatedAt > timestamp).ToListAsync();
+        var inventories = (await db.Inventories.AsNoTracking()
+            .Where(x => x.BusinessId == businessId).ToListAsync())
+            .Where(x => x.LastUpdatedAt >= timestamp).ToList();
 
-        var suppliers = await db.Suppliers.AsNoTracking()
-            .Where(x => x.BusinessId == businessId && x.LastUpdatedAt > timestamp).ToListAsync();
+        var suppliers = (await db.Suppliers.AsNoTracking()
+            .Where(x => x.BusinessId == businessId).ToListAsync())
+            .Where(x => x.LastUpdatedAt >= timestamp).ToList();
 
-        var deliveries = await db.Deliveries.AsNoTracking()
-            .Where(x => x.BusinessId == businessId && x.LastUpdatedAt > timestamp).ToListAsync();
+        var deliveries = (await db.Deliveries.AsNoTracking()
+            .Where(x => x.BusinessId == businessId).ToListAsync())
+            .Where(x => x.LastUpdatedAt >= timestamp).ToList();
 
-        var transactions = await db.SalesTransactions.AsNoTracking()
-            .Where(x => x.BusinessId == businessId && x.LastUpdatedAt > timestamp).ToListAsync();
+        var transactions = (await db.SalesTransactions.AsNoTracking()
+            .Where(x => x.BusinessId == businessId).ToListAsync())
+            .Where(x => x.LastUpdatedAt >= timestamp).ToList();
 
-        var salesItems = await db.SalesItems.AsNoTracking()
-            .Where(x => db.SalesTransactions.Any(t => t.Id == x.TransactionId && t.BusinessId == businessId) && x.LastUpdatedAt > timestamp).ToListAsync();
+        var salesItems = (await db.SalesItems.AsNoTracking()
+            .Where(x => db.SalesTransactions.Any(t => t.Id == x.TransactionId && t.BusinessId == businessId)).ToListAsync())
+            .Where(x => x.LastUpdatedAt >= timestamp).ToList();
 
-        var reminders = await db.Reminders.AsNoTracking()
-            .Where(x => x.BusinessId == businessId && x.LastUpdatedAt > timestamp).ToListAsync();
+        var reminders = (await db.Reminders.AsNoTracking()
+            .Where(x => x.BusinessId == businessId).ToListAsync())
+            .Where(x => x.LastUpdatedAt >= timestamp).ToList();
 
-        var completedContracts = await db.CompletedContracts.AsNoTracking()
-            .Where(x => x.BusinessId == businessId && x.LastUpdatedAt > timestamp).ToListAsync();
+        var completedContracts = (await db.CompletedContracts.AsNoTracking()
+            .Where(x => x.BusinessId == businessId).ToListAsync())
+            .Where(x => x.LastUpdatedAt >= timestamp).ToList();
         
-        var completedContractItems = await db.CompletedContractItems.AsNoTracking()
-            .Where(x => db.CompletedContracts.Any(c => c.Id == x.ContractId && c.BusinessId == businessId) && x.LastUpdatedAt > timestamp)
-            .ToListAsync();
+        var completedContractItems = (await db.CompletedContractItems.AsNoTracking()
+            .Where(x => db.CompletedContracts.Any(c => c.Id == x.ContractId && c.BusinessId == businessId)).ToListAsync())
+            .Where(x => x.LastUpdatedAt >= timestamp).ToList();
 
-        var forecasts = await db.Forecasts.AsNoTracking()
-            .Where(x => x.BusinessId == businessId && x.LastUpdatedAt > timestamp).ToListAsync();
+        var forecasts = (await db.Forecasts.AsNoTracking()
+            .Where(x => x.BusinessId == businessId).ToListAsync())
+            .Where(x => x.LastUpdatedAt >= timestamp).ToList();
         
 
         var response = new SyncPullDto(
             Businesses: businesses.Select(x => x.ToDto()).ToList(),
+            Users: users.Select(x => x.ToDto()).ToList(),
             Items: items.Select(x => x.ToDto()).ToList(),
             Descriptions: descriptions.Select(x => x.ToDto()).ToList(),
             Inventory: inventories.Select(x => x.ToDto()).ToList(),
@@ -130,6 +143,9 @@ public class SyncController(MobiMartContext db) : ControllerBase
             // -- Core --
             if (payload.Businesses?.Any() == true)
                 await UpsertBatch(payload.Businesses, db.Businesses, (dto) => dto.ToEntity());
+            
+            if (payload.Users?.Any() == true)
+                await UpsertBatch(payload.Users, db.Users, (dto) => dto.ToEntity());
 
             // -- Inventory & Items --
             if (payload.Items?.Any() == true)

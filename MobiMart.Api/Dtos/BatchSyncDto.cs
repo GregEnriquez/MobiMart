@@ -6,6 +6,7 @@ namespace MobiMart.Api.Dtos;
 public record SyncPushDto(
     // Core
     List<CreateBusinessDto>? Businesses,
+    List<CreateUserDto>? Users,
     
     // Inventory & Items
     List<CreateItemDto>? Items,
@@ -34,6 +35,7 @@ public record SyncPushDto(
 public record SyncPullDto(
     // Core
     List<BusinessDto> Businesses,
+    List<UserDto> Users,
     
     // Inventory & Items
     List<ItemDto> Items,
