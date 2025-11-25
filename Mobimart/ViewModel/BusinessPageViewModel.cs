@@ -67,6 +67,7 @@ public partial class BusinessPageViewModel : BaseViewModel
             return;
         }
 
+        // -- Creating/Registering New Business -- 
         // input validation (make sure user has info when creating a business)
         if (BusinessName.Equals("") || BusinessAddress.Equals("") || BusinessName is null || BusinessAddress is null)
         {
@@ -102,7 +103,6 @@ public partial class BusinessPageViewModel : BaseViewModel
             Name = BusinessName,
             Address = BusinessAddress,
             Code = code,
-            LastModified = DateTime.Today.ToString()
         };
         await businessService.AddBusinessAsync(business);
         user.BusinessRefId = business.Id;

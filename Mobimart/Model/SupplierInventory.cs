@@ -8,35 +8,41 @@ using System.Threading.Tasks;
 
 namespace MobiMart.Model
 {
-    public class WholesaleInventory
+    public class WholesaleInventory : SyncEntity
     {
-        [PrimaryKey, AutoIncrement]
-        public int deliveryId { get; set; }
-        [ForeignKey(nameof(Supplier))]
-        public int supplierId { get; set; } //fk
-        public string wItemName { get; set; } = "";
-        public int wDelivQuantity { get; set; }
-        public DateTime wDateDelivered { get; set; }
-        public DateTime wDateExpire { get; set; }
-        public decimal wBatchWorth { get; set; }
-        public string wItemDesc { get; set; } = "";
-        public string wItemType { get; set; } = "";
+        [Indexed]
+        public Guid SupplierId { get; set; } //fk
+        [Indexed]
+        public Guid DeliveryId { get; set; } //fk
+     
+        public string ItemName { get; set; } = "";
+        public string ItemDesc { get; set; } = "";
+        public string ItemType { get; set; } = "";
+
+        public DateTimeOffset DateDelivered { get; set; }
+        public DateTimeOffset DateExpire { get; set; }
+
+        public int DelivQuantity { get; set; }
+        public decimal BatchWorth { get; set; }
 
     }
 
-    public class ConsignmentInventory
+    public class ConsignmentInventory : SyncEntity
     {
-        [PrimaryKey, AutoIncrement]
-        public int deliveryId { get; set; }
-        [ForeignKey(nameof(Supplier))]
-        public int supplierId { get; set; } //fk
-        public string cItemName { get; set; } = "";
-        public int cDelivQuantity { get; set; }
-        public string consignmentSched { get; set; } = "";
-        public DateTime cDateDelivered { get; set; }
-        public DateTime cDateExpire { get; set; }
-        public decimal cBatchWorth { get; set; }
-        public string cItemDesc { get; set; } = "";
-        public string cItemType { get; set; } = "";
+        [Indexed]
+        public int SupplierId { get; set; } //fk
+        [Indexed]
+        public int DeliveryId { get; set; } //fk
+
+        public string ItemName { get; set; } = "";
+        public string ItemDesc { get; set; } = "";
+        public string ItemType { get; set; } = "";
+
+        public string ConsignmentSched { get; set; } = "";
+        public DateTimeOffset DateDelivered { get; set; }
+        public DateTimeOffset DateExpire { get; set; }
+
+        public int DelivQuantity { get; set; }
+        public decimal BatchWorth { get; set; }
     }
 }

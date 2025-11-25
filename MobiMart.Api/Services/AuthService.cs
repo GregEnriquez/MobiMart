@@ -35,12 +35,13 @@ public class AuthService(MobiMartContext context, IConfiguration configuration) 
 
         var user = new User()
         {
+            Id = Guid.NewGuid(),
             FirstName = "",
             LastName = "",
             Email = "",
             Password = "",
             EmployeeType = "",
-            LastModified = DateTime.Now
+            LastUpdatedAt = DateTimeOffset.UtcNow
         };
         var hashedPassword = new PasswordHasher<User>().HashPassword(user, request.Password);
 
@@ -119,7 +120,7 @@ public class AuthService(MobiMartContext context, IConfiguration configuration) 
     }
     
     
-    private async Task<User?> ValidateRefreshTokenAsync(int userId, string refreshToken)
+    private async Task<User?> ValidateRefreshTokenAsync(Guid userId, string refreshToken)
     {
         var user = await context.Users.FindAsync(userId);
         if (user is null || user.RefreshToken != refreshToken
@@ -131,7 +132,7 @@ public class AuthService(MobiMartContext context, IConfiguration configuration) 
         return user;
     }
 
-    public async Task<bool> LogoutAsync(int userId)
+    public async Task<bool> LogoutAsync(Guid userId)
     {
         var user = await context.Users.FindAsync(userId);
         if (user is null) return false;

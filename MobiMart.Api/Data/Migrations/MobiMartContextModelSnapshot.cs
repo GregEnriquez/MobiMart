@@ -19,9 +19,9 @@ namespace MobiMart.Api.Data.Migrations
 
             modelBuilder.Entity("MobiMart.Api.Entities.Business", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -29,6 +29,12 @@ namespace MobiMart.Api.Data.Migrations
 
                     b.Property<string>("Code")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset>("LastUpdatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -40,14 +46,133 @@ namespace MobiMart.Api.Data.Migrations
                     b.ToTable("Businesses");
                 });
 
-            modelBuilder.Entity("MobiMart.Api.Entities.Description", b =>
+            modelBuilder.Entity("MobiMart.Api.Entities.CompletedContract", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("AmountToPay")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("BusinessId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset?>("DateReturned")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ItemId")
+                    b.Property<DateTimeOffset>("LastUpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("ProofImageData")
+                        .IsRequired()
+                        .HasColumnType("BLOB");
+
+                    b.Property<DateTimeOffset?>("ReturnDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SupplierName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CompletedContracts");
+                });
+
+            modelBuilder.Entity("MobiMart.Api.Entities.CompletedContractItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ContractId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset>("LastUpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ReturnQuantity")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SoldQuantity")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CompletedContractItems");
+                });
+
+            modelBuilder.Entity("MobiMart.Api.Entities.Delivery", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("BatchWorth")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("BusinessId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ConsignmentSchedule")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("DateDelivered")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("DeliveryAmount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset>("ExpirationDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ItemBarcode")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("LastUpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("ReturnByDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("SupplierId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Deliveries");
+                });
+
+            modelBuilder.Entity("MobiMart.Api.Entities.Description", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("LastUpdatedAt")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -60,29 +185,25 @@ namespace MobiMart.Api.Data.Migrations
 
             modelBuilder.Entity("MobiMart.Api.Entities.Inventory", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("BusinessId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("DeliveryId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("BusinessId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("DeliveryId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("DescriptionId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ItemName")
+                    b.Property<string>("ItemBarcode")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ItemType")
-                        .IsRequired()
+                    b.Property<DateTimeOffset>("LastUpdatedAt")
                         .HasColumnType("TEXT");
-
-                    b.Property<float>("RetailPrice")
-                        .HasColumnType("REAL");
 
                     b.Property<int>("TotalAmount")
                         .HasColumnType("INTEGER");
@@ -92,44 +213,34 @@ namespace MobiMart.Api.Data.Migrations
                     b.ToTable("Inventories");
                 });
 
-            modelBuilder.Entity("MobiMart.Api.Entities.Socials", b =>
+            modelBuilder.Entity("MobiMart.Api.Entities.Item", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Barcode")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Link")
-                        .IsRequired()
+                    b.Property<Guid>("BusinessId")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.Property<Guid>("DescriptionId")
+                        .HasColumnType("TEXT");
 
-                    b.ToTable("SocialsSet");
-                });
-
-            modelBuilder.Entity("MobiMart.Api.Entities.Supplier", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("BusinessId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
+                    b.Property<DateTimeOffset>("LastUpdatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("SocialsId")
-                        .HasColumnType("INTEGER");
+                    b.Property<decimal>("RetailPrice")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -137,47 +248,202 @@ namespace MobiMart.Api.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SocialsId");
-
-                    b.ToTable("Suppliers");
+                    b.ToTable("Items");
                 });
 
-            modelBuilder.Entity("MobiMart.Api.Entities.SupplierContact", b =>
+            modelBuilder.Entity("MobiMart.Api.Entities.MonthlyForecastInstance", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("BusinessId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("DateGenerated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Email")
+                    b.Property<DateTimeOffset>("LastUpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Response")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Forecasts");
+                });
+
+            modelBuilder.Entity("MobiMart.Api.Entities.Reminder", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("BusinessId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset>("LastUpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("NotifyAtDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("RelatedEntityId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("RepeatDaily")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Sent")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Reminders");
+                });
+
+            modelBuilder.Entity("MobiMart.Api.Entities.SalesItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Barcode")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset>("LastUpdatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("SupplierId")
+                    b.Property<decimal>("Price")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("TransactionId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("SupplierContacts");
+                    b.ToTable("SalesItems");
+                });
+
+            modelBuilder.Entity("MobiMart.Api.Entities.SalesTransaction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("BusinessId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Change")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset>("LastUpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Payment")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SalesTransactions");
+                });
+
+            modelBuilder.Entity("MobiMart.Api.Entities.Supplier", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("BusinessId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset>("LastUpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Socials")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Suppliers");
                 });
 
             modelBuilder.Entity("MobiMart.Api.Entities.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Age")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateOnly>("BirthDate")
+                    b.Property<DateTime>("BirthDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("BusinessRefId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("BusinessId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -191,11 +457,14 @@ namespace MobiMart.Api.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("TEXT");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("LastName")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("LastUpdatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
@@ -212,57 +481,12 @@ namespace MobiMart.Api.Data.Migrations
                     b.Property<string>("RefreshToken")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("RefreshTokenExpiryTime")
+                    b.Property<DateTimeOffset?>("RefreshTokenExpiryTime")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("MobiMart.Api.Entities.WholeSaleInventory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<float>("BatchWorth")
-                        .HasColumnType("REAL");
-
-                    b.Property<DateOnly>("DateDelivered")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("DeliveryAmount")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateOnly>("ExpirationDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ItemName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ItemType")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("SupplierId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("WholeSaleInventories");
-                });
-
-            modelBuilder.Entity("MobiMart.Api.Entities.Supplier", b =>
-                {
-                    b.HasOne("MobiMart.Api.Entities.Socials", "Socials")
-                        .WithMany()
-                        .HasForeignKey("SocialsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Socials");
                 });
 #pragma warning restore 612, 618
         }

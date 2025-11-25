@@ -11,7 +11,9 @@ public static class DescriptionMapping
         return new DescriptionDto(
             description.Id,
             description.ItemId,
-            description.Text
+            description.Text,
+            description.LastUpdatedAt,
+            description.IsDeleted
         );
     }
 
@@ -20,17 +22,21 @@ public static class DescriptionMapping
     {
         return new Description()
         {
+            Id = newDescription.Id,
+            LastUpdatedAt = DateTimeOffset.UtcNow,
+            IsDeleted = newDescription.IsDeleted,
             ItemId = newDescription.ItemId,
             Text = newDescription.Text
         };
     }
 
 
-    public static Description ToEntity(this UpdateDescriptionDto updatedDescription, int id, int itemId)
+    public static Description ToEntity(this UpdateDescriptionDto updatedDescription, Guid id, Guid itemId)
     {
         return new Description()
         {
             Id = id,
+            LastUpdatedAt = DateTimeOffset.UtcNow,
             ItemId = itemId,
             Text = updatedDescription.Text
         };

@@ -85,9 +85,8 @@ public partial class UserPageViewModel : BaseViewModel
             user.Age = Age;
 
         // birthday
-        var birthday = DateOnly.FromDateTime(Birthday).ToString("yyyy-MM-dd");
-        if (user.BirthDate != birthday)
-            user.BirthDate = birthday;
+        if (user.BirthDate is not null && user.BirthDate.Value.Date != Birthday.Date)
+            user.BirthDate = new DateTime(DateOnly.FromDateTime(Birthday), TimeOnly.FromDateTime(Birthday));
 
         if (user.PhoneNumber != PhoneNumber)
             user.PhoneNumber = PhoneNumber;
@@ -125,7 +124,8 @@ public partial class UserPageViewModel : BaseViewModel
         Email = user.Email;
         Password = "********";
         Age = user.Age;
-        Birthday = DateOnly.ParseExact(user.BirthDate, "yyyy-MM-dd").ToDateTime(TimeOnly.MinValue);
+        // Birthday = DateOnly.ParseExact(user.BirthDate, "yyyy-MM-dd").ToDateTime(TimeOnly.MinValue);
+        Birthday = user.BirthDate is null ? DateTime.MinValue : user.BirthDate.Value;
         PhoneNumber = user.PhoneNumber;
 
         var business = await businessService.GetBusinessAsync(user.BusinessRefId);
@@ -211,7 +211,7 @@ public partial class UserPageViewModel : BaseViewModel
         if (confirm)
         {
             user.EmployeeType = "";
-            user.BusinessRefId = -1;
+            user.BusinessRefId = Guid.Empty;
             await userService.UpdateUserAsync(user);
             await UpdateInfo();
             NotJoinedBusiness = true;

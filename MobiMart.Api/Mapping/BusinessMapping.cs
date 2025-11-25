@@ -10,9 +10,11 @@ public static class BusinessMapping
     {
         return new BusinessDto(
             business.Id,
+            business.IsDeleted,
             business.Name,
             business.Address,
-            business.Code
+            business.Code,
+            business.LastUpdatedAt
         );
     }
 
@@ -21,6 +23,9 @@ public static class BusinessMapping
     {
         return new Business()
         {
+            Id = newBusiness.Id,
+            LastUpdatedAt = DateTimeOffset.UtcNow,
+            IsDeleted = newBusiness.IsDeleted,
             Name = newBusiness.Name,
             Address = newBusiness.Address,
             Code = newBusiness.Code
@@ -28,14 +33,16 @@ public static class BusinessMapping
     }
 
 
-    public static Business ToEntity(this UpdateBusinessDto newBusiness, int id)
+    public static Business ToEntity(this UpdateBusinessDto newBusiness, Guid id)
     {
         return new Business()
         {
             Id = id,
+            LastUpdatedAt = DateTimeOffset.UtcNow,
             Name = newBusiness.Name,
             Address = newBusiness.Address,
-            Code = newBusiness.Code
+            Code = newBusiness.Code,
+            IsDeleted = newBusiness.IsDeleted
         };
     }
 }

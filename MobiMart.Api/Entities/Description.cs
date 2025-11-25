@@ -2,9 +2,8 @@ using System;
 
 namespace MobiMart.Api.Entities;
 
-public class Description
+public class Description : SyncEntity
 {
-    public int Id { get; set; }
-    public int ItemId { get; set; }
+    public Guid ItemId { get; set; }
     public string Text { get; set; } = "";
 }

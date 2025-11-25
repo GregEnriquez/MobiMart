@@ -3,26 +3,22 @@ using SQLite;
 
 namespace MobiMart.Model;
 
-public class CompletedContract
+public class CompletedContract : SyncEntity
 {
-    [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
-    [ForeignKey(nameof(Business))]
-    public int BusinessId { get; set; }
+    [Indexed]
+    public Guid BusinessId { get; set; }
     public string SupplierName { get; set; } = "";
-    public string ReturnDate { get; set; } = "";
-    public string DateReturned { get; set; } = "";
-    public float AmountToPay { get; set; }
+    public DateTimeOffset? ReturnDate { get; set; }
+    public DateTimeOffset? DateReturned { get; set; }
+    public decimal AmountToPay { get; set; }
     public byte[] ProofImageData { get; set; } = [];
 }
 
 
-public class CompletedContractItem
+public class CompletedContractItem : SyncEntity
 {
-    [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
-    [ForeignKey(nameof(CompletedContract))]
-    public int ContractId { get; set; }
+    [Indexed]
+    public Guid ContractId { get; set; }
     public string Name { get; set; } = "";
     public int SoldQuantity { get; set; }
     public int ReturnQuantity { get; set; }

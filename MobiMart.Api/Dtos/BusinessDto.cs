@@ -2,21 +2,26 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MobiMart.Api.Dtos;
 
-public record class BusinessDto(
-    int Id,
+public record BusinessDto(
+    Guid Id,
+    bool IsDeleted,
     string Name,
     string Address,
-    string Code
+    string Code,
+    DateTimeOffset LastUpdatedAt
 );
 
-public record class UpdateBusinessDto(
-    [Required] string Name,
-    [Required] string Address,
-    [Required] string Code
+public record CreateBusinessDto(
+    Guid Id, // Client provides this!
+    string Name,
+    string Address,
+    string Code,
+    bool IsDeleted
 );
 
-public record class CreateBusinessDto(
-    [Required] string Name,
-    [Required] string Address,
-    [Required] string Code // the backend should be able to generate the code? nah I think the modelView should be the one to do that
+public record UpdateBusinessDto(
+    string Name,
+    string Address,
+    string Code,
+    bool IsDeleted
 );

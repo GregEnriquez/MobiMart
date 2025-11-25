@@ -12,11 +12,10 @@ public static class InventoryMapping
             inv.Id,
             inv.BusinessId,
             inv.DeliveryId,
-            inv.DescriptionId,
+            inv.ItemBarcode,
             inv.TotalAmount,
-            inv.ItemName,
-            inv.RetailPrice,
-            inv.ItemType
+            inv.LastUpdatedAt,
+            inv.IsDeleted
         );
     }
 
@@ -25,29 +24,28 @@ public static class InventoryMapping
     {
         return new Inventory()
         {
+            Id = newInv.Id,
+            LastUpdatedAt = DateTimeOffset.UtcNow,
+            IsDeleted = newInv.IsDeleted,
             BusinessId = newInv.BusinessId,
             DeliveryId = newInv.DeliveryId,
-            DescriptionId = newInv.DescriptionId,
-            TotalAmount = newInv.TotalAmount,
-            ItemName = newInv.ItemName,
-            RetailPrice = newInv.RetailPrice,
-            ItemType = newInv.ItemType
+            ItemBarcode = newInv.ItemBarcode,
+            TotalAmount = newInv.TotalAmount
         };
     }
 
 
-    public static Inventory ToEntity(this UpdateInventoryDto newInv, int id, int businessId, int deliveryId, int descriptionId)
+    public static Inventory ToEntity(this UpdateInventoryDto newInv, Guid id, Guid businessId, Guid deliveryId, string itemBarcode)
     {
         return new Inventory()
         {
             Id = id,
+            LastUpdatedAt = DateTimeOffset.UtcNow,
+            IsDeleted = false,
             BusinessId = businessId,
             DeliveryId = deliveryId,
-            DescriptionId = descriptionId,
-            TotalAmount = newInv.TotalAmount,
-            ItemName = newInv.ItemName,
-            RetailPrice = newInv.RetailPrice,
-            ItemType = newInv.ItemType
+            ItemBarcode = itemBarcode,
+            TotalAmount = newInv.TotalAmount
         };
     }
 }

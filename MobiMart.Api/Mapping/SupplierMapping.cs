@@ -10,30 +10,36 @@ public static class SupplierMapping
     {
         return new Supplier()
         {
+            Id = newSupplier.Id,
+            LastUpdatedAt = DateTimeOffset.UtcNow,
+            IsDeleted = newSupplier.IsDeleted,
             BusinessId = newSupplier.BusinessId,
             Type = newSupplier.Type,
             Name = newSupplier.Name,
             Email = newSupplier.Email,
+            Socials = newSupplier.Socials,
+            Number = newSupplier.Number
         };
     }
 
 
-    public static Supplier ToEntity(this UpdateSupplierDto updatedSupplier, int id, int businessId, Socials socials)
+    public static Supplier ToEntity(this UpdateSupplierDto updatedSupplier, Guid id, Guid businessId)
     {
         return new Supplier()
         {
             Id = id,
+            LastUpdatedAt = DateTimeOffset.UtcNow,
             BusinessId = businessId,
             Type = updatedSupplier.Type,
             Name = updatedSupplier.Name,
             Email = updatedSupplier.Email,
-            SocialsId = socials.Id,
-            Socials = socials
+            Socials = updatedSupplier.Socials,
+            Number = updatedSupplier.Number,
         };
     }
 
 
-    public static SupplierDto ToDto(this Supplier supplier, Socials socials)
+    public static SupplierDto ToDto(this Supplier supplier)
     {
         return new SupplierDto(
             supplier.Id,
@@ -41,8 +47,10 @@ public static class SupplierMapping
             supplier.Type,
             supplier.Name,
             supplier.Email,
-            socials.Link,
-            socials.Description
+            supplier.Socials,
+            supplier.Number,
+            supplier.LastUpdatedAt,
+            supplier.IsDeleted
         );
     }
 }

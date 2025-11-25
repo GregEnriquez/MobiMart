@@ -18,7 +18,7 @@ namespace MobiMart.ViewModel
         [ObservableProperty]
         string wItemType = "";
         [ObservableProperty]
-        float? wRetailPrice;
+        decimal? wRetailPrice;
         [ObservableProperty]
         DateTime wDateDelivered;
         [ObservableProperty]
@@ -27,10 +27,10 @@ namespace MobiMart.ViewModel
         int? wDelivQuantity;
         [ObservableProperty]
         string wBatchCostText;
-        float? WBatchCost;
+        decimal? WBatchCost;
         [ObservableProperty]
         string wUnitCostText;
-        float? WUnitCost;
+        decimal? WUnitCost;
         [ObservableProperty]
         bool isBatchCost = true;
         [ObservableProperty]
@@ -107,19 +107,19 @@ namespace MobiMart.ViewModel
             {
                 item = new Item()
                 {
+                    Id = Guid.NewGuid(),
                     Barcode = BarcodeId,
                     BusinessId = user.BusinessRefId,
                     Name = WItemName,
                     Type = WItemType,
-                    RetailPrice = (float)WRetailPrice!
+                    RetailPrice = WRetailPrice!.Value,
                 };
                 await inventoryService.AddItemAsync(item);
                 // description
                 var desc = new Description()
                 {
-                    ItemId = BarcodeId,
+                    ItemId = item.Id,
                     Text = WItemDesc,
-                    LastModified = DateTime.Now.ToString()
                 };
                 await inventoryService.AddDescAsync(desc);
             }
@@ -159,7 +159,7 @@ namespace MobiMart.ViewModel
                         }
                         item.Name = WItemName;
                         item.Type = WItemType;
-                        item.RetailPrice = (float)WRetailPrice!;
+                        item.RetailPrice = WRetailPrice!.Value;
                         await inventoryService.UpdateItemAsync(item);
                     }
                 }
@@ -167,10 +167,10 @@ namespace MobiMart.ViewModel
 
 
             // -- SAVE DELIVERY RECORD --
-            if (WBatchCost == null || !IsBatchCost)
-            {
-                // WBatchCost = WUnitCost * WDelivQuantity;
-            }
+            // if (WBatchCost == null || !IsBatchCost)
+            // {
+            //     WBatchCost = WUnitCost * WDelivQuantity;
+            // }
             var _dateExpire = (DateTime)WDateExpire!;
             var delivery = new Delivery()
             {
@@ -178,15 +178,15 @@ namespace MobiMart.ViewModel
                 SupplierId = Supplier.Id,
                 ItemBarcode = BarcodeId,
                 DeliveryAmount = (int)WDelivQuantity!,
-                DateDelivered = WDateDelivered.ToString("g"),
-                ExpirationDate = _dateExpire.ToString("d"),
-                BatchWorth = (float)WBatchCost!
+                DateDelivered = WDateDelivered.ToUniversalTime(),
+                ExpirationDate = _dateExpire.ToUniversalTime(),
+                BatchWorth = WBatchCost!.Value
             };
             if (Supplier.Type.ToLower().Equals("consignment"))
             {
                 var _returnDate = (DateTime)WReturnByDate!;
                 delivery.ConsignmentSchedule = WConsignmentSchedule;
-                delivery.ReturnByDate = _returnDate.ToString("d");
+                delivery.ReturnByDate = _returnDate.ToUniversalTime();
             }
             await inventoryService.AddDeliveryAsync(delivery);
 
@@ -207,7 +207,7 @@ namespace MobiMart.ViewModel
             {
                 // create reminder
                 var m = $"""
-                The item {item.Name} delivered on {DateTime.Parse(delivery.DateDelivered):MM/dd/yyyy} is to be returned on {DateTime.Parse(delivery.ReturnByDate):MM/dd/yyyy}.
+                The item {item.Name} delivered on {delivery.DateDelivered.LocalDateTime:MM/dd/yyyy} is to be returned on {delivery.ReturnByDate!.Value.LocalDateTime:MM/dd/yyyy}.
                 Items Sold: {delivery.DeliveryAmount - inv.TotalAmount}
                 Stock Remaining: {inv.TotalAmount} / {delivery.DeliveryAmount}
                 Amount to Pay: {(delivery.DeliveryAmount - inv.TotalAmount) * (delivery.BatchWorth / delivery.DeliveryAmount):0.00}
@@ -218,7 +218,7 @@ namespace MobiMart.ViewModel
                     Type = ReminderType.ConsignmentDue,
                     Title = "Return Consignment Item",
                     Message = m,
-                    NotifyAtDate = new DateTime(DateOnly.FromDateTime(DateTime.Parse(delivery.ReturnByDate)), new TimeOnly(9, 0)).ToString(),
+                    NotifyAtDate = new DateTime(DateOnly.FromDateTime(delivery.ReturnByDate!.Value.DateTime), new TimeOnly(9, 0)),
                     RepeatDaily = false,
                     RelatedEntityId = delivery.Id,
                     IsEnabled = true,
@@ -228,16 +228,16 @@ namespace MobiMart.ViewModel
                 await notificationService.AddReminderAsync(r);
 
                 // schedule local notification
-                DateTime date = DateTime.Parse(r.NotifyAtDate);
+                DateTime date = r.NotifyAtDate.LocalDateTime;
                 // gentle reminder at 3pm before the actual due date
                 date = new DateTime(DateOnly.FromDateTime(date).AddDays(-1), new TimeOnly(15, 0));
                 await notificationService.ScheduleLocalNotification(
-                    r.Id, r.Title, r.Message, date, r.Id.ToString()
+                    r.Title, r.Message, date, r.Id.ToString()
                 );
                 // due date at 9 am
                 date = new DateTime(DateOnly.FromDateTime(date).AddDays(1), new TimeOnly(9, 0));
                 await notificationService.ScheduleLocalNotification(
-                    r.Id, r.Title, r.Message, date, r.Id.ToString()
+                    r.Title, r.Message, date, r.Id.ToString()
                 );
             }
 
@@ -280,7 +280,7 @@ namespace MobiMart.ViewModel
                 _isCalculatingCost = true;
                 if (!string.IsNullOrWhiteSpace(value))
                 {
-                    WBatchCost = float.Parse(value);
+                    WBatchCost = decimal.Parse(value);
                     if (WDelivQuantity > 0 ) {
                         WUnitCost = WBatchCost / WDelivQuantity;
                         WUnitCostText = "" + WUnitCost;
@@ -307,7 +307,7 @@ namespace MobiMart.ViewModel
                 _isCalculatingCost = true;
                 if (!string.IsNullOrWhiteSpace(value))
                 {
-                    WUnitCost = float.Parse(value);
+                    WUnitCost = decimal.Parse(value);
                     if (WDelivQuantity > 0) {
                         WBatchCost = WUnitCost * WDelivQuantity;
                         WBatchCostText = "" + WBatchCost;

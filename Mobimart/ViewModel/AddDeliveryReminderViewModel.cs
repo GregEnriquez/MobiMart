@@ -72,7 +72,7 @@ public partial class AddDeliveryReminderViewModel : BaseViewModel
         }
 
 
-        int businessId = -1;
+        var businessId = Guid.Empty;
         if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
         {
             businessId = vm.BusinessId;
@@ -85,7 +85,7 @@ public partial class AddDeliveryReminderViewModel : BaseViewModel
             Type = ReminderType.DeliveryReminder,
             Title = ReminderTitle,
             Message = ReminderMessage,
-            NotifyAtDate = (NotifyAtDate.Date + NotifyAtTime).ToString(),
+            NotifyAtDate = NotifyAtDate.Date + NotifyAtTime,
             RepeatDaily = false,
             IsEnabled = true,
             Sent = false
@@ -94,7 +94,7 @@ public partial class AddDeliveryReminderViewModel : BaseViewModel
 
         // schedule local notification
         await notificationService.ScheduleLocalNotification(
-            r.Id, r.Title, r.Message, DateTime.Parse(r.NotifyAtDate).AddHours(-1), r.Id.ToString()
+            r.Title, r.Message, r.NotifyAtDate.LocalDateTime.AddHours(-1), r.Id.ToString()
         );
 
         // Combine date and time

@@ -18,9 +18,9 @@ namespace MobiMart.ViewModel
 
             ItemsSold = new ObservableCollection<ItemSold>
             {
-                new ItemSold { ItemName = "Apple", Amount = 10, Total = 200, Date = DateTime.Today.ToShortDateString(), ItemType = "Fruit" },
-                new ItemSold { ItemName = "Banana", Amount = 5, Total = 100, Date = DateTime.Today.ToShortDateString(), ItemType = "Fruit" },
-                new ItemSold { ItemName = "Milk", Amount = 3, Total = 150, Date = DateTime.Today.ToShortDateString(), ItemType = "Dairy" }
+                new ItemSold { ItemName = "Apple", Amount = 10, Total = 200, Date = DateTime.Today, ItemType = "Fruit" },
+                new ItemSold { ItemName = "Banana", Amount = 5, Total = 100, Date = DateTime.Today, ItemType = "Fruit" },
+                new ItemSold { ItemName = "Milk", Amount = 3, Total = 150, Date = DateTime.Today, ItemType = "Dairy" }
             };
         }
     }

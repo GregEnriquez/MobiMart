@@ -116,7 +116,7 @@ public class GeminiService
         string response = await GenerateContentAsync(prompt);
 
         // return response
-        var businessId = -1;
+        var businessId = Guid.Empty;
         if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
         {
             businessId = vm.BusinessId;
@@ -125,7 +125,7 @@ public class GeminiService
         {
             BusinessId = businessId,
             Response = response,
-            DateGenerated = DateTime.Now.ToString()
+            DateGenerated = DateTimeOffset.UtcNow
         };
     }
 }

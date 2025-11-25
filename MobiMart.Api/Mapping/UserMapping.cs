@@ -10,11 +10,15 @@ public static class UserMapping
     {
         return new User()
         {
-            BusinessRefId = newUser.BusinessId,
+            Id = Guid.NewGuid(),
+            LastUpdatedAt = DateTimeOffset.UtcNow,
+            IsDeleted = newUser.IsDeleted,
+            BusinessId = newUser.BusinessId,
             FirstName = newUser.FirstName,
             LastName = newUser.LastName,
             Email = newUser.Email,
             Password = newUser.Password,
+            PasswordLength = newUser.PasswordLength,
             BirthDate = newUser.BirthDate,
             Age = newUser.Age,
             PhoneNumber = newUser.PhoneNumber,
@@ -22,16 +26,18 @@ public static class UserMapping
         };
     }
 
-    public static User ToEntity(this UpdateUserDto newUser, int id)
+    public static User ToEntity(this UpdateUserDto newUser, Guid id)
     {
         return new User()
         {
             Id = id,
-            BusinessRefId = newUser.BusinessId,
+            LastUpdatedAt = DateTimeOffset.UtcNow,
+            BusinessId = newUser.BusinessId,
             FirstName = newUser.FirstName,
             LastName = newUser.LastName,
             Email = newUser.Email,
             Password = newUser.Password,
+            PasswordLength = newUser.PasswordLength,
             BirthDate = newUser.BirthDate,
             Age = newUser.Age,
             PhoneNumber = newUser.PhoneNumber,
@@ -43,15 +49,18 @@ public static class UserMapping
     {
         return new UserDto(
             user.Id,
-            user.BusinessRefId,
+            user.BusinessId,
             user.FirstName,
             user.LastName,
             user.Email,
             user.Password,
+            user.PasswordLength,
             user.BirthDate,
             user.Age,
             user.PhoneNumber,
-            user.EmployeeType
+            user.EmployeeType,
+            user.LastUpdatedAt,
+            user.IsDeleted
         );
     }
 

@@ -22,7 +22,7 @@ public partial class FlyoutMenuViewModel : BaseViewModel
     [ObservableProperty]
     string username = "username";
     [ObservableProperty]
-    int businessId = -1;
+    Guid businessId = Guid.Empty;
     [ObservableProperty]
     bool isUserInBusiness = false;
     [ObservableProperty]
@@ -75,6 +75,7 @@ public partial class FlyoutMenuViewModel : BaseViewModel
         business = null;
         IsUserInBusiness = false;
         IsUserOwner = false;
+        BusinessId = Guid.Empty;
 
         // await Shell.Current.GoToAsync("///MainPage", true);
         await Toast.Make("Account Logged Out", ToastDuration.Short, 14).Show();
@@ -95,7 +96,7 @@ public partial class FlyoutMenuViewModel : BaseViewModel
 
         Username = "";
         BusinessName = "";
-        BusinessId = -1;
+        BusinessId = Guid.Empty;
 
         Username = user.Email;
 

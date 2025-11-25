@@ -114,8 +114,8 @@ namespace MobiMart.ViewModel
             // add notification indicator to proper days
             foreach (var reminder in allReminders)
             {
-                if (DateTime.Parse(reminder.NotifyAtDate).Month != CurrentDate.Month) continue;
-                Days[DateTime.Parse(reminder.NotifyAtDate).Day - 1].HasReminders = true;
+                if (reminder.NotifyAtDate.LocalDateTime.Month != CurrentDate.Month) continue;
+                Days[reminder.NotifyAtDate.LocalDateTime.Day - 1].HasReminders = true;
             }
         }
 
@@ -129,7 +129,7 @@ namespace MobiMart.ViewModel
             selectedDay = Days[day.DayIdx];
             selectedDay.IsSelected = true;
 
-            Reminders = [.. allReminders.Where(x => DateTime.Parse(x.NotifyAtDate).Date == CurrentDate.Date)];
+            Reminders = [.. allReminders.Where(x => x.NotifyAtDate.LocalDateTime.Date == CurrentDate.Date)];
         }
 
 
@@ -149,7 +149,7 @@ namespace MobiMart.ViewModel
             // }
 
             allReminders = await notificationService.GetAllRemindersAsync();
-            Reminders = [.. allReminders.Where(x => DateTime.Parse(x.NotifyAtDate).Date == DateTime.Now.Date)];
+            Reminders = [.. allReminders.Where(x => x.NotifyAtDate.LocalDateTime.Date == DateTime.Now.Date)];
 
             if (Days.Count <= 0)
             {

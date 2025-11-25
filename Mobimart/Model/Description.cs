@@ -4,12 +4,9 @@ using SQLite;
 
 namespace MobiMart.Model;
 
-public class Description
+public class Description : SyncEntity
 {
-    [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
-    [ForeignKey(nameof(Item))]
-    public string ItemId { get; set; } = "";
+    [Indexed]
+    public Guid ItemId { get; set; }
     public string Text { get; set; } = "";
-    public string LastModified { get; set; } = "";
 }

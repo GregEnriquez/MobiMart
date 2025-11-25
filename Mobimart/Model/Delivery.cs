@@ -4,20 +4,22 @@ using SQLite;
 
 namespace MobiMart.Model;
 
-public class Delivery
+public class Delivery : SyncEntity
 {
-    [PrimaryKey, AutoIncrement]
-    public int Id { get; set; } // deliveryId
-    [ForeignKey(nameof(Supplier))]
-    public int SupplierId { get; set; }
-    [ForeignKey(nameof(Item))]
+    [Indexed]
+    public Guid SupplierId { get; set; }
+    [Indexed]
     public string ItemBarcode { get; set; } = "";
-    [ForeignKey(nameof(Business))]
-    public int BusinessId { get; set; }
+    [Indexed]
+    public Guid BusinessId { get; set; }
+
     public int DeliveryAmount { get; set; }
-    public string DateDelivered { get; set; } = "";
-    public string ExpirationDate { get; set; } = "";
-    public float BatchWorth { get; set; }
+    public decimal BatchWorth { get; set; }
+
+    public DateTimeOffset DateDelivered { get; set; }
+    public DateTimeOffset ExpirationDate { get; set; }
+
+    // for consignment deliveries
     public string ConsignmentSchedule { get; set; } = "";
-    public string ReturnByDate { get; set; } = "";
+    public DateTimeOffset? ReturnByDate { get; set; }
 }

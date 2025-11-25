@@ -48,28 +48,42 @@ public class SalesService
     public async Task AddSalesTransactionAsync(SalesTransaction x)
     {
         await Init();
+        x.LastUpdatedAt = DateTimeOffset.UtcNow;
         await db!.InsertAsync(x);
     }
 
 
-    public async Task<SalesTransaction> GetSalesTransactionAsync(int transactionId)
+    public async Task<SalesTransaction> GetSalesTransactionAsync(Guid transactionId)
     {
         await Init();
-        return await db!.Table<SalesTransaction>().Where(x => x.Id == transactionId).FirstOrDefaultAsync();
+
+        var businessId = Guid.Empty;
+        if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
+        {
+            businessId = vm.BusinessId;
+        }
+
+        return await db!.Table<SalesTransaction>().Where(x => x.BusinessId == businessId && x.Id == transactionId).FirstOrDefaultAsync();
     }
 
 
     public async Task UpdateSalesTransactionAsync(SalesTransaction t)
     {
         await Init();
+        t.LastUpdatedAt = DateTimeOffset.UtcNow;
         await db!.UpdateAsync(t);
     }
 
 
-    public async Task DeleteSalesTransactionAsync(int transactionId)
+    public async Task DeleteSalesTransactionAsync(Guid transactionId)
     {
         await Init();
-        await db!.DeleteAsync(await GetSalesTransactionAsync(transactionId));
+        // soft delete
+        var transaction = await GetSalesTransactionAsync(transactionId);
+        transaction.IsDeleted = true;
+        transaction.LastUpdatedAt = DateTimeOffset.UtcNow;
+        await db!.UpdateAsync(transaction);
+        // await db!.DeleteAsync();
     }
 
 
@@ -77,6 +91,7 @@ public class SalesService
     public async Task AddSalesItemAsync(SalesItem x)
     {
         await Init();
+        x.LastUpdatedAt = DateTimeOffset.UtcNow;
         await db!.InsertAsync(x);
     }
 
@@ -85,18 +100,17 @@ public class SalesService
     public async Task DeleteSalesItemTransactionAsync(SalesItem x)
     {
         await Init();
-        await db!.DeleteAsync(x);
+        // soft delete
+        x.IsDeleted = true;
+        x.LastUpdatedAt = DateTimeOffset.UtcNow;
+        await db!.UpdateAsync(x);
+        // await db!.DeleteAsync(x);
     }
 
 
-    public async Task<List<SalesItem>> GetSalesItemsAsync(int transactionId)
+    public async Task<List<SalesItem>> GetSalesItemsAsync(Guid transactionId)
     {
         await Init();
-        int businessId = -1;
-        if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
-        {
-            businessId = vm.BusinessId;
-        }
 
         return await db!.Table<SalesItem>().Where(x => x.TransactionId == transactionId).ToListAsync();
     }
@@ -106,7 +120,7 @@ public class SalesService
     {
         await Init();
         var output = new List<SalesRecord>();
-        int businessId = -1;
+        var businessId = Guid.Empty;
         if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
         {
             businessId = vm.BusinessId;
@@ -114,17 +128,15 @@ public class SalesService
 
         try
         {
-            var dateString = date.ToString("d");
-            var ts = await db!.Table<SalesTransaction>().ToListAsync();
             var transactions = (await db!.Table<SalesTransaction>().Where(x => x.BusinessId == businessId).ToListAsync())
-            .Where(x => DateTime.Parse(x.Date).Date == DateTime.Parse(dateString).Date).ToList();
+            .Where(x => x.Date.LocalDateTime.Date == date.Date).ToList();
 
             foreach (var t in transactions)
             {
                 SalesRecord record = new()
                 {
                     TransactionId = t.Id,
-                    Date = t.Date,
+                    Date = t.Date.LocalDateTime,
                     TotalPrice = t.TotalPrice,
                     Payment = t.Payment,
                     Change = t.Change,
@@ -151,22 +163,22 @@ public class SalesService
     {
         await Init();
         var output = new List<SalesRecord>();
-        int businessId = -1;
+        var businessId = Guid.Empty;
         if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
         {
             businessId = vm.BusinessId;
         }
 
-        var ts = await db!.Table<SalesTransaction>().ToListAsync();
+        // var ts = await db!.Table<SalesTransaction>().ToListAsync();
         var transactions = (await db!.Table<SalesTransaction>().Where(x => x.BusinessId == businessId).ToListAsync())
-        .Where(x => DateTime.Parse(x.Date).Month == dateMonth.Month).ToList();
+        .Where(x => x.Date.LocalDateTime.Month == dateMonth.Month).ToList();
 
         foreach (var t in transactions)
         {
             SalesRecord record = new()
             {
                 TransactionId = t.Id,
-                Date = t.Date,
+                Date = t.Date.LocalDateTime,
                 TotalPrice = t.TotalPrice,
                 Payment = t.Payment,
                 Change = t.Change,

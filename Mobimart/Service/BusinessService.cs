@@ -31,7 +31,7 @@ public class BusinessService
     }
 
 
-    public async Task<Business> GetBusinessAsync(int id)
+    public async Task<Business> GetBusinessAsync(Guid id)
     {
         await Init();
         return await db!.Table<Business>().Where(x => x.Id == id).FirstOrDefaultAsync();
@@ -55,6 +55,7 @@ public class BusinessService
     public async Task UpdateBusinessAsync(Business updatedBusiness)
     {
         await Init();
+        updatedBusiness.LastUpdatedAt = DateTimeOffset.UtcNow;
         await db!.UpdateAsync(updatedBusiness);
     }
 
@@ -62,6 +63,7 @@ public class BusinessService
     public async Task AddBusinessAsync(Business b)
     {
         await Init();
+        b.LastUpdatedAt = DateTimeOffset.UtcNow;
         await db!.InsertAsync(b);
     }
 
@@ -69,6 +71,7 @@ public class BusinessService
     public async Task AddMonthlyForecastInstance(MonthlyForecastInstance x)
     {
         await Init();
+        x.LastUpdatedAt = DateTimeOffset.UtcNow;
         await db!.InsertAsync(x);
     }
 
@@ -76,7 +79,7 @@ public class BusinessService
     public async Task<MonthlyForecastInstance> GetMonthlyForecastInstance()
     {
         await Init();
-        var businessId = -1;
+        var businessId = Guid.Empty;
         if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
         {
             businessId = vm.BusinessId;

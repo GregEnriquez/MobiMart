@@ -2,7 +2,6 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using MobiMart.Api.Data;
-using MobiMart.Api.Dtos;
 using MobiMart.Api.Endpoints;
 using MobiMart.Api.Services;
 
@@ -31,13 +30,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 
 var app = builder.Build();
-app.MapUsersEndpoints();
-app.MapBusinessesEndpoints();
-app.MapInventoriesEndpoints();
-app.MapDescriptionsEndpoint();
-app.MapSuppliersEndpoints();
-app.MapSupplierContactsEndpoints();
-app.MapWholeSaleInventoriesEndpoints().RequireAuthorization();
+app.MapUsersEndpoints().RequireAuthorization();
+app.MapBusinessEndpoints().RequireAuthorization();
+app.MapSalesEndpoints().RequireAuthorization();
+app.MapInventoryEndpoints();
+app.MapSupplyChainEndpoints();
 
 app.MapControllers();
 

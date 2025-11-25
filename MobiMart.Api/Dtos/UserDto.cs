@@ -2,40 +2,46 @@ using System.ComponentModel.DataAnnotations;
 namespace MobiMart.Api.Dtos;
 
 public record class UserDto(
-    int Id,
-    int? BusinessId,
+    Guid Id,
+    Guid BusinessId,
     string FirstName,
     string LastName,
     string Email,
     string Password,
-    DateOnly BirthDate,
+    int PasswordLength, // plaintext password' length not the hashed one
+    DateTime BirthDate,
     int Age,
     string PhoneNumber,
-    string EmployeeType
+    string EmployeeType,
+    DateTimeOffset LastUpdatedAt,
+    bool IsDeleted
 );
 
 public record class UpdateUserDto(
-    int BusinessId,
+    Guid BusinessId,
     [Required][StringLength(50)] string FirstName,
     [Required][StringLength(50)] string LastName,
     [Required] string Email,
     [Required][MinLength(8)] string Password,
-    DateOnly BirthDate,
+    [Required] int PasswordLength,
+    DateTime BirthDate,
     int Age,
     string PhoneNumber,
     string EmployeeType
 );
 
 public record class CreateUserDto(
-    int BusinessId,
+    Guid BusinessId,
     [Required][StringLength(50)] string FirstName,
     [Required][StringLength(50)] string LastName,
     [Required] string Email,
     [Required][MinLength(8)] string Password,
-    DateOnly BirthDate,
+    [Required] int PasswordLength,
+    DateTime BirthDate,
     int Age,
     string PhoneNumber,
-    string EmployeeType
+    string EmployeeType,
+    bool IsDeleted
 );
 
 
@@ -52,11 +58,11 @@ public record class TokenResponseDto(
 
 
 public record class RefreshTokenRequestDto(
-    int UserId,
+    Guid UserId,
     string RefreshToken
 );
 
 
 public record class LogoutUserDto(
-    int UserId
+    Guid UserId
 );

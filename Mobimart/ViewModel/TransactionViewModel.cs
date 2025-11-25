@@ -27,14 +27,14 @@ namespace MobiMart.ViewModel
         public ObservableCollection<Item> FilteredItemSuggestions { get; set; }
 
         [ObservableProperty]
-        float totalPrice;
+        decimal totalPrice;
         [ObservableProperty]
         bool suggestionsVisible = false;
 
         [ObservableProperty]
-        float payment;
+        decimal payment;
         [ObservableProperty]
-        public float change;
+        public decimal change;
 
         [ObservableProperty]
         List<Item> allItems;
@@ -246,7 +246,7 @@ namespace MobiMart.ViewModel
 
 
             // save process
-            var businessId = -1;
+            var businessId = Guid.Empty;
             if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
             {
                 businessId = vm.BusinessId;
@@ -254,8 +254,9 @@ namespace MobiMart.ViewModel
             bool salesTransactionSaved = false;
             var salesTransaction = new SalesTransaction()
             {
+                Id = Guid.NewGuid(),
                 BusinessId = businessId,
-                Date = DateTime.Now.ToString("g"),
+                Date = DateTimeOffset.UtcNow,
                 TotalPrice = TotalPrice,
                 Payment = Payment,
                 Change = Change
@@ -264,13 +265,14 @@ namespace MobiMart.ViewModel
             foreach (var itemTransaction in Items)
             {
                 var barcode = AllItems.Find(x => x.Name.Contains(itemTransaction.ItemName))!.Barcode;
-                var sortedDeliveries = (await inventoryService.GetDeliveriesAsync(barcode)).OrderBy(x => DateTime.Parse(x.DateDelivered)).ToList();
+                var sortedDeliveries = (await inventoryService.GetDeliveriesAsync(barcode)).OrderBy(x => x.DateDelivered).ToList();
                 var invRecords = await inventoryService.GetInventoriesAsync(barcode);
 
                 // input validation part 2: check if each item transaction has enough stock in the inventory
                 int totalInv = 0;
                 foreach (var inv in invRecords)
                 {
+                    if (inv.IsDeleted) continue;
                     totalInv += inv.TotalAmount;
                 }
                 if (totalInv < itemTransaction.Quantity)
@@ -296,12 +298,12 @@ namespace MobiMart.ViewModel
                 };
                 await salesService.AddSalesItemAsync(salesItem);
 
-                // subtraction of inventory
+                // -- subtraction of inventory --
                 int toSubtract = 0;
                 foreach (var delivery in sortedDeliveries)
                 {
                     var inv = invRecords.Find(x => x.DeliveryId == delivery.Id)!;
-                    if (inv is null) continue; // inventory for that delivery record is already emptied(ubos na)
+                    if (inv is null || inv.IsDeleted) continue; // inventory for that delivery record is already emptied(ubos na)
 
                     if (toSubtract > 0)
                     {
@@ -309,8 +311,9 @@ namespace MobiMart.ViewModel
                         {
                             toSubtract -= inv.TotalAmount;
                             // remove that from inventory already
-                            invRecords.Remove(inv);
+                            inv.TotalAmount = 0;
                             await inventoryService.DeleteInventory(inv);
+                            invRecords.Remove(inv);
                             continue;
                         }
                         else
@@ -327,8 +330,9 @@ namespace MobiMart.ViewModel
                     {
                         toSubtract = salesItem.Quantity - inv.TotalAmount;
                         // remove that from inventory already
-                        invRecords.Remove(inv);
+                        inv.TotalAmount = 0;
                         await inventoryService.DeleteInventory(inv);
+                        invRecords.Remove(inv);
                         continue;
                     }
                     else
@@ -349,11 +353,7 @@ namespace MobiMart.ViewModel
                     totalInv += inv.TotalAmount;
                 }
 
-                if (totalInv >= 10) // low stock threshold
-                {
-                    continue;
-                }
-
+                if (totalInv >= 10) continue; // low stock threshold
 
                 // create reminder
                 var r = new Reminder()
@@ -362,7 +362,7 @@ namespace MobiMart.ViewModel
                     Type = ReminderType.SupplyRunout,
                     Title = "Stock Running Low",
                     Message = $"Stock for item {itemTransaction.ItemName} is running low\nRemaining Stock: {totalInv}",
-                    NotifyAtDate = DateTime.Now.ToString(),
+                    NotifyAtDate = DateTimeOffset.UtcNow,
                     RepeatDaily = true,
                     RelatedEntityId = invRecords[0].Id,
                     IsEnabled = true,
@@ -371,11 +371,11 @@ namespace MobiMart.ViewModel
                 // save to database
                 await notificationService.AddReminderAsync(r);
 
-                // schedule local notification
-                DateTime date = DateTime.Parse(r.NotifyAtDate);
-                date = date.AddSeconds(5);
+                // schedule local notification immediately
+                DateTime date = new(DateOnly.FromDateTime(r.NotifyAtDate.LocalDateTime), TimeOnly.FromDateTime(r.NotifyAtDate.LocalDateTime));
+                date = date.AddSeconds(10);
                 await notificationService.ScheduleLocalNotification(
-                    r.Id, r.Title, r.Message, date, r.Id.ToString()
+                    r.Title, r.Message, date, r.Id.ToString()
                 );
 
                 IsBusy = false;

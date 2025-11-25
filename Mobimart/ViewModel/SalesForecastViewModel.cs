@@ -62,11 +62,11 @@ public partial class SalesForecastViewModel : BaseViewModel
         // get monthly forecast for today using gemini service
         SalesRecommendations = [];
         // await businessService.DeleteMonthlyForecastInstance(); //debug
+
         monthlyForecast = await businessService.GetMonthlyForecastInstance();
         if ( (monthlyForecast is not null 
         && monthlyForecast.Response.Contains("Error")) ||
-        (monthlyForecast is not null 
-        && DateTime.Parse(monthlyForecast.DateGenerated).Date < DateTime.Now.Date))
+        (monthlyForecast is not null && monthlyForecast.DateGenerated.Date < DateTimeOffset.UtcNow.Date))
         {
             await businessService.DeleteMonthlyForecastInstance();
             monthlyForecast = null;
@@ -119,33 +119,33 @@ public partial class SalesForecastViewModel : BaseViewModel
         DateTime nextMonth = DateTime.Now.AddMonths(1);
         // generation of data
         var sales = await salesService.GetMonthlySalesRecords(DateTime.Today);
-        float totalRevenue = 0;
+        decimal totalRevenue = 0;
         if (sales is null) return;
 
         foreach (var sale in sales) totalRevenue += sale.TotalPrice;
 
         CurrentRevenue = $"₱{totalRevenue:0.00}";
-        float currMonthAvgRevenue = totalRevenue / DateTime.Today.Day;
-        float nextMonthRevenue = currMonthAvgRevenue * DateTime.DaysInMonth(DateTime.Now.Year, nextMonth.Month);
+        decimal currMonthAvgRevenue = totalRevenue / DateTime.Today.Day;
+        decimal nextMonthRevenue = currMonthAvgRevenue * DateTime.DaysInMonth(DateTime.Now.Year, nextMonth.Month);
         ForecastedRevenue = $"₱{nextMonthRevenue:0.00}";
 
         // actual generation of chart
         var entries = new List<ChartEntry>
         {
-            new(totalRevenue)
+            new((float)totalRevenue)
             {
                 Label = $"~{DateTime.Now:M}",
                 ValueLabel = CurrentRevenue,
                 Color = SKColor.Parse("#83D1E3")
             },
-            new(nextMonthRevenue)
+            new((float)nextMonthRevenue)
             {
                 Label = $"{new DateTime(nextMonth.Year, nextMonth.Month, DateTime.DaysInMonth(nextMonth.Year, nextMonth.Month)):M}",
                 ValueLabel = ForecastedRevenue,
                 Color = SKColor.Parse("#9FEEF0")
             }
         };
-        float maxValue = totalRevenue;
+        decimal maxValue = totalRevenue;
         if (nextMonthRevenue > maxValue) maxValue = nextMonthRevenue;
         BarChart = new BarChart()
         {
@@ -160,7 +160,7 @@ public partial class SalesForecastViewModel : BaseViewModel
             ShowYAxisLines = true,
             YAxisPosition = Position.Left,
             MinValue = 0,
-            MaxValue = (maxValue + 500),
+            MaxValue = (float)(maxValue + 500),
         };
     }
 

@@ -5,7 +5,7 @@ namespace MobiMart.Model;
 
 public class SupplierContract : INotifyPropertyChanged
 {
-    public int SupplierId { get; set; }
+    public Guid SupplierId { get; set; }
     private string supplierName = "";
     public string SupplierName { get => supplierName; set { supplierName = value; OnPropertyChanged(); } }
     private DateTime returnDate;
@@ -14,8 +14,8 @@ public class SupplierContract : INotifyPropertyChanged
     public bool IsDropped { get => isDropped; set { isDropped = value; OnPropertyChanged(); } }
     private List<ContractItem> items = [];
     public List<ContractItem> Items { get => items; set { items = value; OnPropertyChanged(); } }
-    private float amountToPay;
-    public float AmountToPay { get => amountToPay; set { amountToPay = value; OnPropertyChanged(); } }
+    private decimal amountToPay;
+    public decimal AmountToPay { get => amountToPay; set { amountToPay = value; OnPropertyChanged(); } }
     private ImageSource? imageSource = null;
     public ImageSource? ImageSource { get => imageSource; set { imageSource = value; OnPropertyChanged(); } }
     public byte[] ImageData { get; set; }

@@ -61,7 +61,7 @@ public class UserService
         }
 
         // if refresh token validity is expired
-        DateTime expiry = DateTime.Parse(userInstance.RefreshTokenExpiryTime);
+        var expiry = userInstance.RefreshTokenExpiryTime;
         if (DateTime.Today > expiry)
         {
             // logout the user
@@ -69,7 +69,7 @@ public class UserService
             return false;
         }
         // if there is atleast 2 days before token expires, just let bro in and dont bother refreshing bro's token
-        else if (DateTime.Today < expiry.AddDays(-2))
+        else if (DateTimeOffset.UtcNow < expiry.AddDays(-2))
         {
             // fake loading
             await Task.Delay(1000);
@@ -99,13 +99,18 @@ public class UserService
                 }
             }
             var tokens = JsonConvert.DeserializeObject<Dictionary<string, string>>(await response.Content.ReadAsStringAsync());
+
+            // udpate user
             user.RefreshToken = tokens!["refreshToken"];
-            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddMonths(1).ToString("yyyy-MM-dd HH:mm:ss.fff");
+                // add 1 month to curren UTC time
+            user.RefreshTokenExpiryTime = DateTimeOffset.UtcNow.AddMonths(1);
+            user.LastUpdatedAt = DateTimeOffset.UtcNow;
             await db.UpdateAsync(user);
 
+            // update instance
             userInstance.AccessToken = tokens!["accessToken"];
             userInstance.RefreshToken = user.RefreshToken;
-            userInstance.RefreshTokenExpiryTime = user.RefreshTokenExpiryTime;
+            userInstance.RefreshTokenExpiryTime = user.RefreshTokenExpiryTime.Value;
             await db.UpdateAsync(userInstance);
         }
         // if can't connect online, just let bro in anyway (since refresh token is not expired)
@@ -149,7 +154,7 @@ public class UserService
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokens!["accessToken"]);
         }
         catch (HttpRequestException e)
-        {
+        {   
             Debug.WriteLine(e.Message);
             throw new HttpRequestException("Can't connect to the database.");
         }
@@ -170,27 +175,31 @@ public class UserService
         {
             // pull user from remote db
             var response = await client.GetAsync($"users/{email}");
-            user = JsonConvert.DeserializeObject<User>(await response.Content.ReadAsStringAsync())!;
-            // then add it to local db
+            var jsonString = await response.Content.ReadAsStringAsync();
+            user = JsonConvert.DeserializeObject<User>(jsonString)!;
+
+            // then save it to local db
             await db!.InsertAsync(user);
         }
 
-        // replace tokens
-        user = await db.Table<User>().Where(x => x.Id == user!.Id).FirstOrDefaultAsync();
+        // update tokens
+        // user = await db.Table<User>().Where(x => x.Id == user!.Id).FirstOrDefaultAsync();
         user.RefreshToken = tokens["refreshToken"];
-        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddMonths(1).ToString("yyyy-MM-dd HH:mm:ss.fff");
+        user.RefreshTokenExpiryTime = DateTimeOffset.UtcNow.AddMonths(1);
+        user.LastUpdatedAt = DateTimeOffset.UtcNow;
         await db.UpdateAsync(user);
 
-        // create user instance
+        // create user instance (session)
+            // clear old session first
+        await db.DeleteAllAsync<UserInstance>();
+
         await db!.InsertAsync(new UserInstance()
         {
             UserId = user.Id,
             AccessToken = tokens["accessToken"],
             RefreshToken = user.RefreshToken,
-            RefreshTokenExpiryTime = user.RefreshTokenExpiryTime,
+            RefreshTokenExpiryTime = user.RefreshTokenExpiryTime.Value,
         });
-        // debug
-        // var instance = await db.Table<UserInstance>().Where(x => x.UserId == user!.Id).FirstOrDefaultAsync();
     }
 
 
@@ -218,7 +227,7 @@ public class UserService
 
             // save the user on the database
             User user = JsonConvert.DeserializeObject<User>(await response.Content.ReadAsStringAsync())!;
-            var id = await db!.InsertAsync(user);
+            await db!.InsertAsync(user);
         }
         catch (HttpRequestException e)
         {
@@ -248,7 +257,7 @@ public class UserService
         var user = await db!.Table<User>().Where(x => x.Id == userInstance.UserId).FirstOrDefaultAsync();
 
         user.RefreshToken = "";
-        user.RefreshTokenExpiryTime = "";
+        user.RefreshTokenExpiryTime = null;
         await db!.UpdateAsync(user);
 
         await db.DeleteAllAsync<UserInstance>();
@@ -262,7 +271,7 @@ public class UserService
     }
 
 
-    public async Task<User> GetUserAsync(int id)
+    public async Task<User> GetUserAsync(Guid id)
     {
         await Init();
         return await db!.Table<User>().Where(x => x.Id == id).FirstOrDefaultAsync();
@@ -272,11 +281,12 @@ public class UserService
     public async Task UpdateUserAsync(User updatedUser)
     {
         await Init();
+        updatedUser.LastUpdatedAt = DateTimeOffset.UtcNow;
         await db!.UpdateAsync(updatedUser);
     }
 
 
-    public async Task<List<User>> GetEmployees(int businessId)
+    public async Task<List<User>> GetEmployees(Guid businessId)
     {
         await Init();
         return await db!.Table<User>()

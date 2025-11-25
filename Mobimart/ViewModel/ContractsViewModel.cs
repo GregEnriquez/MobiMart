@@ -141,7 +141,7 @@ public partial class ContractsViewModel : BaseViewModel
             return;
         }
 
-        int businessId = -1;
+        var businessId = Guid.Empty;
         if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
         {
             businessId = vm.BusinessId;
@@ -151,8 +151,8 @@ public partial class ContractsViewModel : BaseViewModel
         {
             BusinessId = businessId,
             SupplierName = supplierContract.SupplierName,
-            ReturnDate = supplierContract.ReturnDate.ToString(),
-            DateReturned = DateTime.Now.ToString(),
+            ReturnDate = supplierContract.ReturnDate.ToUniversalTime(),
+            DateReturned = DateTimeOffset.UtcNow,
             AmountToPay = supplierContract.AmountToPay,
             ProofImageData = supplierContract.ImageData
         };

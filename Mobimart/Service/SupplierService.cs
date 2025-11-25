@@ -36,7 +36,7 @@ public class SupplierService
     public async Task<List<Supplier>> GetAllSuppliersAsync()
     {
         await Init();
-        var businessId = -1;
+        var businessId = Guid.Empty;
         if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
         {
             businessId = vm.BusinessId;
@@ -48,11 +48,12 @@ public class SupplierService
     public async Task AddSupplierAsync(Supplier s)
     {
         await Init();
+        s.LastUpdatedAt = DateTimeOffset.UtcNow;
         await db!.InsertAsync(s);
     }
 
 
-    public async Task<Supplier> GetSupplierAsync(int id)
+    public async Task<Supplier> GetSupplierAsync(Guid id)
     {
         await Init();
         return await db!.Table<Supplier>().Where(x => x.Id == id).FirstOrDefaultAsync();
@@ -62,6 +63,7 @@ public class SupplierService
     public async Task UpdateSupplierAsync(Supplier updatedSupplier)
     {
         await Init();
+        updatedSupplier.LastUpdatedAt = DateTimeOffset.UtcNow;
         await db!.UpdateAsync(updatedSupplier);
     }
 
@@ -69,6 +71,7 @@ public class SupplierService
     public async Task AddCompletedContractAsync(CompletedContract x)
     {
         await Init();
+        x.LastUpdatedAt = DateTimeOffset.UtcNow;
         await db!.InsertAsync(x);
     }
 
@@ -76,6 +79,7 @@ public class SupplierService
     public async Task AddCompletedContractItemAsync(CompletedContractItem x)
     {
         await Init();
+        x.LastUpdatedAt = DateTimeOffset.UtcNow;
         await db!.InsertAsync(x);
     }
 }

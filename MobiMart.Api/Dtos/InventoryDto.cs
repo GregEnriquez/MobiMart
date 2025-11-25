@@ -1,31 +1,25 @@
 namespace MobiMart.Api.Dtos;
 
-public record class InventoryDto(
-    int ItemId,
-    int BusinessId,
-    int DeliveryId,
-    int DescriptionId,
+public record InventoryDto(
+    Guid Id,
+    Guid BusinessId,
+    Guid DeliveryId,
+    string ItemBarcode,
     int TotalAmount,
-    string ItemName,
-    float RetailPrice,
-    string ItemType
+    DateTimeOffset LastUpdatedAt,
+    bool IsDeleted
 );
 
-
-public record class CreateInventoryDto(
-    int BusinessId,
-    int DeliveryId,
-    int DescriptionId,
+public record CreateInventoryDto(
+    Guid Id,
+    Guid BusinessId,
+    Guid DeliveryId,
+    string ItemBarcode,
     int TotalAmount,
-    string ItemName,
-    float RetailPrice,
-    string ItemType
+    bool IsDeleted
 );
 
 
 public record class UpdateInventoryDto(
-    int TotalAmount,
-    string ItemName,
-    float RetailPrice,
-    string ItemType
+    int TotalAmount
 );

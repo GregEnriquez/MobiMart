@@ -2,14 +2,11 @@ using System;
 
 namespace MobiMart.Api.Entities;
 
-public class Inventory
+public class Inventory : SyncEntity
 {
-    public int Id { get; set; }
-    public int BusinessId { get; set; }
-    public int DeliveryId { get; set; }
-    public int DescriptionId { get; set; }
+    public Guid BusinessId { get; set; }
+    public Guid DeliveryId { get; set; }
+    public string ItemBarcode { get; set; } = "";
     public int TotalAmount { get; set; }
-    public string ItemName { get; set; } = "";
-    public float RetailPrice { get; set; }
-    public string ItemType { get; set; } = "";
+    
 }

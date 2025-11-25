@@ -90,7 +90,7 @@ namespace MobiMart.ViewModel
             {
                 date = DateTime.Now.AddDays(-i);
                 var sales = await salesService.GetSalesRecordsAsync(date);
-                float total = 0;
+                decimal total = 0;
                 if (sales is not null && sales.Count > 0)
                 {
                     foreach (var sale in sales) total += sale.TotalPrice;
@@ -98,7 +98,7 @@ namespace MobiMart.ViewModel
 
                 while (total > maxValue) maxValue += 500;
 
-                entries.Add(new ChartEntry(total)
+                entries.Add(new ChartEntry((float)total)
                 {
                     Label = $"{date:M}",
                     ValueLabel = $"₱{total:0.00}",
@@ -133,9 +133,9 @@ namespace MobiMart.ViewModel
         {
             var entries = new List<ChartEntry>();
             var sales = await salesService.GetSalesRecordsAsync(DateTime.Now);
-            float total = 0;
+            decimal total = 0;
             if (sales is null || sales.Count <= 0) { HasNoTransactions = true; return; }
-            var itemsSold = new Dictionary<String, float>(); // barcode, soldAmount terms of price
+            var itemsSold = new Dictionary<String, decimal>(); // barcode, soldAmount terms of price
 
             ItemsSold = [];
             foreach (var sale in sales)
@@ -168,10 +168,10 @@ namespace MobiMart.ViewModel
             foreach (var itemSold in itemsSold)
             {
                 var item = itemDescs.Find(x => x.Barcode.Equals(itemSold.Key))!;
-                entries.Add(new ChartEntry(itemSold.Value)
+                entries.Add(new ChartEntry((float)itemSold.Value)
                 {
                     Label = item.Name,
-                    ValueLabel = $" {itemSold.Value:0.00} | {(itemSold.Value / total) * 100:0}%",
+                    ValueLabel = $" {itemSold.Value:0.00} | {itemSold.Value / total * 100:0}%",
                     Color = GetRandomColor()
                 });
             }
@@ -192,8 +192,8 @@ namespace MobiMart.ViewModel
         {
             var entries = new List<ChartEntry>();
             var deliveries = await inventoryService.GetDeliveriesViaDate(DateTime.Now);
-            float total = 0;
-            var suppliersDelivered = new Dictionary<string, float>(); // supplier, expense
+            decimal total = 0;
+            var suppliersDelivered = new Dictionary<string, decimal>(); // supplier, expense
 
             var suppliers = await supplierService.GetAllSuppliersAsync();
 
@@ -213,7 +213,7 @@ namespace MobiMart.ViewModel
 
             foreach (var x in suppliersDelivered)
             {
-                entries.Add(new ChartEntry(x.Value)
+                entries.Add(new ChartEntry((float)x.Value)
                 {
                     Label = x.Key,
                     ValueLabel = $"₱{x.Value:0.00} | {(x.Value / total) * 100:0}%",
@@ -263,8 +263,8 @@ namespace MobiMart.ViewModel
         public string Barcode { get; set; }
         public string ItemName { get; set; }
         public int Amount { get; set; }
-        public double Total { get; set; }
-        public string Date { get; set; }
+        public decimal Total { get; set; }
+        public DateTime Date { get; set; }
         public string ItemType { get; set; }
     }
 }

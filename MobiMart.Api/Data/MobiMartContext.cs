@@ -8,12 +8,21 @@ public class MobiMartContext(DbContextOptions<MobiMartContext> options) : DbCont
 {
     public DbSet<User> Users => Set<User>();
     public DbSet<Business> Businesses => Set<Business>();
-    public DbSet<Inventory> Inventories => Set<Inventory>();
+    
+    public DbSet<Item> Items => Set<Item>();
     public DbSet<Description> Descriptions => Set<Description>();
-    public DbSet<WholeSaleInventory> WholeSaleInventories => Set<WholeSaleInventory>();
+    
+    public DbSet<Inventory> Inventories => Set<Inventory>();
     public DbSet<Supplier> Suppliers => Set<Supplier>();
-    public DbSet<Socials> SocialsSet => Set<Socials>();
-    public DbSet<SupplierContact> SupplierContacts => Set<SupplierContact>();
+    public DbSet<Delivery> Deliveries => Set<Delivery>();
+    public DbSet<CompletedContract> CompletedContracts => Set<CompletedContract>();
+    public DbSet<CompletedContractItem> CompletedContractItems => Set<CompletedContractItem>();
+
+    public DbSet<SalesTransaction> SalesTransactions => Set<SalesTransaction>();
+    public DbSet<SalesItem> SalesItems => Set<SalesItem>();
+
+    public DbSet<Reminder> Reminders => Set<Reminder>();
+    public DbSet<MonthlyForecastInstance> Forecasts => Set<MonthlyForecastInstance>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

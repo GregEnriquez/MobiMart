@@ -130,7 +130,7 @@ public partial class MessageSupplierViewModel : BaseViewModel
 
     public async Task OnAppearing()
     {
-        var businessId = -1;
+        var businessId = Guid.Empty;
         if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
         {
             businessId = vm.BusinessId;

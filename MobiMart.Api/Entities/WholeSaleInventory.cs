@@ -2,14 +2,17 @@ using System;
 
 namespace MobiMart.Api.Entities;
 
-public class WholeSaleInventory
+public class WholesaleInventory : SyncEntity
 {
-    public int Id { get; set; } // deliveryId
-    public int SupplierId { get; set; }
-    public string ItemName { get; set; } = "";
-    public int DeliveryAmount { get; set; }
-    public DateOnly DateDelivered { get; set; }
-    public DateOnly ExpirationDate { get; set; }
-    public float BatchWorth { get; set; }
-    public string ItemType { get; set; } = "";
+    public Guid SupplierId { get; set; }
+    public Guid DeliveryId { get; set; }
+
+    public string WItemName { get; set; } = "";
+    public string WItemDesc { get; set; } = "";
+    public string WItemType { get; set; } = "";
+    
+    public int WDelivQuantity { get; set; }
+    public DateTimeOffset WDateDelivered { get; set; }
+    public DateTimeOffset WDateExpire { get; set; }
+    public decimal WBatchWorth { get; set; } 
 }

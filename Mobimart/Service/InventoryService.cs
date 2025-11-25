@@ -55,7 +55,7 @@ public class InventoryService
     public async Task<List<Item>> GetAllItemsAsync()
     {
         await Init();
-        var businessId = -1;
+        var businessId = Guid.Empty;
         if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
         {
             businessId = vm.BusinessId;
@@ -67,13 +67,18 @@ public class InventoryService
     public async Task<Description> GetItemDescAsync(string barcode)
     {
         await Init();
-        return await db!.Table<Description>().FirstOrDefaultAsync(x => x.ItemId.Equals(barcode));
+
+        var item = await GetItemAsync(barcode);
+        if (item == null) return null;
+
+        return await db!.Table<Description>().FirstOrDefaultAsync(x => x.ItemId == item.Id);
     }
 
 
     public async Task AddItemAsync(Item i)
     {
         await Init();
+        i.LastUpdatedAt = DateTimeOffset.UtcNow;
         await db!.InsertAsync(i);
     }
 
@@ -81,6 +86,7 @@ public class InventoryService
     public async Task AddDescAsync(Description x)
     {
         await Init();
+        x.LastUpdatedAt = DateTimeOffset.UtcNow;
         await db!.InsertAsync(x);
     }
 
@@ -88,6 +94,7 @@ public class InventoryService
     public async Task AddDeliveryAsync(Delivery x)
     {
         await Init();
+        x.LastUpdatedAt = DateTimeOffset.UtcNow;
         await db!.InsertAsync(x);
     }
 
@@ -95,6 +102,7 @@ public class InventoryService
     public async Task AddInventoryAsync(Inventory x)
     {
         await Init();
+        x.LastUpdatedAt = DateTimeOffset.UtcNow;
         await db!.InsertAsync(x);
     }
 
@@ -103,7 +111,7 @@ public class InventoryService
     public async Task<List<Inventory>> GetInventoriesAsync()
     {
         await Init();
-        var businessId = -1;
+        var businessId = Guid.Empty;
         if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
         {
             businessId = vm.BusinessId;
@@ -113,7 +121,7 @@ public class InventoryService
 
 
 
-    public async Task<Inventory> GetInventoryAsync(int id)
+    public async Task<Inventory> GetInventoryAsync(Guid id)
     {
         await Init();
         return await db!.Table<Inventory>().Where(x => x.Id == id).FirstOrDefaultAsync();
@@ -124,7 +132,7 @@ public class InventoryService
     public async Task<List<Inventory>> GetInventoriesAsync(string barcode)
     {
         await Init();
-        var businessId = -1;
+        var businessId = Guid.Empty;
         if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
         {
             businessId = vm.BusinessId;
@@ -136,7 +144,7 @@ public class InventoryService
     public async Task<List<Delivery>> GetDeliveriesAsync(string barcode)
     {
         await Init();
-        var businessId = -1;
+        var businessId = Guid.Empty;
         if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
         {
             businessId = vm.BusinessId;
@@ -148,19 +156,22 @@ public class InventoryService
     public async Task<List<Delivery>> GetDeliveriesViaDate(DateTime date)
     {
         await Init();
-        var businessId = -1;
+        var businessId = Guid.Empty;
         if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
         {
             businessId = vm.BusinessId;
         }
-        return (await db!.Table<Delivery>().Where(x => x.BusinessId == businessId).ToListAsync()).Where(x => DateTime.Parse(x.DateDelivered).Date == date.Date).ToList();
+
+        var allDeliveries = await db!.Table<Delivery>().Where(x => x.BusinessId == businessId).ToListAsync();
+
+        return allDeliveries.Where(x => x.DateDelivered.Date == date.Date).ToList();
     }
 
 
-    public async Task<List<Delivery>> GetDeliveriesViaSupplier(int supplierId)
+    public async Task<List<Delivery>> GetDeliveriesViaSupplier(Guid supplierId)
     {
         await Init();
-        var businessId = -1;
+        var businessId = Guid.Empty;
         if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
         {
             businessId = vm.BusinessId;
@@ -172,7 +183,7 @@ public class InventoryService
     public async Task<List<Delivery>> GetDeliveriesViaItem(string barcode)
     {
         await Init();
-        var businessId = -1;
+        var businessId = Guid.Empty;
         if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
         {
             businessId = vm.BusinessId;
@@ -188,6 +199,7 @@ public class InventoryService
         var deliveries = await GetDeliveriesViaItem(barcode);
         var item = await GetItemAsync(barcode);
         var desc = await GetItemDescAsync(barcode);
+
         Inventory? inv = null;
         foreach (var d in deliveries)
         {
@@ -198,15 +210,15 @@ public class InventoryService
                 DeliveryId = d.Id,
                 ItemName = item.Name,
                 DelivQuantity = d.DeliveryAmount,
-                DateDelivered = d.DateDelivered,
-                DateExpire = d.ExpirationDate,
-                BatchCostPrice = d.BatchWorth,
+                DateDelivered = d.DateDelivered.LocalDateTime.ToString(),
+                DateExpire = d.ExpirationDate.LocalDateTime.ToString(),
+                BatchCostPrice = (float)d.BatchWorth,
                 ItemType = item.Type,
-                ItemDesc = desc!.Text,
+                ItemDesc = desc?.Text ?? "",
                 Barcode = item.Barcode,
-                QuantityInStock = inv is null ? 0 : inv.TotalAmount,
+                QuantityInStock = inv is null || inv.IsDeleted ? 0 : inv.TotalAmount,
                 ConsignmentSchedule = d.ConsignmentSchedule,
-                ReturnByDate = d.ReturnByDate
+                ReturnByDate = d.ReturnByDate!.Value.LocalDateTime.ToString() ?? ""
             });
         }
 
@@ -214,7 +226,7 @@ public class InventoryService
     }
 
 
-    public async Task<List<DeliveryRecord>> GetDeliveryRecordsAsync(int supplierId)
+    public async Task<List<DeliveryRecord>> GetDeliveryRecordsAsync(Guid supplierId)
     {
         await Init();
         var output = new List<DeliveryRecord>();
@@ -236,15 +248,15 @@ public class InventoryService
                 DeliveryId = d.Id,
                 ItemName = item.Name,
                 DelivQuantity = d.DeliveryAmount,
-                DateDelivered = d.DateDelivered,
-                DateExpire = d.ExpirationDate,
-                BatchCostPrice = d.BatchWorth,
+                DateDelivered = d.DateDelivered.LocalDateTime.ToString(),
+                DateExpire = d.ExpirationDate.LocalDateTime.ToString(),
+                BatchCostPrice = (double)d.BatchWorth,
                 ItemType = item.Type,
                 ItemDesc = desc!.Text,
                 Barcode = item.Barcode,
                 QuantityInStock = inv is not null ? inv.TotalAmount : 0,
                 ConsignmentSchedule = d.ConsignmentSchedule,
-                ReturnByDate = d.ReturnByDate
+                ReturnByDate = d.ReturnByDate!.Value.LocalDateTime.ToString() ?? ""
             });
         }
 
@@ -253,7 +265,7 @@ public class InventoryService
     }
 
 
-    public async Task<Delivery> GetDeliveryAsync(int id)
+    public async Task<Delivery> GetDeliveryAsync(Guid id)
     {
         await Init();
         return await db!.Table<Delivery>().Where(x => x.Id == id).FirstOrDefaultAsync();
@@ -261,7 +273,7 @@ public class InventoryService
 
 
 
-    public async Task<Inventory> GetInventoryFromDeliveryAsync(int deliveryId)
+    public async Task<Inventory> GetInventoryFromDeliveryAsync(Guid deliveryId)
     {
         await Init();
         return await db!.Table<Inventory>().Where(x => x.DeliveryId == deliveryId).FirstOrDefaultAsync();
@@ -294,9 +306,9 @@ public class InventoryService
                 Barcode = i.ItemBarcode,
                 Name = item.Name,
                 Quantity = i.TotalAmount,
-                Price = item.RetailPrice,
+                Price = (float)item.RetailPrice,
                 Type = item.Type,
-                Description = desc.Text
+                Description = desc?.Text ?? ""
             });
         }
 
@@ -307,6 +319,7 @@ public class InventoryService
     public async Task UpdateDescAsync(Description desc)
     {
         await Init();
+        desc.LastUpdatedAt = DateTimeOffset.UtcNow;
         await db!.UpdateAsync(desc);
     }
 
@@ -315,6 +328,7 @@ public class InventoryService
     public async Task UpdateItemAsync(Item item)
     {
         await Init();
+        item.LastUpdatedAt = DateTimeOffset.UtcNow;
         await db!.UpdateAsync(item);
     }
 
@@ -323,6 +337,7 @@ public class InventoryService
     public async Task UpdateDeliveryAsync(Delivery x)
     {
         await Init();
+        x.LastUpdatedAt = DateTimeOffset.UtcNow;
         await db!.UpdateAsync(x);
     }
 
@@ -330,6 +345,7 @@ public class InventoryService
     public async Task UpdateInventoryAsync(Inventory x)
     {
         await Init();
+        x.LastUpdatedAt = DateTimeOffset.UtcNow;
         await db!.UpdateAsync(x);
     }
 
@@ -337,14 +353,24 @@ public class InventoryService
     public async Task DeleteInventory(Inventory x)
     {
         await Init();
-        await db!.DeleteAsync(x);
+        // soft delete
+        x.IsDeleted = true;
+        x.LastUpdatedAt = DateTimeOffset.UtcNow;
+        await db!.UpdateAsync(x);
+        // instead of actual delete
+        // await db!.DeleteAsync(x);
     }
 
 
     public async Task DeleteDelivery(Delivery x)
     {
         await Init();
-        await db!.DeleteAsync(x);
+        // soft delete
+        x.IsDeleted = true;
+        x.LastUpdatedAt = DateTimeOffset.UtcNow;
+        await db!.UpdateAsync(x);
+        // instead of actual delete
+        // await db!.DeleteAsync(x);
     }
 
 
@@ -356,25 +382,33 @@ public class InventoryService
         var deliveries = await GetDeliveriesViaSupplier(supplier.Id);
 
         if (deliveries is null) return null;
-        var queriedDeliveries = deliveries.Where(x => !x.ReturnByDate.Equals("") && DateTime.Parse(x.ReturnByDate).Date == returnDate.Date).AsEnumerable();
+
+        // filter by date
+        var queriedDeliveries = deliveries.Where(x => !(x.ReturnByDate == null) && x.ReturnByDate.Value.Date == returnDate.Date).AsEnumerable();
         if (queriedDeliveries is null || !queriedDeliveries.Any()) return null;
-        if (deliveries.Count > 0) deliveries = [.. queriedDeliveries];
+        // if (deliveries.Count > 0) deliveries = [.. queriedDeliveries];
+        deliveries = [.. queriedDeliveries];
 
         var items = new List<ContractItem>();
-        float total = 0;
+        decimal total = 0;
 
         for (int i = 0; i < deliveries!.Count; i++)
         {
             var delivery = deliveries[i];
-            if (delivery.ReturnByDate is null || delivery.ReturnByDate.Equals("")) continue;
-            if (DateTime.Parse(delivery.ReturnByDate).Date != returnDate.Date) continue;
+            // if (delivery.ReturnByDate is null || delivery.ReturnByDate.Equals("")) continue;
+            // if (DateTime.Parse(delivery.ReturnByDate).Date != returnDate.Date) continue;
+
             var inv = await GetInventoryFromDeliveryAsync(delivery.Id);
-            string name = itemsDesc.Find(x => x.Barcode.Equals(delivery.ItemBarcode))!.Name;
-            float unitPrice = delivery.BatchWorth / delivery.DeliveryAmount;
-            int soldQuantity = inv is null ? delivery.DeliveryAmount : delivery.DeliveryAmount - inv.TotalAmount;
+            var itemDesc = itemsDesc.Find(x => x.Barcode.Equals(delivery.ItemBarcode));
+            string name = itemDesc?.Name ?? "Unknown";
+
+            decimal unitPrice = delivery.BatchWorth / delivery.DeliveryAmount;
+
+            int soldQuantity = inv is null || inv.IsDeleted ? delivery.DeliveryAmount : delivery.DeliveryAmount - inv.TotalAmount;
             int returnQuantity = delivery.DeliveryAmount - soldQuantity;
 
             total += soldQuantity * unitPrice;
+
             if (items.Find(x => x.Name.Equals(name)) is ContractItem item)
             {
                 item.SoldQuantity += soldQuantity;
@@ -390,6 +424,7 @@ public class InventoryService
         }
 
         if (items.Count <= 0) return null;
+
         return new SupplierContract()
         {
             SupplierId = supplier.Id,
@@ -407,18 +442,19 @@ public class InventoryService
         await Init();
 
         var deliveries = await GetDeliveriesViaSupplier(supplier.Id);
-        if (deliveries.Count > 0) deliveries = [.. deliveries.Where(x => DateTime.Parse(x.ReturnByDate).Date == returnDate.Date).AsEnumerable()];
+        if (deliveries.Count <= 0) return;
 
+
+        deliveries = [.. deliveries.Where(x => x.ReturnByDate is not null && x.ReturnByDate.Value.Date == returnDate.Date).AsEnumerable()];
         for (int i = 0; i < deliveries.Count; i++)
         {
             var delivery = deliveries[i];
-            if (delivery.ReturnByDate is null || delivery.ReturnByDate.Equals("")) continue;
-            if (DateTime.Parse(delivery.ReturnByDate).Date != returnDate.Date) continue;
             var inv = await GetInventoryFromDeliveryAsync(delivery.Id);
 
-            delivery.ReturnByDate = "";
+            delivery.ReturnByDate = null;
             await UpdateDeliveryAsync(delivery);
-            await DeleteInventory(inv);
+            if (inv is not null)
+                await DeleteInventory(inv);
         }
     }
 }

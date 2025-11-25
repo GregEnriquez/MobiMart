@@ -4,12 +4,10 @@ using SQLite;
 
 namespace MobiMart.Model;
 
-public class MonthlyForecastInstance
+public class MonthlyForecastInstance : SyncEntity
 {
-    [PrimaryKey]
-    public int Id { get; set; }
-    [ForeignKey(nameof(Business))]
-    public int BusinessId { get; set; }
+    [Indexed]
+    public Guid BusinessId { get; set; }
     public string Response { get; set; } = "";
-    public string DateGenerated { get; set; } = "";
+    public DateTimeOffset DateGenerated { get; set; }
 }

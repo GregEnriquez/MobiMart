@@ -25,7 +25,7 @@ namespace MobiMart.ViewModel
         [ObservableProperty]
         string wItemType = "";
         [ObservableProperty]
-        float? wRetailPrice;
+        decimal? wRetailPrice;
         [ObservableProperty]
         DateTime? wDateDelivered;
         [ObservableProperty]
@@ -33,9 +33,9 @@ namespace MobiMart.ViewModel
         [ObservableProperty]
         int? wItemQuantity;
         [ObservableProperty]
-        float? wBatchCost;
+        decimal? wBatchCost;
         [ObservableProperty]
-        float? wUnitCost;
+        decimal? wUnitCost;
         [ObservableProperty]
         bool isBatchCost = true;
         [ObservableProperty]
@@ -46,7 +46,7 @@ namespace MobiMart.ViewModel
         string wConsignmentSchedule;
 
         [ObservableProperty]
-        int deliveryId;
+        Guid deliveryId;
         [ObservableProperty]
         bool isEditDelivery = false;
         [ObservableProperty]
@@ -78,15 +78,15 @@ namespace MobiMart.ViewModel
             WItemDesc = desc.Text;
             WItemType = item.Type;
             WRetailPrice = item.RetailPrice;
-            WDateDelivered = DateTime.Parse(delivery.DateDelivered);
-            WDateExpire = DateTime.Parse(delivery.ExpirationDate);
-            WItemQuantity = inventory is null ? 0 : inventory.TotalAmount;
+            WDateDelivered = delivery.DateDelivered.LocalDateTime;
+            WDateExpire = delivery.ExpirationDate.LocalDateTime;
+            WItemQuantity = inventory is null || inventory.IsDeleted ? 0 : inventory.TotalAmount;
             WDelivQuantity = delivery.DeliveryAmount;
             WBatchCost = delivery.BatchWorth;
             if (IsConsignment)
             {
                 WConsignmentSchedule = delivery.ConsignmentSchedule;
-                WReturnByDate = DateTime.Parse(delivery.ReturnByDate);
+                WReturnByDate = delivery.ReturnByDate!.Value.LocalDateTime;
             }
         }
 
@@ -114,6 +114,20 @@ namespace MobiMart.ViewModel
         [RelayCommand]
         async Task SaveChanges()
         {
+            int emptyCount = 0;
+            if (WItemName.Equals("")) emptyCount += 1;
+            if (WItemDesc.Equals("")) emptyCount += 1;
+            if (WItemType.Equals("")) emptyCount += 1;
+            if (WRetailPrice == null) emptyCount += 1;
+            if (WDelivQuantity == null) emptyCount += 1;
+            if (WBatchCost == null) emptyCount += 1;
+
+            if (emptyCount > 0)
+            {
+                await Toast.Make("Make sure to fill out all the details", ToastDuration.Short, 14).Show();
+                return;
+            }
+
             var editedFields = new List<string>();
 
             if (!item.Name.Equals(WItemName)) editedFields.Add("Name");
@@ -149,23 +163,23 @@ namespace MobiMart.ViewModel
                     }
                     item.Name = WItemName;
                     item.Type = WItemType;
-                    item.RetailPrice = (float)WRetailPrice!;
+                    if (editedFields.Contains("Retail Price")) item.RetailPrice = WRetailPrice!.Value;
                     await inventoryService!.UpdateItemAsync(item);
                 }
             }
 
 
-            if (inventory is not null) inventory.TotalAmount = (int)WItemQuantity!;
-            delivery.DateDelivered = WDateDelivered.ToString()!;
-            delivery.ExpirationDate = WDateExpire.ToString()!;
-            if (IsConsignment) delivery.ReturnByDate = WReturnByDate.ToString()!;
+            if (inventory is not null && !inventory.IsDeleted) inventory.TotalAmount = (int)WItemQuantity!;
+            delivery.DateDelivered = WDateDelivered!.Value.ToUniversalTime();
+            delivery.ExpirationDate = WDateExpire!.Value.ToUniversalTime();
+            if (IsConsignment) delivery.ReturnByDate = WReturnByDate!.Value.ToUniversalTime();
             delivery.DeliveryAmount = (int)WDelivQuantity!;
-            delivery.BatchWorth = (float)WBatchCost!;
+            delivery.BatchWorth = WBatchCost!.Value;
             if (IsConsignment) delivery.ConsignmentSchedule = WConsignmentSchedule;
 
             await inventoryService!.UpdateDescAsync(desc);
             await inventoryService!.UpdateDeliveryAsync(delivery);
-            if (inventory is not null) await inventoryService!.UpdateInventoryAsync(inventory);
+            if (inventory is not null && !inventory.IsDeleted) await inventoryService!.UpdateInventoryAsync(inventory);
 
             BarcodeId = "";
             WItemName = "";

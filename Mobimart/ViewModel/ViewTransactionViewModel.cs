@@ -48,7 +48,7 @@ public partial class ViewTransactionViewModel : BaseViewModel
         if (IsBusy) return;
         IsBusy = true;
 
-        int businessId = -1;
+        var businessId = Guid.Empty;
         if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
         {
             businessId = vm.BusinessId;
@@ -60,7 +60,7 @@ public partial class ViewTransactionViewModel : BaseViewModel
             if (!selectedItems[i]) continue;
             var salesItem = Record.Items[i];
             var itemsInDeliveries = await inventoryService.GetDeliveriesAsync(salesItem.Barcode);
-            var latestDelivery = itemsInDeliveries.OrderBy(x => DateTime.Parse(x.DateDelivered)).ToList()[0];
+            var latestDelivery = itemsInDeliveries.OrderBy(x => x.DateDelivered).ToList()[0];
 
             // update the inventory record of the latest delivery
             var invItem = await inventoryService.GetInventoryFromDeliveryAsync(latestDelivery.Id);
@@ -125,7 +125,7 @@ public partial class ViewTransactionViewModel : BaseViewModel
         if (IsBusy) return;
         IsBusy = true;
 
-        int businessId = -1;
+        var businessId = Guid.Empty;
         if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
         {
             businessId = vm.BusinessId;
@@ -136,7 +136,7 @@ public partial class ViewTransactionViewModel : BaseViewModel
         {
             var salesItem = Record.Items[i];
             var itemsInDeliveries = await inventoryService.GetDeliveriesAsync(salesItem.Barcode);
-            var latestDelivery = itemsInDeliveries.OrderBy(x => DateTime.Parse(x.DateDelivered)).ToList()[0];
+            var latestDelivery = itemsInDeliveries.OrderBy(x => x.DateDelivered).ToList()[0];
 
             // update the inventory record of the latest delivery
             var invItem = await inventoryService.GetInventoryFromDeliveryAsync(latestDelivery.Id);

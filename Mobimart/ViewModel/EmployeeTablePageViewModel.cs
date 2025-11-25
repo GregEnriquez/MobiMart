@@ -41,7 +41,7 @@ public partial class EmployeeTablePageViewModel : BaseViewModel
 
 
     [RelayCommand]
-    public async Task ConfirmAccept(int userId)
+    public async Task ConfirmAccept(Guid userId)
     {
         if (IsBusy) return;
         IsBusy = true;
@@ -69,7 +69,7 @@ public partial class EmployeeTablePageViewModel : BaseViewModel
 
 
     [RelayCommand]
-    public async Task DeleteEmployee(int userId)
+    public async Task DeleteEmployee(Guid userId)
     {
         if (IsBusy) return;
         IsBusy = true;
@@ -85,7 +85,7 @@ public partial class EmployeeTablePageViewModel : BaseViewModel
         if (confirm)
         {
             user.EmployeeType = "";
-            user.BusinessRefId = -1;
+            user.BusinessRefId = Guid.Empty;
             await userService.UpdateUserAsync(user);
             await RefreshEmployees();
         }

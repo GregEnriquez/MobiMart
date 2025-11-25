@@ -24,8 +24,8 @@ namespace MobiMart.Model
             set { quantity = value; OnPropertyChanged(); OnQuantityOrPriceChanged?.Invoke(); }
         }
 
-        private float price;
-        public float Price
+        private decimal price;
+        public decimal Price
         {
             get => price;
             set { price = value; OnPropertyChanged(); OnQuantityOrPriceChanged?.Invoke(); }

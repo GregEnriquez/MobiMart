@@ -4,15 +4,17 @@ using SQLite;
 
 namespace MobiMart.Model;
 
-public class Item
+public class Item : SyncEntity
 {
-    [PrimaryKey]
+    [Indexed]
+    public Guid BusinessId { get; set; }
+    [Indexed]
     public string Barcode { get; set; } = "";
-    [ForeignKey(nameof(Business))]
-    public int BusinessId { get; set; }
-    [ForeignKey(nameof(Delivery))]
-    public int DescriptionId { get; set; } // DEV NOTE: I don't think this is supposed to be here (I just copied whats on the ERD)
+    
     public string Name { get; set; } = "";
     public string Type { get; set; } = "";
-    public float RetailPrice { get; set; }
+    public decimal RetailPrice { get; set; }
+    
+    [Indexed]
+    public Guid DescriptionId { get; set; } // DEV NOTE: I don't think this is supposed to be here (I just copied whats on the ERD)
 }

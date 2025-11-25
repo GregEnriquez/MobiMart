@@ -9,8 +9,8 @@ namespace MobiMart.View;
 public partial class EditSupplierInventory : ContentPage
 {
 
-	private int _deliveryId;
-	public int DeliveryId
+	private Guid _deliveryId;
+	public Guid DeliveryId
 	{
 		get => _deliveryId;
 		set

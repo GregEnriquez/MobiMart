@@ -4,14 +4,14 @@ using SQLite;
 
 namespace MobiMart.Model;
 
-public class SalesTransaction
+public class SalesTransaction : SyncEntity
 {
-    [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
-    [ForeignKey(nameof(Business))]
-    public int BusinessId { get; set; }
-    public string Date { get; set; } = "";
-    public float TotalPrice { get; set; }
-    public float Payment { get; set; }
-    public float Change { get; set; }
+    [Indexed]
+    public Guid BusinessId { get; set; }
+    
+    public DateTimeOffset Date { get; set; }
+
+    public decimal TotalPrice { get; set; }
+    public decimal Payment { get; set; }
+    public decimal Change { get; set; }
 }

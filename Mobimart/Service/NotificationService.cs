@@ -57,11 +57,10 @@ public class NotificationService
 
 
 
-    public async Task ScheduleLocalNotification(int id, string title, string body, DateTime notifyAt, string payload = null)
+    public async Task ScheduleLocalNotification(string title, string body, DateTime notifyAt, string payload = null)
     {
         var request = new NotificationRequest
         {
-            NotificationId = id,
             Title = title,
             Description = body,
             ReturningData = payload, // pass small string data to read when tapped
@@ -79,6 +78,7 @@ public class NotificationService
     public async Task AddReminderAsync(Reminder r)
     {
         await Init();
+        r.LastUpdatedAt = DateTimeOffset.UtcNow;
         await db!.InsertAsync(r);
     }
 
@@ -86,13 +86,13 @@ public class NotificationService
     public async Task<List<Reminder>> GetAllRemindersAsync()
     {
         await Init();
-        var businessId = -1;
+        var businessId = Guid.Empty;
         if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
         {
             businessId = vm.BusinessId;
         }
 
-        if (businessId == -1) return [];
+        if (businessId == Guid.Empty) return [];
         return await db!.Table<Reminder>().Where(x=> x.BusinessId == businessId).ToListAsync();
     }
 
@@ -100,13 +100,18 @@ public class NotificationService
     public async Task DeleteReminderAsync(Reminder r)
     {
         await Init();
-        await db!.DeleteAsync(r);
+        // soft delete
+        r.IsDeleted = true;
+        r.LastUpdatedAt = DateTimeOffset.UtcNow;
+        await db!.UpdateAsync(r);
+        // await db!.DeleteAsync(r);
     }
 
 
     public async Task UpdateReminderAsync(Reminder r)
     {
         await Init();
+        r.LastUpdatedAt = DateTimeOffset.UtcNow;
         await db!.UpdateAsync(r);
     }
 
@@ -131,16 +136,10 @@ public class NotificationService
         for (int i = 0; i < reminders.Count; i++)
         {
             var reminder = reminders[i];
-            // if (reminder.Id == 16) await DeleteReminderAsync(reminder);
-
             if (reminder.Type is ReminderType.ConsignmentDue)
             {
                 // deletion if one week past the notify date already
-                if (DateTime.Now > DateTime.ParseExact(
-                    reminder.NotifyAtDate.Replace('\u202F', ' '),
-                    formats,
-                    CultureInfo.InvariantCulture,
-                    DateTimeStyles.None).AddDays(7))
+                if (DateTimeOffset.UtcNow > reminder.NotifyAtDate.AddDays(7))
                 {
                     await DeleteReminderAsync(reminder);
                     continue;
@@ -158,7 +157,7 @@ public class NotificationService
                 var item = await inventoryService.GetItemAsync(inv.ItemBarcode);
 
                 var message = $"""
-                The item {item.Name} delivered on {DateTime.ParseExact(delivery.DateDelivered.Replace('\u202F', ' '), formats, CultureInfo.InvariantCulture):MM/dd/yyyy} is to be returned on {DateTime.ParseExact(delivery.ReturnByDate.Replace('\u202F', ' '), formats, CultureInfo.InvariantCulture):MM/dd/yyyy}.
+                The item {item.Name} delivered on {delivery.DateDelivered.LocalDateTime:MM/dd/yyyy} is to be returned on {delivery.ReturnByDate.Value.LocalDateTime:MM/dd/yyyy}.
                 Items Sold: {delivery.DeliveryAmount - inv.TotalAmount}
                 Stock Remaining: {inv.TotalAmount} / {delivery.DeliveryAmount}
                 Amount to Pay: {(delivery.DeliveryAmount - inv.TotalAmount) * (delivery.BatchWorth / delivery.DeliveryAmount):0.00}
@@ -171,37 +170,40 @@ public class NotificationService
             {
                 // check if restocked or not already
                 var inv = await inventoryService.GetInventoryAsync(reminder.RelatedEntityId);
-                if (inv is null) // inv record does not exist anymore (meaning stock has been depleted)
+                if (inv is null || inv.IsDeleted) // inv record does not exist anymore (meaning stock has been depleted)
                 {
                     await DeleteReminderAsync(reminder);
                     continue;
                 }
+                
                 // all the inventory records of the item
                 var invRecords = await inventoryService.GetInventoriesAsync(inv.ItemBarcode);
                 if (invRecords is null || invRecords.Count <= 0) continue; // same same validation sa taas
                 int totalInv = 0;
                 foreach (var _i in invRecords) totalInv += _i.TotalAmount;
+                
                 // delete reminder if there is enough stock already
                 if (totalInv >= 10)
                 {
                     await DeleteReminderAsync(reminder);
                     continue;
                 }
-                // resched reminder and local notification
+
+                // else, resched reminder and local notification
                 var item = await inventoryService.GetItemAsync(inv.ItemBarcode);
                 var message = $"Stock for item {item.Name} is running low\nRemaining Stock: {totalInv}";
                 reminder.Message = message;
                 await UpdateReminderAsync(reminder);
-                var notifyDate = DateTime.ParseExact(reminder.NotifyAtDate.Replace('\u202F', ' '), formats, CultureInfo.InvariantCulture);
-                if (notifyDate.Date < DateTime.Now.Date) // only when today's date (by day) is > previous notifydate sched
+
+                if (reminder.NotifyAtDate.Date < DateTimeOffset.UtcNow.Date) // only when today's date (by day) is > previous notifydate sched
                 {
-                    reminder.NotifyAtDate = DateTime.Now.AddMinutes(2).ToString("MM/dd/yyyy hh:mm:ss tt");
-                    await ScheduleLocalNotification(reminder.Id, reminder.Title, reminder.Message, DateTime.ParseExact(reminder.NotifyAtDate.Replace('\u202F', ' '), formats, CultureInfo.InvariantCulture), reminder.Id.ToString());
+                    reminder.NotifyAtDate = DateTimeOffset.UtcNow.AddMinutes(2);
+                    await ScheduleLocalNotification(reminder.Title, reminder.Message, reminder.NotifyAtDate.LocalDateTime, reminder.Id.ToString());
                 }
             }
             else if (reminder.Type is ReminderType.DeliveryReminder)
             {
-                if (DateTime.ParseExact(reminder.NotifyAtDate.Replace('\u202F', ' '), formats, CultureInfo.InvariantCulture) < DateTime.Now)
+                if (reminder.NotifyAtDate < DateTimeOffset.UtcNow)
                 {
                     await DeleteReminderAsync(reminder);
                 }

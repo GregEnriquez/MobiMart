@@ -22,6 +22,13 @@ public static class UsersEndpoints
             // return Results.BadRequest();
         });
 
+        // GET /users/id (GUID)
+        group.MapGet("/{id:guid}", async (Guid id, MobiMartContext dbContext) =>
+        {
+            User? user = await dbContext.Users.FindAsync(id);
+            return user is null ? Results.NotFound() : Results.Ok(user.ToDto());
+        });
+
         // GET /users/email@sample.com
         group.MapGet("/{email}", async (string email, MobiMartContext dbContext) =>
         {
@@ -36,6 +43,8 @@ public static class UsersEndpoints
         {
             User user = newUser.ToEntity();
 
+            user.LastUpdatedAt = DateTimeOffset.UtcNow;
+
             dbContext.Users.Add(user);
             await dbContext.SaveChangesAsync();
 
@@ -43,29 +52,40 @@ public static class UsersEndpoints
         })
         .WithParameterValidation();
 
-        // PUT /users/1
-        group.MapPut("/{id}", async (int id, UpdateUserDto updatedUser,MobiMartContext dbContext) =>
+        // PUT /users/{guid}
+        group.MapPut("/{id:guid}", async (Guid id, UpdateUserDto updatedUser,MobiMartContext dbContext) =>
         {
             var existingUser = await dbContext.Users.FindAsync(id);
             if (existingUser is null) return Results.NotFound();
 
+            var newValues = updatedUser.ToEntity(id);
+            newValues.LastUpdatedAt = DateTimeOffset.UtcNow; // Update Timestamp
+
             dbContext.Entry(existingUser)
                 .CurrentValues
-                .SetValues(updatedUser.ToEntity(id));
+                .SetValues(newValues);
 
             await dbContext.SaveChangesAsync();
 
             return Results.NoContent();
         });
 
-        // DELETE /users/1
-        group.MapDelete("/{id}", async (int id, MobiMartContext dbContext) =>
+        // DELETE /users/{guid}
+        group.MapDelete("/{id:guid}", async (Guid id, MobiMartContext dbContext) =>
         {
-            await dbContext.Users
-                     .Where(game => game.Id == id)
-                     .ExecuteDeleteAsync();
+            // await dbContext.Users
+            //          .Where(game => game.Id == id)
+            //          .ExecuteDeleteAsync();
 
-            return Results.NoContent();
+            // soft delete
+            var rowsAffected = await dbContext.Users
+                .Where(u => u.Id == id)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(u => u.IsDeleted, true)
+                    .SetProperty(u => u.LastUpdatedAt, DateTimeOffset.UtcNow)
+                );
+
+            return rowsAffected > 0 ? Results.NoContent() : Results.NotFound();
         });
 
         return group;

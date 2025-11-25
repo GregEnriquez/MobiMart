@@ -1,15 +1,18 @@
 namespace MobiMart.Api.Dtos;
 
-public record class DescriptionDto(
-    int Id,
-    int ItemId,
-    string Text
+public record DescriptionDto(
+    Guid Id,
+    Guid ItemId,
+    string Text,
+    DateTimeOffset LastUpdatedAt,
+    bool IsDeleted
 );
 
-
-public record class CreateDescriptionDto(
-    int ItemId,
-    string Text
+public record CreateDescriptionDto(
+    Guid Id,
+    Guid ItemId,
+    string Text,
+    bool IsDeleted
 );
 
 

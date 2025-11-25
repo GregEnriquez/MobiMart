@@ -4,10 +4,10 @@ namespace MobiMart.Model;
 
 public record SalesRecord
 {
-    public int TransactionId { get; set; }
-    public string Date { get; set; } = "";
-    public float TotalPrice { get; set; }
-    public float Payment { get; set; }
-    public float Change { get; set; }
+    public Guid TransactionId { get; set; }
+    public DateTime Date { get; set; }
+    public decimal TotalPrice { get; set; }
+    public decimal Payment { get; set; }
+    public decimal Change { get; set; }
     public List<SalesItem> Items { get; set; } = null!;
 }
