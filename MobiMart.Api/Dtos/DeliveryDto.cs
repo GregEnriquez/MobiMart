@@ -12,7 +12,7 @@ public record DeliveryDto(
     DateTimeOffset ExpirationDate,
     decimal BatchWorth,
     string ConsignmentSchedule,
-    DateTimeOffset ReturnByDate,
+    DateTimeOffset? ReturnByDate,
     DateTimeOffset LastUpdatedAt,
     bool IsDeleted
 );
@@ -27,7 +27,7 @@ public record CreateDeliveryDto(
     DateTimeOffset ExpirationDate,
     decimal BatchWorth,
     string ConsignmentSchedule,
-    DateTimeOffset ReturnByDate,
+    DateTimeOffset? ReturnByDate,
     bool IsDeleted,
     DateTimeOffset LastUpdatedAt
 );
@@ -40,5 +40,5 @@ public record UpdateDeliveryDto(
     DateTimeOffset ExpirationDate,
     decimal BatchWorth,
     string ConsignmentSchedule,
-    DateTimeOffset ReturnByDate
+    DateTimeOffset? ReturnByDate
 );

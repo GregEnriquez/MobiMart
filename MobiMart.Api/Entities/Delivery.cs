@@ -13,6 +13,7 @@ public class Delivery : SyncEntity
     public DateTimeOffset ExpirationDate { get; set; }
     public decimal BatchWorth { get; set; }
     
+    // for consignment deliveries
     public string ConsignmentSchedule { get; set; } = "";
-    public DateTimeOffset ReturnByDate { get; set; }
+    public DateTimeOffset? ReturnByDate { get; set; }
 }
