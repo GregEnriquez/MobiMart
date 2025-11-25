@@ -20,7 +20,8 @@ public record CreateSalesTransactionDto(
     decimal TotalPrice,
     decimal Payment,
     decimal Change,
-    bool IsDeleted
+    bool IsDeleted,
+    DateTimeOffset LastUpdatedAt
 );
 
 public record SalesItemDto(
@@ -41,5 +42,6 @@ public record CreateSalesItemDto(
     string Barcode,
     decimal Price,
     int Quantity,
-    bool IsDeleted
+    bool IsDeleted,
+    DateTimeOffset LastUpdatedAt
 );

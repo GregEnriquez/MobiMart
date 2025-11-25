@@ -22,5 +22,6 @@ public record CreateItemDto(
     string Type,
     decimal RetailPrice,
     Guid DescriptionId,
-    bool IsDeleted
+    bool IsDeleted,
+    DateTimeOffset LastUpdatedAt
 );

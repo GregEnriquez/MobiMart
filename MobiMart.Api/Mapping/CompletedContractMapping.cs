@@ -27,7 +27,7 @@ public static class CompletedContractMapping
         return new CompletedContract
         {
             Id = dto.Id,
-            LastUpdatedAt = DateTimeOffset.UtcNow,
+            LastUpdatedAt = dto.LastUpdatedAt,
             IsDeleted = dto.IsDeleted,
             BusinessId = dto.BusinessId,
             SupplierName = dto.SupplierName,
@@ -57,7 +57,7 @@ public static class CompletedContractMapping
         return new CompletedContractItem
         {
             Id = dto.Id,
-            LastUpdatedAt = DateTimeOffset.UtcNow,
+            LastUpdatedAt = dto.LastUpdatedAt,
             IsDeleted = dto.IsDeleted,
             ContractId = dto.ContractId,
             Name = dto.Name,

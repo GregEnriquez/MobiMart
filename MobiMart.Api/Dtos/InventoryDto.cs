@@ -16,7 +16,8 @@ public record CreateInventoryDto(
     Guid DeliveryId,
     string ItemBarcode,
     int TotalAmount,
-    bool IsDeleted
+    bool IsDeleted,
+    DateTimeOffset LastUpdatedAt
 );
 
 

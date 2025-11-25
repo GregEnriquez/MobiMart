@@ -16,7 +16,8 @@ public record CreateBusinessDto(
     string Name,
     string Address,
     string Code,
-    bool IsDeleted
+    bool IsDeleted,
+    DateTimeOffset LastUpdatedAt
 );
 
 public record UpdateBusinessDto(

@@ -24,7 +24,8 @@ public record CreateSupplierDto(
     string Email,
     string Socials,
     string Number,
-    bool IsDeleted
+    bool IsDeleted,
+    DateTimeOffset LastUpdatedAt
 );
 
 

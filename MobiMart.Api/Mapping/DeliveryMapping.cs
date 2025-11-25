@@ -39,7 +39,7 @@ public static class DeliveryMapping
             BatchWorth = dto.BatchWorth,
             ConsignmentSchedule = dto.ConsignmentSchedule,
             ReturnByDate = dto.ReturnByDate,
-            LastUpdatedAt = DateTimeOffset.UtcNow,
+            LastUpdatedAt = dto.LastUpdatedAt,
             IsDeleted = dto.IsDeleted
         };
     }    

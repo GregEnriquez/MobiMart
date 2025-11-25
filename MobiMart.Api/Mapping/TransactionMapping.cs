@@ -30,7 +30,7 @@ public static class TransactionMapping
             TotalPrice = dto.TotalPrice,
             Payment = dto.Payment,
             Change = dto.Change,
-            LastUpdatedAt = DateTimeOffset.UtcNow,
+            LastUpdatedAt = dto.LastUpdatedAt,
             IsDeleted = dto.IsDeleted
         };
     }
@@ -59,7 +59,7 @@ public static class TransactionMapping
             Barcode = dto.Barcode,
             Price = dto.Price,
             Quantity = dto.Quantity,
-            LastUpdatedAt = DateTimeOffset.UtcNow,
+            LastUpdatedAt = dto.LastUpdatedAt,
             IsDeleted = dto.IsDeleted
         };
     }

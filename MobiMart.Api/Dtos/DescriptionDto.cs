@@ -12,7 +12,8 @@ public record CreateDescriptionDto(
     Guid Id,
     Guid ItemId,
     string Text,
-    bool IsDeleted
+    bool IsDeleted,
+    DateTimeOffset LastUpdatedAt
 );
 
 

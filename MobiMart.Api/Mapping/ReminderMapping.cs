@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using MobiMart.Api.Dtos;
 using MobiMart.Api.Entities;
 
@@ -38,7 +39,7 @@ public static class ReminderMapping
             RelatedEntityId = dto.RelatedEntityId,
             IsEnabled = dto.IsEnabled,
             Sent = dto.Sent,
-            LastUpdatedAt = DateTimeOffset.UtcNow,
+            LastUpdatedAt = dto.LastUpdatedAt,
             IsDeleted = dto.IsDeleted
         };
     }
@@ -61,7 +62,7 @@ public static class ReminderMapping
         return new MonthlyForecastInstance
         {
             Id = dto.Id,
-            LastUpdatedAt = DateTimeOffset.UtcNow,
+            LastUpdatedAt = dto.LastUpdatedAt,
             IsDeleted = dto.IsDeleted,
             Response = dto.Response,
             DateGenerated = dto.DateGenerated

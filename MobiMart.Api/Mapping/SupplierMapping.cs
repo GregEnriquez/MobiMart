@@ -11,7 +11,7 @@ public static class SupplierMapping
         return new Supplier()
         {
             Id = newSupplier.Id,
-            LastUpdatedAt = DateTimeOffset.UtcNow,
+            LastUpdatedAt = newSupplier.LastUpdatedAt,
             IsDeleted = newSupplier.IsDeleted,
             BusinessId = newSupplier.BusinessId,
             Type = newSupplier.Type,

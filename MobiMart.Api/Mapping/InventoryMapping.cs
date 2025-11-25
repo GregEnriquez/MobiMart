@@ -25,7 +25,7 @@ public static class InventoryMapping
         return new Inventory()
         {
             Id = newInv.Id,
-            LastUpdatedAt = DateTimeOffset.UtcNow,
+            LastUpdatedAt = newInv.LastUpdatedAt,
             IsDeleted = newInv.IsDeleted,
             BusinessId = newInv.BusinessId,
             DeliveryId = newInv.DeliveryId,

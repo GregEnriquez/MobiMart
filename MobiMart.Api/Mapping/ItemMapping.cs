@@ -32,7 +32,7 @@ public static class ItemMapping
             Type = dto.Type,
             RetailPrice = dto.RetailPrice,
             DescriptionId = dto.DescriptionId,
-            LastUpdatedAt = DateTimeOffset.UtcNow,
+            LastUpdatedAt = dto.LastUpdatedAt,
             IsDeleted = dto.IsDeleted
         };
     }

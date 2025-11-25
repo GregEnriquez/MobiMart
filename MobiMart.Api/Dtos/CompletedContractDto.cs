@@ -22,7 +22,8 @@ public record CreateCompletedContractDto(
     DateTimeOffset? ReturnDate,
     DateTimeOffset? DateReturned,
     decimal AmountToPay,
-    byte[] ProofImageData
+    byte[] ProofImageData,
+    DateTimeOffset LastUpdatedAt
 );
 
 public record CompletedContractItemDto(
@@ -40,5 +41,6 @@ public record CreateCompletedContractItemDto(
     bool IsDeleted,
     string Name,
     int SoldQuantity,
-    int ReturnQuantity
+    int ReturnQuantity,
+    DateTimeOffset LastUpdatedAt
 );

@@ -23,7 +23,7 @@ public static class DescriptionMapping
         return new Description()
         {
             Id = newDescription.Id,
-            LastUpdatedAt = DateTimeOffset.UtcNow,
+            LastUpdatedAt = newDescription.LastUpdatedAt,
             IsDeleted = newDescription.IsDeleted,
             ItemId = newDescription.ItemId,
             Text = newDescription.Text

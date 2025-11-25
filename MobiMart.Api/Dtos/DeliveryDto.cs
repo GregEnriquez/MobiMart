@@ -28,7 +28,8 @@ public record CreateDeliveryDto(
     decimal BatchWorth,
     string ConsignmentSchedule,
     DateTimeOffset ReturnByDate,
-    bool IsDeleted
+    bool IsDeleted,
+    DateTimeOffset LastUpdatedAt
 );
 
 

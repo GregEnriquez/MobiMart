@@ -24,7 +24,7 @@ public static class BusinessMapping
         return new Business()
         {
             Id = newBusiness.Id,
-            LastUpdatedAt = DateTimeOffset.UtcNow,
+            LastUpdatedAt = newBusiness.LastUpdatedAt,
             IsDeleted = newBusiness.IsDeleted,
             Name = newBusiness.Name,
             Address = newBusiness.Address,

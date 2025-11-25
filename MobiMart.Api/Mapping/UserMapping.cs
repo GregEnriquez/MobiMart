@@ -11,7 +11,7 @@ public static class UserMapping
         return new User()
         {
             Id = Guid.NewGuid(),
-            LastUpdatedAt = DateTimeOffset.UtcNow,
+            LastUpdatedAt = newUser.LastUpdatedAt,
             IsDeleted = newUser.IsDeleted,
             BusinessId = newUser.BusinessId,
             FirstName = newUser.FirstName,

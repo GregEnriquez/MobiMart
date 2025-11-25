@@ -29,7 +29,8 @@ public record CreateReminderDto(
     Guid RelatedEntityId,
     bool IsEnabled,
     bool Sent,
-    bool IsDeleted
+    bool IsDeleted,
+    DateTimeOffset LastUpdatedAt
 );
 
 public record MonthlyForecastInstanceDto(
@@ -46,5 +47,6 @@ public record CreateMonthlyForecastInstanceDto(
     Guid BusinessId,
     string Response,
     DateTimeOffset DateGenerated,
-    bool IsDeleted
+    bool IsDeleted,
+    DateTimeOffset LastUpdatedAt
 );

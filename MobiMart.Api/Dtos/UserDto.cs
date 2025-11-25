@@ -41,7 +41,8 @@ public record class CreateUserDto(
     int Age,
     string PhoneNumber,
     string EmployeeType,
-    bool IsDeleted
+    bool IsDeleted,
+    DateTimeOffset LastUpdatedAt
 );
 
 
