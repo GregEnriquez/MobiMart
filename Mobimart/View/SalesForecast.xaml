@@ -39,6 +39,12 @@
                         <FormattedString>
                             <Span Text="Forecasted Revenue: " FontAttributes="Bold" TextColor="Black"/>
                             <Span Text="{Binding ForecastedRevenue}" FontAttributes="Italic" TextColor="Black"/>
+
+                            <Span Text=" ⓘ" TextColor="Black" FontAttributes="Bold">
+                                <Span.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnInfoClicked"/>
+                                </Span.GestureRecognizers>
+                            </Span>
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>

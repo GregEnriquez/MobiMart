@@ -11,11 +11,11 @@ namespace MobiMart.Service;
 public class GeminiService
 {
     private readonly HttpClient _httpClient;
-    private readonly string _apiKey;
+    private protected readonly string _apiKey;
 
     public GeminiService()
     {
-        _apiKey = "AIzaSyBcbOjXmhl-NVRdftwPlwLPAMY5D5USGy8";
+        _apiKey = "AIzaSyBDM0p86muvQ7HpVgdtZkO-qMKiS-sGuc8";
         _httpClient = new HttpClient();
     }
 

@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Extensions;
 using MobiMart.ViewModel;
 
 namespace MobiMart.View;
@@ -20,5 +21,15 @@ public partial class SalesForecast : ContentPage
         {
             await vm.OnAppearing();
         }
+    }
+
+    private async void OnInfoClicked(object sender, TappedEventArgs e)
+    {
+        if (BindingContext is SalesForecastViewModel vm && vm.Explanation != "")
+        {
+            var popup = new ExplanationPopup(vm.Explanation);
+            this.ShowPopup(popup);
+        }
+
     }
 }

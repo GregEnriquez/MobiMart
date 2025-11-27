@@ -71,7 +71,13 @@ public class BusinessService
     public async Task AddMonthlyForecastInstance(MonthlyForecastInstance x)
     {
         await Init();
-        x.LastUpdatedAt = DateTimeOffset.UtcNow;
+        // set to min value so that it won't sync to cloud
+        /*
+            Reason: this entity should not be a sync entity as this is just stored in cache.
+            I don't want to refactor client-side and server-side back-end rn so this is fine.
+            I think.
+        */
+        x.LastUpdatedAt = DateTimeOffset.MinValue;
         await db!.InsertAsync(x);
     }
 

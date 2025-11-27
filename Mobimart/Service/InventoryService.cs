@@ -164,7 +164,7 @@ public class InventoryService
 
         var allDeliveries = await db!.Table<Delivery>().Where(x => x.BusinessId == businessId).ToListAsync();
 
-        return allDeliveries.Where(x => x.DateDelivered.Date == date.Date).ToList();
+        return allDeliveries.Where(x => x.DateDelivered.LocalDateTime.Date == date.Date).ToList();
     }
 
 

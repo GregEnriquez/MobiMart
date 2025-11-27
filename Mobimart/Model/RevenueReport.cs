@@ -18,7 +18,7 @@ public record RevenueReport
 public record ForecastedRevenue
 {
     [JsonPropertyName("amount")]
-    public string Amount { get; init; } // Using `decimal` for financial data
+    public decimal Amount { get; init; } // Using `decimal` for financial data
 
     [JsonPropertyName("currency")]
     public string Currency { get; init; }

@@ -20,9 +20,11 @@ public partial class SalesForecastViewModel : BaseViewModel
     Chart barChart;
     [ObservableProperty]
     List<SalesRecommendation> salesRecommendations;
+    [ObservableProperty]
+    string explanation;
 
     MonthlyForecastInstance? monthlyForecast;
-    bool askingAI = false;
+    bool askingAI = false, _isViewLoaded = false;
 
     SalesService salesService;
     InventoryService inventoryService;
@@ -52,41 +54,86 @@ public partial class SalesForecastViewModel : BaseViewModel
     }
 
 
-
     public async Task OnAppearing()
     {
+        // // prevent Double-Loading on Tab Switches
+        // // if we have already loaded data for this specific page instance, don't do it again.
+        // if (_isViewLoaded) return; 
+        // _isViewLoaded = true;
+
         await GenerateBarOverlayChart();
+        Explanation = "Derived from getting the average daily sales for this month by getting total revenue so far for the current month, dividing it with the number days that has passed for the month and multiplied that to the numberof days for the next month.";
         var sales = await salesService.GetMonthlySalesRecords(DateTime.Today);
-        // await openAiService.GenerateMonthlyForecast(sales);
 
-        // get monthly forecast for today using gemini service
         SalesRecommendations = [];
-        // await businessService.DeleteMonthlyForecastInstance(); //debug
 
+        // check Cache if there is a record of monthly forecast for this day (limited ai usage lang kasi)
         monthlyForecast = await businessService.GetMonthlyForecastInstance();
-        if ( (monthlyForecast is not null 
-        && monthlyForecast.Response.Contains("Error")) ||
-        (monthlyForecast is not null && monthlyForecast.DateGenerated.Date < DateTimeOffset.UtcNow.Date))
+
+        // only delete if it's truly old. 
+        // if it contains "Error", check if that error happened RECENTLY (e.g. < 10 mins ago). 
+        // if so, keep it to prevent spamming the API.
+        bool shouldDelete = false;
+
+        if (monthlyForecast != null)
+        {
+            // if it's from yesterday or older, delete.
+            if (monthlyForecast.DateGenerated.Date < DateTimeOffset.UtcNow.Date)
+            {
+                shouldDelete = true;
+            }
+            // if it's an Error, but it's older than 10 minutes, try again. 
+            // if it's a fresh error (< 10 mins), keep it to block the API call.
+            else if (monthlyForecast.Response.Contains("Error") && 
+                    DateTimeOffset.UtcNow.Subtract(monthlyForecast.DateGenerated).TotalMinutes > 10)
+            {
+                shouldDelete = true;
+            }
+        }
+
+        if (shouldDelete)
         {
             await businessService.DeleteMonthlyForecastInstance();
             monthlyForecast = null;
         }
+
+        // call gemini API
         if (monthlyForecast is null && !askingAI)
         {
             try
             {
                 askingAI = true;
                 monthlyForecast = await geminiService.GenerateMonthlyForecast(sales);
+                
+                // save to cache
+                await businessService.AddMonthlyForecastInstance(monthlyForecast);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                SalesRecommendations =
+                Debug.WriteLine($"Gemini API Error: {ex.Message}");
+
+                var businessId = Guid.Empty;
+                if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
+                {
+                    businessId = vm.BusinessId;
+                }
+
+                // save the Error State!
+                // ff we don't save this, the next OnAppearing will try again immediately.
+                var errorRecord = new MonthlyForecastInstance
+                {
+                    BusinessId = businessId,
+                    DateGenerated = DateTimeOffset.UtcNow,
+                    Response = "Error: Rate Limit or Connection. Please try again later." 
+                };
+                
+                // save this "Cooldown" record to DB
+                await businessService.AddMonthlyForecastInstance(errorRecord);
+                monthlyForecast = errorRecord;
+
+                SalesRecommendations = 
                 [
-                    new ()
-                    {
-                    Title = "Unsatable or no internet connection",
-                    Details = "Can't connect to the server for generation of insights and recommendations."    
-                    }
+                    new() { Title = "Connection Issue", Details = "Could not generate AI insights. Please check back later." }
                 ];
                 return;
             }
@@ -94,39 +141,72 @@ public partial class SalesForecastViewModel : BaseViewModel
             {
                 askingAI = false;
             }
-            await businessService.AddMonthlyForecastInstance(monthlyForecast);
         }
-        // convert the response revenue report
-        try
+
+        // deserialize (only if we have a valid JSON response)
+        if (monthlyForecast != null && !monthlyForecast.Response.StartsWith("Error"))
         {
-            string og = monthlyForecast!.Response;
-            monthlyForecast.Response = monthlyForecast.Response.Replace("```json", "");
-            monthlyForecast.Response = monthlyForecast.Response.Replace("```", "");
-            RevenueReport report = JsonSerializer.Deserialize<RevenueReport>(monthlyForecast.Response)!;
-            SalesRecommendations = [.. report.SalesRecommendations.AsEnumerable()];
+            try
+            {
+                string cleanJson = monthlyForecast.Response.Replace("```json", "").Replace("```", "");
+                RevenueReport report = JsonSerializer.Deserialize<RevenueReport>(cleanJson)!;
+                SalesRecommendations = [.. report.SalesRecommendations];
+
+                // generate revenue report
+                Explanation = report.ForecastedRevenue.Description;
+                await GenerateBarOverlayChart(await _getTotalRevenue(), report.ForecastedRevenue.Amount);
+
+            }
+            catch (Exception e)
+            {
+                // if deserialization fails, show raw text or error
+                SalesRecommendations = [ new() { Title = "Analysis Data", Details = "Data is available but could not be formatted." } ];
+            }
         }
-        catch (Exception e)
+        else if (monthlyForecast != null)
         {
-            Debug.WriteLine(e.StackTrace);
-            SalesRecommendations = [new SalesRecommendation() {Title = "Error" + monthlyForecast!.DateGenerated, Details=monthlyForecast!.Response}];
+            // display the error message we saved
+            SalesRecommendations = [ new() { Title = "Service Unavailable", Details = "AI Insights are temporarily paused." } ];
         }
     }
 
 
+    private async Task<decimal> _getTotalRevenue()
+    {
+        var sales = await salesService.GetMonthlySalesRecords(DateTime.Today);
+        if (sales is null) return 0;
+
+        decimal totalRevenue = 0;
+        foreach (var sale in sales) totalRevenue += sale.TotalPrice;
+
+        return totalRevenue;
+    }
+
 
     public async Task GenerateBarOverlayChart()
     {
+        // generation of forecasted revenue using simple math
         DateTime nextMonth = DateTime.Now.AddMonths(1);
-        // generation of data
-        var sales = await salesService.GetMonthlySalesRecords(DateTime.Today);
-        decimal totalRevenue = 0;
-        if (sales is null) return;
-
-        foreach (var sale in sales) totalRevenue += sale.TotalPrice;
-
-        CurrentRevenue = $"₱{totalRevenue:0.00}";
+        decimal totalRevenue = await _getTotalRevenue();
         decimal currMonthAvgRevenue = totalRevenue / DateTime.Today.Day;
         decimal nextMonthRevenue = currMonthAvgRevenue * DateTime.DaysInMonth(DateTime.Now.Year, nextMonth.Month);
+
+        /* 
+        Derived from getting the average daily sales for this month by getting total revenue so far for the current month, 
+        dividing it with the number days that has passed for the month and multiplied that to the number
+        of days for the next month.
+        */
+
+
+        await GenerateBarOverlayChart(totalRevenue, nextMonthRevenue);
+    }
+
+
+    public async Task GenerateBarOverlayChart(decimal totalRevenue, decimal nextMonthRevenue)
+    {
+        DateTime nextMonth = DateTime.Now.AddMonths(1);
+
+        CurrentRevenue = $"₱{totalRevenue:0.00}";
         ForecastedRevenue = $"₱{nextMonthRevenue:0.00}";
 
         // actual generation of chart
