@@ -4,11 +4,16 @@
                xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                x:Class="MobiMart.View.SyncBusyPopup"
                BackgroundColor="Transparent"
-               InputTransparent="False"> 
+               Padding="0"
+               Margin="0"
+               HorizontalOptions="FillAndExpand"
+               VerticalOptions="FillAndExpand"
+               InputTransparent="False">
 
     <Grid BackgroundColor="#99000000" 
-          HorizontalOptions="Fill" 
-          VerticalOptions="Fill">
+          HorizontalOptions="FillAndExpand" 
+          VerticalOptions="FillAndExpand"
+          Margin="0">
         
         <VerticalStackLayout VerticalOptions="Center" 
                              HorizontalOptions="Center" 
