@@ -5,8 +5,8 @@ public record DeliveryRecord
     public Guid DeliveryId { get; set; }
     public string ItemName { get; set; } = "";
     public int DelivQuantity { get; set; }
-    public string DateDelivered { get; set; } = "";
-    public string DateExpire { get; set; } = "";
+    public DateTime DateDelivered { get; set; }
+    public DateTime DateExpire { get; set; }
     public double BatchCostPrice { get; set; }
     public string ItemType { get; set; } = "";
     public string ItemDesc { get; set; } = "";
@@ -14,5 +14,5 @@ public record DeliveryRecord
     public int QuantityInStock { get; set; }
 
     public string ConsignmentSchedule { get; set; } = "";
-    public string ReturnByDate { get; set; } = "";
+    public DateTime? ReturnByDate { get; set; }
 }

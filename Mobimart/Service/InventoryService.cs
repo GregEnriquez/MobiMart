@@ -210,15 +210,15 @@ public class InventoryService
                 DeliveryId = d.Id,
                 ItemName = item.Name,
                 DelivQuantity = d.DeliveryAmount,
-                DateDelivered = d.DateDelivered.LocalDateTime.ToString(),
-                DateExpire = d.ExpirationDate.LocalDateTime.ToString(),
+                DateDelivered = d.DateDelivered.LocalDateTime,
+                DateExpire = d.ExpirationDate.LocalDateTime,
                 BatchCostPrice = (float)d.BatchWorth,
                 ItemType = item.Type,
                 ItemDesc = desc?.Text ?? "",
                 Barcode = item.Barcode,
                 QuantityInStock = inv is null || inv.IsDeleted ? 0 : inv.TotalAmount,
                 ConsignmentSchedule = d.ConsignmentSchedule,
-                ReturnByDate = d.ReturnByDate!.Value.LocalDateTime.ToString() ?? ""
+                ReturnByDate = d.ReturnByDate is null ? null : d.ReturnByDate.Value.LocalDateTime
             });
         }
 
@@ -248,15 +248,16 @@ public class InventoryService
                 DeliveryId = d.Id,
                 ItemName = item.Name,
                 DelivQuantity = d.DeliveryAmount,
-                DateDelivered = d.DateDelivered.LocalDateTime.ToString(),
-                DateExpire = d.ExpirationDate.LocalDateTime.ToString(),
+                DateDelivered = d.DateDelivered.LocalDateTime,
+                DateExpire = d.ExpirationDate.LocalDateTime,
                 BatchCostPrice = (double)d.BatchWorth,
                 ItemType = item.Type,
                 ItemDesc = desc!.Text,
                 Barcode = item.Barcode,
                 QuantityInStock = inv is not null ? inv.TotalAmount : 0,
                 ConsignmentSchedule = d.ConsignmentSchedule,
-                ReturnByDate = d.ReturnByDate!.Value.LocalDateTime.ToString() ?? ""
+                // ReturnByDate =  d.ReturnByDate!.Value.LocalDateTime.ToString() ?? ""
+                ReturnByDate =  d.ReturnByDate is null ? null : d.ReturnByDate!.Value.LocalDateTime
             });
         }
 

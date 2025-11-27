@@ -161,11 +161,11 @@ namespace MobiMart.ViewModel
                         VisibleCol2 = true;
                         break;
                     case DeliveryCategory.DateDelivered:
-                        SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => DateTime.Parse(x.DateDelivered))] : [.. _supplierItems.OrderBy(x => DateTime.Parse(x.DateDelivered))];
+                        SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => x.DateDelivered)] : [.. _supplierItems.OrderBy(x => x.DateDelivered)];
                         VisibleCol3 = true;
                         break;
                     case DeliveryCategory.DateExpiry:
-                        SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => DateTime.Parse(x.DateExpire))] : [.. _supplierItems.OrderBy(x => DateTime.Parse(x.DateExpire))];
+                        SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => x.DateExpire)] : [.. _supplierItems.OrderBy(x => x.DateExpire)];
                         SupplierItems = [..SupplierItems.Where(x => x.QuantityInStock > 0)];
                         VisibleCol4 = true;
                         break;
@@ -183,7 +183,7 @@ namespace MobiMart.ViewModel
                         break;
                     case DeliveryCategory.DateReturn:
                         VisibleCol8 = true;
-                        SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => DateTime.Parse(x.ReturnByDate))] : [.. _supplierItems.OrderBy(x => DateTime.Parse(x.ReturnByDate))];
+                        SupplierItems = isDescending ? [.. _supplierItems.OrderByDescending(x => x.ReturnByDate)] : [.. _supplierItems.OrderBy(x => x.ReturnByDate)];
                         break;
                     default:
                         SupplierItems = [.. _supplierItems];

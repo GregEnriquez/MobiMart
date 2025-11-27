@@ -363,14 +363,14 @@
                                 
 
                                 <Label 
-                                    Text="{Binding DateDelivered}" 
+                                    Text="{Binding DateDelivered, StringFormat='{0:d}'}"
                                     TextColor="White" 
                                     HorizontalTextAlignment="Center"
                                     FontSize="18"
                                     Grid.Column="3"/>
 
                                 <Label 
-                                    Text="{Binding DateExpire}" 
+                                    Text="{Binding DateExpire, StringFormat='{0:d}'}" 
                                     TextColor="White" 
                                     HorizontalTextAlignment="Center"
                                     FontSize="18"
@@ -407,7 +407,7 @@
                                 </Label>
 
                                 <Label 
-                                    Text="{Binding ReturnByDate}" 
+                                    Text="{Binding ReturnByDate, StringFormat='{0:d}'}" 
                                     TextColor="White" 
                                     HorizontalTextAlignment="Center"
                                     FontSize="18"
