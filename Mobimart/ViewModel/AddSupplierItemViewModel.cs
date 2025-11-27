@@ -109,7 +109,7 @@ namespace MobiMart.ViewModel
                 {
                     Id = Guid.NewGuid(),
                     Barcode = BarcodeId,
-                    BusinessId = user.BusinessRefId,
+                    BusinessId = user.BusinessId,
                     Name = WItemName,
                     Type = WItemType,
                     RetailPrice = WRetailPrice!.Value,
@@ -174,7 +174,7 @@ namespace MobiMart.ViewModel
             var _dateExpire = (DateTime)WDateExpire!;
             var delivery = new Delivery()
             {
-                BusinessId = user.BusinessRefId,
+                BusinessId = user.BusinessId,
                 SupplierId = Supplier.Id,
                 ItemBarcode = BarcodeId,
                 DeliveryAmount = (int)WDelivQuantity!,
@@ -194,7 +194,7 @@ namespace MobiMart.ViewModel
             // -- SAVE ITEM TO INVENTORY RECORD --
             var inv = new Inventory()
             {
-                BusinessId = user.BusinessRefId,
+                BusinessId = user.BusinessId,
                 DeliveryId = delivery.Id,
                 ItemBarcode = BarcodeId,
                 TotalAmount = (int)WDelivQuantity!
@@ -214,7 +214,7 @@ namespace MobiMart.ViewModel
                 """;
                 var r = new Reminder()
                 {
-                    BusinessId = user.BusinessRefId,
+                    BusinessId = user.BusinessId,
                     Type = ReminderType.ConsignmentDue,
                     Title = "Return Consignment Item",
                     Message = m,

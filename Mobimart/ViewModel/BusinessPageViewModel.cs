@@ -56,7 +56,7 @@ public partial class BusinessPageViewModel : BaseViewModel
     {
         var userInstance = await userService.GetUserInstanceAsync();
         var user = await userService.GetUserAsync(userInstance.UserId);
-        var business = await businessService.GetBusinessAsync(user.BusinessRefId);
+        var business = await businessService.GetBusinessAsync(user.BusinessId);
 
         // for update only
         if (business is not null)
@@ -105,8 +105,9 @@ public partial class BusinessPageViewModel : BaseViewModel
             Code = code,
         };
         await businessService.AddBusinessAsync(business);
-        user.BusinessRefId = business.Id;
+        user.BusinessId = business.Id;
         user.EmployeeType = "owner";
+        user.LastUpdatedAt = DateTimeOffset.Now;
         await userService.UpdateUserAsync(user);
 
 
@@ -123,7 +124,7 @@ public partial class BusinessPageViewModel : BaseViewModel
     {
         var userInstance = await userService.GetUserInstanceAsync();
         var user = await userService.GetUserAsync(userInstance.UserId);
-        var business = await businessService.GetBusinessAsync(user.BusinessRefId);
+        var business = await businessService.GetBusinessAsync(user.BusinessId);
 
         IsOwner = true;
         BusinessName = "";

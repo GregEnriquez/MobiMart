@@ -17,9 +17,11 @@ public partial class LoginViewModel : BaseViewModel
     string password = "";
 
     UserService userService;
-    public LoginViewModel(UserService userService)
+    SyncService syncService;
+    public LoginViewModel(UserService userService, SyncService syncService)
     {
         this.userService = userService;
+        this.syncService = syncService;
 
         IsBusy = true;
     }
@@ -90,6 +92,9 @@ public partial class LoginViewModel : BaseViewModel
         if (await userService.ResumeUserInstanceAsync())
         {
             await Toast.Make("Login Session Resumed", ToastDuration.Short, 14).Show();
+
+            // sync user data
+            await syncService.SyncUserLocallyAsync();
 
             // await Shell.Current.GoToAsync("//UserPage", false);
             await Task.Delay(500); //fake loading

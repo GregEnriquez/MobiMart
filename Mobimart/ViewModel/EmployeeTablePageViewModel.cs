@@ -28,7 +28,7 @@ public partial class EmployeeTablePageViewModel : BaseViewModel
         var userInstance = await userService.GetUserInstanceAsync();
         var user = await userService.GetUserAsync(userInstance.UserId);
         // var business = await businessService.GetBusinessAsync(user.BusinessRefId);
-        Employees = await userService.GetEmployees(user.BusinessRefId);
+        Employees = await userService.GetEmployees(user.BusinessId);
         Employees.Remove(user);
     }
 
@@ -85,7 +85,7 @@ public partial class EmployeeTablePageViewModel : BaseViewModel
         if (confirm)
         {
             user.EmployeeType = "";
-            user.BusinessRefId = Guid.Empty;
+            user.BusinessId = Guid.Empty;
             await userService.UpdateUserAsync(user);
             await RefreshEmployees();
         }

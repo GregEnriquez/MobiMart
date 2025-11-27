@@ -37,7 +37,8 @@ namespace MobiMart
             // return new Window(appShell);
 
             var userService = services.GetServices<UserService>().First();
-            return new Window(new NavigationPage(new MainPage(new LoginViewModel(userService))));
+            var syncService = services.GetServices<SyncService>().First();
+            return new Window(new NavigationPage(new MainPage(new LoginViewModel(userService, syncService))));
         }
 
 

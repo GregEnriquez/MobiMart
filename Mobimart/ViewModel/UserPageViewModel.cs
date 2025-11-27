@@ -85,7 +85,7 @@ public partial class UserPageViewModel : BaseViewModel
             user.Age = Age;
 
         // birthday
-        if (user.BirthDate is not null && user.BirthDate.Value.Date != Birthday.Date)
+        if (user.BirthDate.Date != Birthday.Date)
             user.BirthDate = new DateTime(DateOnly.FromDateTime(Birthday), TimeOnly.FromDateTime(Birthday));
 
         if (user.PhoneNumber != PhoneNumber)
@@ -95,7 +95,7 @@ public partial class UserPageViewModel : BaseViewModel
 
         // last modified
 
-
+        user.LastUpdatedAt = DateTimeOffset.UtcNow;
         await userService.UpdateUserAsync(user);
         await Toast.Make("Profile Successfully Updated", ToastDuration.Short, 14).Show();
         IsBusy = false;
@@ -125,10 +125,10 @@ public partial class UserPageViewModel : BaseViewModel
         Password = "********";
         Age = user.Age;
         // Birthday = DateOnly.ParseExact(user.BirthDate, "yyyy-MM-dd").ToDateTime(TimeOnly.MinValue);
-        Birthday = user.BirthDate is null ? DateTime.MinValue : user.BirthDate.Value;
+        Birthday = user.BirthDate;
         PhoneNumber = user.PhoneNumber;
 
-        var business = await businessService.GetBusinessAsync(user.BusinessRefId);
+        var business = await businessService.GetBusinessAsync(user.BusinessId);
         if (business is not null)
         {
             BusinessCode = business.Code;
@@ -180,7 +180,7 @@ public partial class UserPageViewModel : BaseViewModel
             return;
         }
 
-        user.BusinessRefId = business.Id;
+        user.BusinessId = business.Id;
         user.EmployeeType = "pending";
         await userService.UpdateUserAsync(user);
         await UpdateInfo();
@@ -211,7 +211,7 @@ public partial class UserPageViewModel : BaseViewModel
         if (confirm)
         {
             user.EmployeeType = "";
-            user.BusinessRefId = Guid.Empty;
+            user.BusinessId = Guid.Empty;
             await userService.UpdateUserAsync(user);
             await UpdateInfo();
             NotJoinedBusiness = true;

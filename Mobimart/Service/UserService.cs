@@ -60,6 +60,7 @@ public class UserService
             return false;
         }
 
+
         // if refresh token validity is expired
         var expiry = userInstance.RefreshTokenExpiryTime;
         if (DateTime.Today > expiry)
@@ -169,25 +170,39 @@ public class UserService
             throw new Exception(e.Message);
         }
 
+
         // check if user already exists on the local db
         var user = await db!.Table<User>().FirstOrDefaultAsync(x => x.Email == email);
+
+        // pull user from remote db
+        var userResponse = await client.GetAsync($"users/{email}");
+        var jsonString = await userResponse.Content.ReadAsStringAsync();
+        var pulledUser = JsonConvert.DeserializeObject<User>(jsonString)!;
+
+        // if it doesn't exist
         if (user is null)
         {
-            // pull user from remote db
-            var response = await client.GetAsync($"users/{email}");
-            var jsonString = await response.Content.ReadAsStringAsync();
-            user = JsonConvert.DeserializeObject<User>(jsonString)!;
-
+            // create one based on the one from the server
+            user = new User {Id = pulledUser.Id};
+            user.UpdateFromUserObject(pulledUser);
             // then save it to local db
-            await db!.InsertAsync(user);
+            await db!.InsertAsync(pulledUser);
+        }
+        // if user on the local db exists
+        else
+        {
+            // if data is outdated
+            if (pulledUser.LastUpdatedAt >= user.LastUpdatedAt)
+            {
+                // update data
+                user.UpdateFromUserObject(pulledUser);
+            }
         }
 
         // update tokens
-        // user = await db.Table<User>().Where(x => x.Id == user!.Id).FirstOrDefaultAsync();
         user.RefreshToken = tokens["refreshToken"];
         user.RefreshTokenExpiryTime = DateTimeOffset.UtcNow.AddMonths(1);
-        user.LastUpdatedAt = DateTimeOffset.UtcNow;
-        await db.UpdateAsync(user);
+        await db.UpdateAsync(user); // update from database
 
         // create user instance (session)
             // clear old session first
@@ -290,7 +305,7 @@ public class UserService
     {
         await Init();
         return await db!.Table<User>()
-                        .Where(x => x.BusinessRefId == businessId)
+                        .Where(x => x.BusinessId == businessId)
                         .ToListAsync();
     }
 }

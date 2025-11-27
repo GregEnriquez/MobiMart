@@ -42,6 +42,7 @@ namespace MobiMart
             builder.Services.AddSingleton<NotificationService>();
             builder.Services.AddSingleton<OpenAiService>();
             builder.Services.AddSingleton<GeminiService>();
+            builder.Services.AddSingleton<SyncService>();
 
             // inject viewmodels
             builder.Services.AddTransient<SignUpViewModel>();
@@ -82,6 +83,7 @@ namespace MobiMart
             builder.Services.AddTransient<SupplierList>();
             builder.Services.AddTransient<EditInventoryPopup>();
             builder.Services.AddTransient<EditSupplierInventory>();
+            builder.Services.AddTransient<SyncBusyPopup>();
         
 
 #if DEBUG

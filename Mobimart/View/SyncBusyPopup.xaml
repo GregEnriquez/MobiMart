@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               x:Class="MobiMart.View.SyncBusyPopup"
+               BackgroundColor="Transparent"
+               InputTransparent="False"> 
+
+    <Grid BackgroundColor="#99000000" 
+          HorizontalOptions="Fill" 
+          VerticalOptions="Fill">
+        
+        <VerticalStackLayout VerticalOptions="Center" 
+                             HorizontalOptions="Center" 
+                             Spacing="20">
+
+            <ActivityIndicator IsRunning="True" 
+                               Color="#D99B2B"
+                               HeightRequest="50" 
+                               WidthRequest="50"/>
+            
+            <Label Text="Syncing Data..." 
+                   TextColor="White" 
+                   FontSize="18" 
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"/>
+                   
+            <Label Text="Please do not close the app" 
+                   TextColor="#CCC" 
+                   FontSize="12" 
+                   HorizontalOptions="Center"/>
+                   
+        </VerticalStackLayout>
+    </Grid>
+</toolkit:Popup>

@@ -160,4 +160,10 @@
 	  </MauiXaml>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Helpers\" />
+	  <Folder Include="Helpers\Dtos\" />
+	  <Folder Include="Helpers\Mapping\" />
+	</ItemGroup>
+
 </Project>

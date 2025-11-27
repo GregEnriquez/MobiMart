@@ -66,7 +66,7 @@ public class BusinessService
         b.LastUpdatedAt = DateTimeOffset.UtcNow;
         await db!.InsertAsync(b);
     }
-
+    
 
     public async Task AddMonthlyForecastInstance(MonthlyForecastInstance x)
     {

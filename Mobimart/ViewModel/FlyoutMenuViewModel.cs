@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Maui.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MobiMart.Model;
@@ -16,6 +17,7 @@ public partial class FlyoutMenuViewModel : BaseViewModel
     BusinessService businessService;
     NotificationService notificationService;
     InventoryService inventoryService;
+    SyncService syncService;
 
     [ObservableProperty]
     string businessName = "Business Name";
@@ -30,17 +32,21 @@ public partial class FlyoutMenuViewModel : BaseViewModel
     [ObservableProperty]
     bool isUserEmployee = false;
 
+    [ObservableProperty]
+    string lastSyncDisplay = "Sync Now";
+
     User? user;
     Business? business;
 
     bool isRemindersUpdated = false;
 
-    public FlyoutMenuViewModel(UserService userService, BusinessService businessService, NotificationService notificationService, InventoryService inventoryService)
+    public FlyoutMenuViewModel(UserService userService, BusinessService businessService, NotificationService notificationService, InventoryService inventoryService, SyncService syncService)
     {
         this.userService = userService;
         this.businessService = businessService;
         this.notificationService = notificationService;
         this.inventoryService = inventoryService;
+        this.syncService = syncService;
 
         user = null;
 
@@ -92,7 +98,7 @@ public partial class FlyoutMenuViewModel : BaseViewModel
         var userInstance = await userService.GetUserInstanceAsync();
         if (userInstance is null) return;
         user = await userService.GetUserAsync(userInstance.UserId);
-        business = await businessService.GetBusinessAsync(user.BusinessRefId);
+        business = await businessService.GetBusinessAsync(user.BusinessId);
 
         Username = "";
         BusinessName = "";
@@ -126,11 +132,78 @@ public partial class FlyoutMenuViewModel : BaseViewModel
             IsUserEmployee = false;
         }
 
+        RefreshSyncTimeDisplay();
+
         // update reminders only once a day
         if (!isRemindersUpdated)
         {
             await notificationService.CheckAndScheduleNotificationsAsync(inventoryService);
             isRemindersUpdated = true;
+        }
+    }
+
+
+
+    [RelayCommand]
+    public async Task SyncNow()
+    {
+        if (IsBusy) return;
+        IsBusy = true;
+
+        // show loading user feedback
+        var popup = new SyncBusyPopup();
+        Shell.Current.ShowPopup(popup); 
+
+        try 
+        {
+            // short delay to ensure popup renders smoothly
+            await Task.Delay(100);
+            
+            bool success = await syncService.SyncDataAsync();
+
+            // close popup
+            await popup.CloseAsync();
+
+            if (success)
+            {
+                await Toast.Make("Sync Complete!", ToastDuration.Short).Show();
+
+                // refresh other pages data on screen (by going back to the user page)
+                await Shell.Current.GoToAsync("//UserPage");
+
+                // refresh data on screen
+                await ForceUpdateInfo();
+            }
+            else
+            {
+                await Toast.Make("Sync Failed. Check internet.", ToastDuration.Long).Show();
+            }
+        }
+        catch (Exception ex)
+        {
+            await popup.CloseAsync(); // Ensure popup closes even on crash
+            Debug.WriteLine(ex);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    private void RefreshSyncTimeDisplay()
+    {
+        var lastSyncStr = Preferences.Get("LastSyncTimestamp", "");
+        
+        if (string.IsNullOrEmpty(lastSyncStr) || lastSyncStr == DateTimeOffset.MinValue.ToString("o"))
+        {
+            LastSyncDisplay = "Sync Data Now\n(Never Synced)";
+        }
+        else
+        {
+            var date = DateTimeOffset.Parse(lastSyncStr).ToLocalTime();
+            
+            // Format: "Sync Now [Newline] Last: Nov 25, 10:30 PM"
+            LastSyncDisplay = $"Sync Data Now\nLast: {date:MMM dd, h:mm tt}";
         }
     }
 
