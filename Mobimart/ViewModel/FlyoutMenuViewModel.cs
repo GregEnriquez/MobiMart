@@ -164,6 +164,9 @@ public partial class FlyoutMenuViewModel : BaseViewModel
             // close popup
             await popup.CloseAsync();
 
+            // close navbar
+            Shell.Current.FlyoutIsPresented = false;
+
             if (success)
             {
                 await Toast.Make("Sync Complete!", ToastDuration.Short).Show();
