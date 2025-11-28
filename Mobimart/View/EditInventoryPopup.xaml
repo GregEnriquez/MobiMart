@@ -11,7 +11,7 @@
              Padding="20">
     
     <VerticalStackLayout Padding="0" Spacing="10" HorizontalOptions="FillAndExpand" Margin="0">
-        <Label Text="Select Record for"
+        <Label Text="Tap Record to Edit"
                FontSize="18"
                HorizontalOptions="Center"
                FontAttributes="Bold"
@@ -19,6 +19,22 @@
         <Label Text="{Binding Item.Name}"
                FontSize="16"
                HorizontalOptions="Center"/>
+        <Border Stroke="#6D5206"
+            StrokeThickness="1"
+            StrokeShape="RoundRectangle 10"
+            HorizontalOptions="Center">
+        
+            <Picker Title="Sort Records By..."
+                    TitleColor="Gray"
+                    TextColor="#6D5206"
+                    FontSize="12"
+                    WidthRequest="180"
+                    ItemsSource="{Binding SortOptions}"
+                    SelectedItem="{Binding SelectedSortOption}"
+                    HorizontalTextAlignment="Center"
+                    Margin="0, -5, 0, -2">
+            </Picker>
+        </Border>
 
         <ScrollView Orientation="Both" HorizontalOptions="Fill" Margin="0">
             <VerticalStackLayout HeightRequest="280" Margin="0">

@@ -16,6 +16,19 @@ public partial class EditInventoryPopupViewModel : BaseViewModel, IQueryAttribut
     public List<DeliveryRecord> deliveries;
     [ObservableProperty]
     public Item item;
+    [ObservableProperty]
+    public string selectedSortOption;
+
+    public List<string> SortOptions { get; } = [
+        "Expiry Date (Soonest)",
+        "Expiry Date (Latest)",
+        "Date Delivered (Newest)",
+        "Date Delivered (Oldest)",
+        "Quantity (High to Low)",
+        "Quantity (Low to High)"
+    ];
+
+    private List<DeliveryRecord> _allDeliveriesCache = [];
 
     public string ItemBarcode { get; set; }
 
@@ -29,24 +42,37 @@ public partial class EditInventoryPopupViewModel : BaseViewModel, IQueryAttribut
     }
 
 
+    partial void OnSelectedSortOptionChanged(string value)
+    {
+        SortData(value);
+    }
+
+
+    private void SortData(string sortType)
+    {
+        if (_allDeliveriesCache is null || !_allDeliveriesCache.Any()) return;
+
+        // Sort based on the selected string
+        var sorted = sortType switch
+        {
+            "Date Delivered (Newest)" => _allDeliveriesCache.OrderByDescending(x => x.DateDelivered),
+            "Date Delivered (Oldest)" => _allDeliveriesCache.OrderBy(x => x.DateDelivered),
+            "Quantity (High to Low)" => _allDeliveriesCache.OrderByDescending(x => x.QuantityInStock), // Or DelivQuantity depending on preference
+            "Quantity (Low to High)" => _allDeliveriesCache.OrderBy(x => x.QuantityInStock),
+            "Expiry Date (Soonest)" => _allDeliveriesCache.OrderBy(x => x.DateExpire),
+            "Expiry Date (Latest)" => _allDeliveriesCache.OrderByDescending(x => x.DateExpire),
+            _ => _allDeliveriesCache.AsEnumerable()
+        };
+
+        // update observable property
+        Deliveries = [.. sorted];
+    }
+
+
     private async void RefreshRecords()
     {
         Item = await inventoryService.GetItemAsync(ItemBarcode);
-        // var DeliveriesDummy = new List<Delivery>();
-        // var inventoryList = await inventoryService.GetInventoriesAsync(ItemBarcode);
-        // var deliveries = await inventoryService.GetDeliveriesAsync(ItemBarcode);
 
-        // foreach (var inv in inventoryList)
-        // {
-        //     var deliveryRecord = deliveries.Find(x => x.Id == inv.DeliveryId);
-        //     if (deliveryRecord is not null)
-        //     {
-        //         DeliveriesDummy.Add(deliveryRecord);
-        //         continue;
-        //     }
-        // }
-
-        // Deliveries = DeliveriesDummy;
         try
         {
             var deliveries = await inventoryService.GetDeliveryRecordsViaItem(ItemBarcode);
@@ -59,11 +85,15 @@ public partial class EditInventoryPopupViewModel : BaseViewModel, IQueryAttribut
                 filteredDeliveries.Add(d);
             }
 
-            Deliveries = [.. filteredDeliveries.AsEnumerable()];
+            // save to cache
+            _allDeliveriesCache = filteredDeliveries;
+
+            // set default view
+            SelectedSortOption = SortOptions[0];
         }
         catch (Exception e)
         {
-            
+            Debug.WriteLine(e);
         }
     }
 

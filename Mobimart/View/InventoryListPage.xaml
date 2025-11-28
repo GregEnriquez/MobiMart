@@ -70,24 +70,24 @@
                         </DataTrigger>
                     </ScrollView.Triggers>
                     <VerticalStackLayout>
-                        <Grid ColumnDefinitions="120, 120, 120, 120, 120" BackgroundColor="#6D5206" Padding="5">
+                        <Grid ColumnDefinitions="105, 80, 80, 80, 120" BackgroundColor="#6D5206" Padding="5">
                             <Label Text="Item Name" TextColor="White" FontAttributes="Bold" />
                             <Label Grid.Column="1" Text="Quantity" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
                             <Label Grid.Column="2" Text="Price" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
-                            <Label Grid.Column="3" Text="Type" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
-                            <Label Grid.Column="4" Text="Action" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+                            <Label Grid.Column="4" Text="Type" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+                            <Label Grid.Column="3" Text="Action" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
                         </Grid>
 
                         <CollectionView ItemsSource="{Binding InventoryItems}">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="model:InventoryRecord">
-                                    <Grid ColumnDefinitions="120, 120, 120, 120, 120" Padding="5" BackgroundColor="#F6CD5E">
+                                    <Grid ColumnDefinitions="105, 80, 80, 80, 120" Padding="5" BackgroundColor="#F6CD5E">
                                         <Label Text="{Binding Name}" TextColor="#6D5206" />
                                         <Label Grid.Column="1" Text="{Binding Quantity}" TextColor="#6D5206" HorizontalOptions="Center" />
                                         <Label Grid.Column="2" Text="{Binding Price}" TextColor="#6D5206" HorizontalOptions="Center" />
-                                        <Label Grid.Column="3" Text="{Binding Type}" TextColor="#6D5206" HorizontalOptions="Center" />
-                                        <Button Grid.Column="4"
-                                                Text="Edit"
+                                        <Label Grid.Column="4" Text="{Binding Type}" TextColor="#6D5206" HorizontalOptions="Center" />
+                                        <Button Grid.Column="3"
+                                                Text="Manage"
                                                 BackgroundColor="#FBE7B3"
                                                 TextColor="#6D5206"
                                                 CornerRadius="10"

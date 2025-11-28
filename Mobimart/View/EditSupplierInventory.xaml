@@ -13,7 +13,7 @@
             <VerticalStackLayout Padding="20" Spacing="15">
 
                 <Label 
-                    Text="Item Details" 
+                    Text="Inventory Details" 
                     FontAttributes="Bold" 
                     TextColor="#6F4E37" 
                     HorizontalTextAlignment="Center"
@@ -160,7 +160,20 @@
                     Stroke="#A9882D"
                     StrokeThickness="1.5"
                     StrokeShape="RoundRectangle 10,10,10,10">
-                        <Entry Placeholder="Enter Consignment Schedule" Text="{Binding WConsignmentSchedule}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
+                        <!-- <Entry Placeholder="Enter Consignment Schedule" Text="{Binding WConsignmentSchedule}" BackgroundColor="#F8ECC6" TextColor="#A9882D" /> -->
+                        <Picker Title="Select Consignment Schedule"
+                                SelectedItem="{Binding WConsignmentSchedule}">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Weekly</x:String>
+                                    <x:String>Biweekly</x:String>
+                                    <x:String>Monthly</x:String>
+                                    <x:String>Bimonthly</x:String>
+                                    <x:String>Quarterly</x:String>
+                                    <x:String>Annual</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
                     </Border>
 
                 </VerticalStackLayout>
