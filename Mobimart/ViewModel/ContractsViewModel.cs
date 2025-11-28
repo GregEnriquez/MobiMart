@@ -43,10 +43,6 @@ public partial class ContractsViewModel : BaseViewModel
         // get all the suppliercontracts within the last 7 days
         for (int i = 0; i < suppliers.Count; i++)
         {
-            if (i == 4)
-            {
-                Debug.WriteLine("yers");
-            }
             var supplier = suppliers[i];
             if (!supplier.Type.ToLower().Equals("consignment")) continue;
 
@@ -58,6 +54,14 @@ public partial class ContractsViewModel : BaseViewModel
                 SupplierContracts.Add(contract);
             }
         }
+
+        // get all the completed/returned contract
+        var returnedSupplierContracts = await supplierService.GetReturnedSupplierContractsAsync();
+        foreach (var contract in returnedSupplierContracts)
+        {
+            SupplierContracts.Add(contract);
+        }
+
 
         SupplierContracts = [.. SupplierContracts.AsEnumerable()];
         IsLoadingRecords = false;

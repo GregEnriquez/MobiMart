@@ -115,6 +115,7 @@ namespace MobiMart.ViewModel
             foreach (var reminder in allReminders)
             {
                 if (reminder.NotifyAtDate.LocalDateTime.Month != CurrentDate.Month) continue;
+                if (reminder.IsDeleted) continue;
                 Days[reminder.NotifyAtDate.LocalDateTime.Day - 1].HasReminders = true;
             }
         }
@@ -129,7 +130,7 @@ namespace MobiMart.ViewModel
             selectedDay = Days[day.DayIdx];
             selectedDay.IsSelected = true;
 
-            Reminders = [.. allReminders.Where(x => x.NotifyAtDate.LocalDateTime.Date == CurrentDate.Date)];
+            Reminders = [.. allReminders.Where(x => x.NotifyAtDate.LocalDateTime.Date == CurrentDate.Date && !x.IsDeleted)];
         }
 
 

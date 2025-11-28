@@ -45,6 +45,62 @@ public class SupplierService
     }
 
 
+    public async Task<List<CompletedContractItem>> GetCompletedContractItemsAsync(Guid contractId)
+    {
+        await Init();
+
+        return await db!.Table<CompletedContractItem>().Where(x => x.ContractId == contractId).ToListAsync();
+    }
+
+
+    public async Task<List<SupplierContract>> GetReturnedSupplierContractsAsync()
+    {
+        await Init();
+        var businessId = Guid.Empty;
+        if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
+        {
+            businessId = vm.BusinessId;
+        }
+
+        var completedContracts = await db!.Table<CompletedContract>().Where(x => x.BusinessId == businessId).ToListAsync();
+        if (completedContracts is null || !completedContracts.Any()) return [];
+
+        var output = new List<SupplierContract>();
+
+        foreach (CompletedContract contract in completedContracts)
+        {
+            var contractItems = new List<ContractItem>();
+            var completedContractItems = await GetCompletedContractItemsAsync(contract.Id);
+            foreach(var item in completedContractItems)
+            {
+                contractItems.Add(new()
+                {
+                   Name = item.Name,
+                   ReturnQuantity = item.ReturnQuantity,
+                   SoldQuantity = item.SoldQuantity 
+                });
+            }
+
+            var supContract = new SupplierContract
+            {
+                SupplierName = contract.SupplierName,
+                AmountToPay = contract.AmountToPay,
+                HasProof = true,
+                ImageData = contract.ProofImageData,
+                IsDropped = false,
+                IsReturned = true,
+                Items = contractItems,
+                ImageSource = ImageSource.FromStream(() => new MemoryStream(contract.ProofImageData)),
+                ReturnDate = contract.ReturnDate!.Value.LocalDateTime
+            };
+
+            output.Add(supContract);
+        }
+
+        return output;
+    }
+
+
     public async Task AddSupplierAsync(Supplier s)
     {
         await Init();

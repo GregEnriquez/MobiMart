@@ -432,6 +432,7 @@ public class InventoryService
             SupplierName = supplier.Name,
             ReturnDate = returnDate,
             IsDropped = false,
+            IsReturned = false,
             Items = [.. items],
             AmountToPay = total
         };

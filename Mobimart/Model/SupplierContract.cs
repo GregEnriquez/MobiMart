@@ -21,6 +21,8 @@ public class SupplierContract : INotifyPropertyChanged
     public byte[] ImageData { get; set; }
     private bool hasProof = false;
     public bool HasProof { get => hasProof; set { hasProof = value; OnPropertyChanged(); } }
+    private bool isReturned = false;
+    public bool IsReturned { get => isReturned; set { isReturned = value; OnPropertyChanged(); } }
 
     public event PropertyChangedEventHandler? PropertyChanged;
     protected void OnPropertyChanged([CallerMemberName] string name = "") =>
