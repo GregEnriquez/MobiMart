@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,13 +23,10 @@ public class SyncController(MobiMartContext db) : ControllerBase
         // if "timeStampSince" is null (first sync), use MinValue to fetch everything.
         var timestamp = timestampSince ?? DateTimeOffset.MinValue;
 
-        // verify if user actually belongs in the business
-
         // fetch only records modified AFTER the client's last sync
         // AsNoTracking() makes reads faster since we aren't updating them here.
         
-        var businesses = (await db.Businesses.AsNoTracking().ToListAsync())
-            .Where(x => x.LastUpdatedAt > timestamp);
+        var businesses = await db.Businesses.AsNoTracking().ToListAsync();
 
         // if no businessId is given it just means the client who requested
         // is currently not affiliated with any business yet (client is a new user)
@@ -54,6 +52,9 @@ public class SyncController(MobiMartContext db) : ControllerBase
 
             return Ok(businessOnlyResponse);
         }
+
+        // verify if user actually belongs in the business before sending data
+
 
         var users = (await db.Users.AsNoTracking()
             .Where(x => x.BusinessId == businessId).ToListAsync())

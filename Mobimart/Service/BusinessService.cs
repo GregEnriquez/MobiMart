@@ -34,20 +34,21 @@ public class BusinessService
     public async Task<Business> GetBusinessAsync(Guid id)
     {
         await Init();
-        return await db!.Table<Business>().Where(x => x.Id == id).FirstOrDefaultAsync();
+        return await db!.Table<Business>().Where(x => x.Id == id && !x.IsDeleted).FirstOrDefaultAsync();
     }
 
 
     public async Task<Business> GetBusinessAsync(string code)
     {
         await Init();
-        return await db!.Table<Business>().Where(x => x.Code == code).FirstOrDefaultAsync();
+        return await db!.Table<Business>().Where(x => x.Code == code && !x.IsDeleted).FirstOrDefaultAsync();
     }
 
 
     public async Task<bool> BusinessExistsAsync(string code)
     {
         await Init();
+        // DEBUG: also call the server API, create and endpoint businesses/code-exists/{code} that returns boolean
         return await db!.Table<Business>().Where(x => x.Code == code).FirstOrDefaultAsync() is not null;
     }
 

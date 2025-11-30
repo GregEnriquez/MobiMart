@@ -110,7 +110,7 @@
             <BoxView HeightRequest="1" BackgroundColor="#D99B2B" />
 
             <Button 
-                 Text="Check Inventory" 
+                 Text="Check Delivery Records" 
                  BackgroundColor="#D99B2B" 
                  TextColor="White"
                  CornerRadius="10"

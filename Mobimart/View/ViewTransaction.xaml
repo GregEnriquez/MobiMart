@@ -59,6 +59,11 @@
                                     </CheckBox.GestureRecognizers>
                                 </CheckBox>
                                 <Grid Grid.Column="1" ColumnDefinitions="100, *, *" Padding="5" ColumnSpacing="5">
+                                    <Grid.Triggers>
+                                        <DataTrigger TargetType="Grid" Binding="{Binding IsDeleted}" Value="True">
+                                            <Setter Property="IsVisible" Value="False"/>
+                                        </DataTrigger>
+                                    </Grid.Triggers>
                                     <Border Stroke="#6D5206" 
                                             StrokeThickness="1" 
                                             StrokeShape="RoundRectangle 5,5,5,5"

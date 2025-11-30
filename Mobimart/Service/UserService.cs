@@ -43,6 +43,7 @@ public class UserService
 
         await db.CreateTableAsync<User>();
         await db.CreateTableAsync<UserInstance>();
+        await db.CreateTableAsync<Business>();
     }
 
 
@@ -178,6 +179,15 @@ public class UserService
         var userResponse = await client.GetAsync($"users/{email}");
         var jsonString = await userResponse.Content.ReadAsStringAsync();
         var pulledUser = JsonConvert.DeserializeObject<User>(jsonString)!;
+
+        // if first time logging in on the app after install pull businesses from remote db
+        // DEBUG: I DONT HAVE A get/businesses endpoint
+        // if (await db!.Table<Business>().CountAsync() <= 0)
+        // {
+        //     var businessResponse = await client.GetAsync($"businesses/{email}");
+        //     jsonString = await userResponse.Content.ReadAsStringAsync();
+        //     var pulledBusinesses = JsonConvert.DeserializeObject<User>(jsonString)!;
+        // }
 
         // if it doesn't exist
         if (user is null)

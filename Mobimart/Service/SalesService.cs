@@ -63,7 +63,7 @@ public class SalesService
             businessId = vm.BusinessId;
         }
 
-        return await db!.Table<SalesTransaction>().Where(x => x.BusinessId == businessId && x.Id == transactionId).FirstOrDefaultAsync();
+        return await db!.Table<SalesTransaction>().Where(x => x.BusinessId == businessId && x.Id == transactionId && !x.IsDeleted).FirstOrDefaultAsync();
     }
 
 
@@ -112,7 +112,7 @@ public class SalesService
     {
         await Init();
 
-        return await db!.Table<SalesItem>().Where(x => x.TransactionId == transactionId).ToListAsync();
+        return await db!.Table<SalesItem>().Where(x => x.TransactionId == transactionId && !x.IsDeleted).ToListAsync();
     }
 
 
@@ -128,7 +128,7 @@ public class SalesService
 
         try
         {
-            var transactions = (await db!.Table<SalesTransaction>().Where(x => x.BusinessId == businessId).ToListAsync())
+            var transactions = (await db!.Table<SalesTransaction>().Where(x => x.BusinessId == businessId  && !x.IsDeleted).ToListAsync())
             .Where(x => x.Date.LocalDateTime.Date == date.Date).ToList();
 
             foreach (var t in transactions)
@@ -170,7 +170,7 @@ public class SalesService
         }
 
         // var ts = await db!.Table<SalesTransaction>().ToListAsync();
-        var transactions = (await db!.Table<SalesTransaction>().Where(x => x.BusinessId == businessId).ToListAsync())
+        var transactions = (await db!.Table<SalesTransaction>().Where(x => x.BusinessId == businessId && !x.IsDeleted).ToListAsync())
         .Where(x => x.Date.LocalDateTime.Month == dateMonth.Month).ToList();
 
         foreach (var t in transactions)

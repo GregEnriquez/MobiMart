@@ -93,7 +93,7 @@ public class NotificationService
         }
 
         if (businessId == Guid.Empty) return [];
-        return await db!.Table<Reminder>().Where(x=> x.BusinessId == businessId).ToListAsync();
+        return await db!.Table<Reminder>().Where(x=> x.BusinessId == businessId  && !x.IsDeleted).ToListAsync();
     }
 
 
@@ -153,14 +153,14 @@ public class NotificationService
                     await DeleteReminderAsync(reminder);
                     continue;
                 }
+                var item = await inventoryService.GetItemAsync(delivery.ItemBarcode);
                 var inv = await inventoryService.GetInventoryFromDeliveryAsync(delivery.Id);
-                var item = await inventoryService.GetItemAsync(inv.ItemBarcode);
 
                 var message = $"""
                 The item {item.Name} delivered on {delivery.DateDelivered.LocalDateTime:MM/dd/yyyy} is to be returned on {delivery.ReturnByDate.Value.LocalDateTime:MM/dd/yyyy}.
-                Items Sold: {delivery.DeliveryAmount - inv.TotalAmount}
-                Stock Remaining: {inv.TotalAmount} / {delivery.DeliveryAmount}
-                Amount to Pay: {(delivery.DeliveryAmount - inv.TotalAmount) * (delivery.BatchWorth / delivery.DeliveryAmount):0.00}
+                Items Sold: {delivery.DeliveryAmount - inv?.TotalAmount ?? 0}
+                Stock Remaining: {inv?.TotalAmount ?? 0} / {delivery.DeliveryAmount}
+                Amount to Pay: {(delivery.DeliveryAmount - inv?.TotalAmount ?? 0) * (delivery.BatchWorth / delivery.DeliveryAmount):0.00}
                 """;
 
                 reminder.Message = message;

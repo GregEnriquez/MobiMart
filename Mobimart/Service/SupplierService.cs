@@ -41,7 +41,7 @@ public class SupplierService
         {
             businessId = vm.BusinessId;
         }
-        return await db!.Table<Supplier>().Where(x => x.BusinessId == businessId).ToListAsync();
+        return await db!.Table<Supplier>().Where(x => x.BusinessId == businessId && !x.IsDeleted).ToListAsync();
     }
 
 
@@ -49,7 +49,7 @@ public class SupplierService
     {
         await Init();
 
-        return await db!.Table<CompletedContractItem>().Where(x => x.ContractId == contractId).ToListAsync();
+        return await db!.Table<CompletedContractItem>().Where(x => x.ContractId == contractId && !x.IsDeleted).ToListAsync();
     }
 
 

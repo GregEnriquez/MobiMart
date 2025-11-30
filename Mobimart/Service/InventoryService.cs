@@ -48,7 +48,7 @@ public class InventoryService
     public async Task<Item> GetItemAsync(string barcode)
     {
         await Init();
-        return await db!.Table<Item>().FirstOrDefaultAsync(x => x.Barcode.Equals(barcode));
+        return await db!.Table<Item>().FirstOrDefaultAsync(x => x.Barcode.Equals(barcode) && !x.IsDeleted);
     }
 
 
@@ -60,7 +60,7 @@ public class InventoryService
         {
             businessId = vm.BusinessId;
         }
-        return await db!.Table<Item>().Where(x => x.BusinessId == businessId).ToListAsync();
+        return await db!.Table<Item>().Where(x => x.BusinessId == businessId && !x.IsDeleted).ToListAsync();
     }
 
 
@@ -71,7 +71,7 @@ public class InventoryService
         var item = await GetItemAsync(barcode);
         if (item == null) return null;
 
-        return await db!.Table<Description>().FirstOrDefaultAsync(x => x.ItemId == item.Id);
+        return await db!.Table<Description>().FirstOrDefaultAsync(x => x.ItemId == item.Id  && !x.IsDeleted);
     }
 
 
@@ -116,7 +116,7 @@ public class InventoryService
         {
             businessId = vm.BusinessId;
         }
-        return await db!.Table<Inventory>().Where(x => x.BusinessId == businessId).ToListAsync();
+        return await db!.Table<Inventory>().Where(x => x.BusinessId == businessId && !x.IsDeleted).ToListAsync();
     }
 
 
@@ -124,7 +124,7 @@ public class InventoryService
     public async Task<Inventory> GetInventoryAsync(Guid id)
     {
         await Init();
-        return await db!.Table<Inventory>().Where(x => x.Id == id).FirstOrDefaultAsync();
+        return await db!.Table<Inventory>().Where(x => x.Id == id && !x.IsDeleted).FirstOrDefaultAsync();
     }
 
 
@@ -137,7 +137,7 @@ public class InventoryService
         {
             businessId = vm.BusinessId;
         }
-        return await db!.Table<Inventory>().Where(x => x.BusinessId == businessId && x.ItemBarcode == barcode).ToListAsync();
+        return await db!.Table<Inventory>().Where(x => x.BusinessId == businessId && x.ItemBarcode == barcode && !x.IsDeleted).ToListAsync();
     }
 
 
@@ -149,7 +149,7 @@ public class InventoryService
         {
             businessId = vm.BusinessId;
         }
-        return await db!.Table<Delivery>().Where(x => x.BusinessId == businessId && x.ItemBarcode == barcode).ToListAsync();
+        return await db!.Table<Delivery>().Where(x => x.BusinessId == businessId && x.ItemBarcode == barcode && !x.IsDeleted).ToListAsync();
     }
 
 
@@ -162,7 +162,7 @@ public class InventoryService
             businessId = vm.BusinessId;
         }
 
-        var allDeliveries = await db!.Table<Delivery>().Where(x => x.BusinessId == businessId).ToListAsync();
+        var allDeliveries = await db!.Table<Delivery>().Where(x => x.BusinessId == businessId && !x.IsDeleted).ToListAsync();
 
         return allDeliveries.Where(x => x.DateDelivered.LocalDateTime.Date == date.Date).ToList();
     }
@@ -176,7 +176,7 @@ public class InventoryService
         {
             businessId = vm.BusinessId;
         }
-        return await db!.Table<Delivery>().Where(x => x.BusinessId == businessId && x.SupplierId == supplierId).ToListAsync();
+        return await db!.Table<Delivery>().Where(x => x.BusinessId == businessId && x.SupplierId == supplierId && !x.IsDeleted).ToListAsync();
     }
 
 
@@ -188,7 +188,7 @@ public class InventoryService
         {
             businessId = vm.BusinessId;
         }
-        return await db!.Table<Delivery>().Where(x => x.BusinessId == businessId && x.ItemBarcode.Equals(barcode)).ToListAsync();
+        return await db!.Table<Delivery>().Where(x => x.BusinessId == businessId && x.ItemBarcode.Equals(barcode) && !x.IsDeleted).ToListAsync();
     }
 
 
@@ -269,7 +269,7 @@ public class InventoryService
     public async Task<Delivery> GetDeliveryAsync(Guid id)
     {
         await Init();
-        return await db!.Table<Delivery>().Where(x => x.Id == id).FirstOrDefaultAsync();
+        return await db!.Table<Delivery>().Where(x => x.Id == id  && !x.IsDeleted).FirstOrDefaultAsync();
     }
 
 
@@ -277,7 +277,15 @@ public class InventoryService
     public async Task<Inventory> GetInventoryFromDeliveryAsync(Guid deliveryId)
     {
         await Init();
-        return await db!.Table<Inventory>().Where(x => x.DeliveryId == deliveryId).FirstOrDefaultAsync();
+        return await db!.Table<Inventory>().Where(x => x.DeliveryId == deliveryId && !x.IsDeleted).FirstOrDefaultAsync();
+    }
+
+
+    public async Task<List<Inventory>> GetInventoryTable()
+    {
+        await Init();
+
+        return await db!.Table<Inventory>().ToListAsync();
     }
 
 
@@ -447,7 +455,7 @@ public class InventoryService
         if (deliveries.Count <= 0) return;
 
 
-        deliveries = [.. deliveries.Where(x => x.ReturnByDate is not null && x.ReturnByDate.Value.Date == returnDate.Date).AsEnumerable()];
+        deliveries = [.. deliveries.Where(x => x.ReturnByDate is not null && x.ReturnByDate.Value.Date == returnDate.Date)];
         for (int i = 0; i < deliveries.Count; i++)
         {
             var delivery = deliveries[i];

@@ -20,11 +20,13 @@ public partial class ViewTransactionViewModel : BaseViewModel
 
     InventoryService inventoryService;
     SalesService salesService;
+    SupplierService supplierService;
 
-    public ViewTransactionViewModel(InventoryService inventoryService, SalesService salesService)
+    public ViewTransactionViewModel(InventoryService inventoryService, SalesService salesService, SupplierService supplierService)
     {
         this.inventoryService = inventoryService;
         this.salesService = salesService;
+        this.supplierService = supplierService;
     }
 
 
@@ -54,34 +56,79 @@ public partial class ViewTransactionViewModel : BaseViewModel
             businessId = vm.BusinessId;
         }
 
-        // return each item to inventory (place it on the last delivery record of that item)
+        // return each item to inventory (put it on the inventory with the oldest delivery record of that item)
         for (int i = 0; i < Record.Items.Count; i++)
         {
             if (!selectedItems[i]) continue;
             var salesItem = Record.Items[i];
-            var itemsInDeliveries = await inventoryService.GetDeliveriesAsync(salesItem.Barcode);
-            var latestDelivery = itemsInDeliveries.OrderBy(x => x.DateDelivered).ToList()[0];
 
-            // update the inventory record of the latest delivery
-            var invItem = await inventoryService.GetInventoryFromDeliveryAsync(latestDelivery.Id);
-            if (invItem is not null)
+            // get all the delivery records for this item
+            var itemsInDeliveries = (await inventoryService.GetDeliveriesAsync(salesItem.Barcode)).OrderByDescending(x => x.DateDelivered).ToList(); // latest to oldest
+
+            // filter out consigned delivery items that have been returned already
+            for (var j = 0; j < itemsInDeliveries.Count; j++)
             {
-                invItem.TotalAmount += salesItem.Quantity;
-                await inventoryService.UpdateInventoryAsync(invItem);
+                var del = itemsInDeliveries[j];
+                var sup = await supplierService.GetSupplierAsync(del.SupplierId);
+                if (sup.Type.ToLower().Equals("consignment") && del.ReturnByDate == null) // if a consignment delivery's ReturnByDate is null, it has been returned already
+                    itemsInDeliveries.Remove(del);
             }
-            // or add a new one if the inventory for that delivery record is not present already
-            else
+
+            // find which delivery records will receive back the item
+            var deliveriesToReturnTo = new List<Delivery>();
+            // get the delivery records that has inventory space to spare
+            int allocatedAmount = 0;
+            foreach (var del in itemsInDeliveries)
             {
-                invItem = new Inventory()
+                if (allocatedAmount >= salesItem.Quantity) break; // we found enough inventory space to return the item
+
+                var inv = await inventoryService.GetInventoryFromDeliveryAsync(del.Id);
+                int allocatableInvAmount = inv is null ? del.DeliveryAmount : del.DeliveryAmount - inv.TotalAmount;
+                
+                if (allocatableInvAmount > 0) {
+                    deliveriesToReturnTo.Add(del);
+                    allocatedAmount += allocatableInvAmount;
+                }
+            }
+
+            // update the invetory record of the allocatable inventory related to the deliveries
+            var allInventory = await inventoryService.GetInventoryTable(); // to also look for soft-deleted inventory record
+            int amountToReturn = salesItem.Quantity;
+            foreach(var del in deliveriesToReturnTo) 
+            {
+                if (amountToReturn == 0) break;
+
+                var inv = allInventory.Find(x => x.DeliveryId == del.Id);
+                if (inv is null) // inventory is hard-deleted
                 {
-                    BusinessId = businessId,
-                    DeliveryId = latestDelivery.Id,
-                    ItemBarcode = salesItem.Barcode,
-                    TotalAmount = salesItem.Quantity
-                };
-                await inventoryService.AddInventoryAsync(invItem);
-            }
+                    inv = new Inventory()
+                    {
+                        BusinessId = businessId,
+                        DeliveryId = del.Id,
+                        ItemBarcode = salesItem.Barcode,
+                        TotalAmount = 0
+                    };
+                    await inventoryService.AddInventoryAsync(inv);
+                    allInventory.Add(inv);
+                }
 
+                int allocatableInvAmount = 0;
+                allocatableInvAmount = del.DeliveryAmount - inv.TotalAmount;
+                if (amountToReturn - allocatableInvAmount > 0)
+                {
+                    inv.TotalAmount += allocatableInvAmount;
+                    amountToReturn -= allocatableInvAmount;
+                }
+                else
+                {
+                    inv.TotalAmount += amountToReturn;
+                    amountToReturn = 0;
+                }
+
+                if (inv.IsDeleted) inv.IsDeleted = false;
+                await inventoryService.UpdateInventoryAsync(inv);
+            }
+ 
             // update transaction total
             var transaction = await salesService.GetSalesTransactionAsync(Record.TransactionId);
             transaction.TotalPrice -= salesItem.Price;
@@ -132,29 +179,78 @@ public partial class ViewTransactionViewModel : BaseViewModel
         }
 
         // return each item to inventory (place it on the last delivery record of that item)
+        /* 'oldest delivery' because that the inventory record that gets remove when doing a transaction
+        is the inventory with the oldest delivery record*/
         for (int i = 0; i < Record.Items.Count; i++)
         {
             var salesItem = Record.Items[i];
-            var itemsInDeliveries = await inventoryService.GetDeliveriesAsync(salesItem.Barcode);
-            var latestDelivery = itemsInDeliveries.OrderBy(x => x.DateDelivered).ToList()[0];
 
-            // update the inventory record of the latest delivery
-            var invItem = await inventoryService.GetInventoryFromDeliveryAsync(latestDelivery.Id);
-            if (invItem is not null)
+            // get all the delivery records for this item
+            var itemsInDeliveries = (await inventoryService.GetDeliveriesAsync(salesItem.Barcode)).OrderByDescending(x => x.DateDelivered).ToList(); // latest to oldest
+
+            // filter out consigned delivery items that have been returned already
+            for (var j = 0; j < itemsInDeliveries.Count; j++)
             {
-                invItem.TotalAmount += salesItem.Quantity;
-                await inventoryService.UpdateInventoryAsync(invItem);
+                var del = itemsInDeliveries[j];
+                var sup = await supplierService.GetSupplierAsync(del.SupplierId);
+                if (sup.Type.ToLower().Equals("consignment") && del.ReturnByDate == null) // if a consignment delivery's ReturnByDate is null, it has been returned already
+                    itemsInDeliveries.Remove(del);
             }
-            else
+
+            // find which delivery records will receive back the item
+            var deliveriesToReturnTo = new List<Delivery>();
+            // get the delivery records that has inventory space to spare
+            int allocatedAmount = 0;
+            foreach (var del in itemsInDeliveries)
             {
-                var inv = new Inventory()
+                if (allocatedAmount >= salesItem.Quantity) break; // we found enough inventory space to return the item
+
+                var inv = await inventoryService.GetInventoryFromDeliveryAsync(del.Id);
+                int allocatableInvAmount = inv is null ? del.DeliveryAmount : del.DeliveryAmount - inv.TotalAmount;
+                
+                if (allocatableInvAmount > 0) {
+                    deliveriesToReturnTo.Add(del);
+                    allocatedAmount += allocatableInvAmount;
+                }
+            }
+
+
+            // update the invetory record of the allocatable inventory related to the deliveries
+            var allInventory = await inventoryService.GetInventoryTable(); // to also look for soft-deleted inventory record
+            int amountToReturn = salesItem.Quantity;
+            foreach(var del in deliveriesToReturnTo) 
+            {
+                if (amountToReturn == 0) break;
+
+                var inv = allInventory.Find(x => x.DeliveryId == del.Id);
+                if (inv is null) // inventory is hard-deleted
                 {
-                    BusinessId = businessId,
-                    DeliveryId = latestDelivery.Id,
-                    ItemBarcode = salesItem.Barcode,
-                    TotalAmount = salesItem.Quantity
-                };
-                await inventoryService.AddInventoryAsync(inv);
+                    inv = new Inventory()
+                    {
+                        BusinessId = businessId,
+                        DeliveryId = del.Id,
+                        ItemBarcode = salesItem.Barcode,
+                        TotalAmount = 0
+                    };
+                    allInventory.Add(inv);
+                    await inventoryService.AddInventoryAsync(inv);
+                }
+
+                int allocatableInvAmount = 0;
+                allocatableInvAmount = del.DeliveryAmount - inv.TotalAmount;
+                if (amountToReturn - allocatableInvAmount > 0)
+                {
+                    inv.TotalAmount += allocatableInvAmount;
+                    amountToReturn -= allocatableInvAmount;
+                }
+                else
+                {
+                    inv.TotalAmount += amountToReturn;
+                    amountToReturn = 0;
+                }
+
+                if (inv.IsDeleted) inv.IsDeleted = false;
+                await inventoryService.UpdateInventoryAsync(inv);
             }
 
             // delete transaction item
@@ -181,6 +277,7 @@ public partial class ViewTransactionViewModel : BaseViewModel
         selectedItems = [];
         foreach (SalesItem i in Record.Items)
         {
+            if (i.IsDeleted) continue;
             selectedItems.Add(false);
         }
     }
