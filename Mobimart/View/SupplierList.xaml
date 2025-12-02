@@ -127,6 +127,11 @@
                                         Value="True">
                                         <Setter Property="IsVisible" Value="False"/>
                                 </DataTrigger>
+                                <DataTrigger TargetType="Button"
+                                        Binding="{Binding IsNotOwner}"
+                                        Value="True">
+                                        <Setter Property="IsVisible" Value="False"/>
+                                </DataTrigger>
                         </Button.Triggers>
                 </Button>
         </Grid>

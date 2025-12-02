@@ -102,17 +102,10 @@
                 </ScrollView>
 
                 <ActivityIndicator IsRunning="True" 
-                            IsVisible="False"
+                            IsVisible="{Binding IsLoadingInventory}"
                             Color="#D99B2B" 
                             VerticalOptions="Center" 
                             HorizontalOptions="Center">
-                    <ActivityIndicator.Triggers>
-                        <DataTrigger TargetType="ActivityIndicator"
-                                    Binding="{Binding InventoryItems.Count}"
-                                    Value="0">
-                            <Setter Property="IsVisible" Value="True"/>
-                        </DataTrigger>
-                    </ActivityIndicator.Triggers>
                 </ActivityIndicator>
 
                 <HorizontalStackLayout Padding="1" HorizontalOptions="Center">

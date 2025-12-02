@@ -24,6 +24,8 @@ namespace MobiMart.ViewModel
         bool isFromInventory;
         [ObservableProperty]
         bool isFromScanBarcode;
+        [ObservableProperty]
+        bool isNotOwner = true;
 
         public SupplierListViewModel(SupplierService supplierService)
         {
@@ -79,6 +81,11 @@ namespace MobiMart.ViewModel
             //     Suppliers.Add(sup);
             // }
             Suppliers = await supplierService.GetAllSuppliersAsync();
+
+            if (Shell.Current.BindingContext is FlyoutMenuViewModel vm)
+            {
+                IsNotOwner = !vm.IsUserEmployee || vm.IsUserInBusiness;
+            }
         }
 
 

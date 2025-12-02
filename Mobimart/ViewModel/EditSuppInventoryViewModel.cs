@@ -116,8 +116,8 @@ namespace MobiMart.ViewModel
         {
             int emptyCount = 0;
             if (WItemName.Equals("")) emptyCount += 1;
-            if (WItemDesc.Equals("")) emptyCount += 1;
-            if (WItemType.Equals("")) emptyCount += 1;
+            // if (WItemDesc.Equals("")) emptyCount += 1;
+            // if (WItemType.Equals("")) emptyCount += 1;
             if (WRetailPrice == null) emptyCount += 1;
             if (WDelivQuantity == null) emptyCount += 1;
             if (WBatchCost == null) emptyCount += 1;

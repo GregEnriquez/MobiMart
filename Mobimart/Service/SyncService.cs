@@ -246,6 +246,7 @@ public class SyncService
             if (currentUser == null) return false;
 
             // Construct URL with Query Params
+            lastSync = DateTimeOffset.MinValue;
             var pullUrl = $"/api/sync?businessId={currentUser.BusinessId}&timestampSince={Uri.EscapeDataString(lastSync.ToString("o"))}";
             
             var pullResponse = await _client.GetAsync(pullUrl);

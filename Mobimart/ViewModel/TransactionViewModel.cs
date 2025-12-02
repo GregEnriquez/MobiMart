@@ -262,13 +262,12 @@ namespace MobiMart.ViewModel
                 Change = Change
             };
 
+            // input validation part 2: check if each item transaction has enough stock in the inventory
             foreach (var itemTransaction in Items)
             {
                 var barcode = AllItems.Find(x => x.Name.Contains(itemTransaction.ItemName))!.Barcode;
-                var sortedDeliveries = (await inventoryService.GetDeliveriesAsync(barcode)).OrderBy(x => x.DateDelivered).ToList();
                 var invRecords = await inventoryService.GetInventoriesAsync(barcode);
 
-                // input validation part 2: check if each item transaction has enough stock in the inventory
                 int totalInv = 0;
                 foreach (var inv in invRecords)
                 {
@@ -280,6 +279,20 @@ namespace MobiMart.ViewModel
                     await Toast.Make($"Not enough stock for item {itemTransaction.ItemName}. Remaining: {totalInv}").Show();
                     IsBusy = false;
                     return;
+                }
+            }
+
+            foreach (var itemTransaction in Items)
+            {
+                var barcode = AllItems.Find(x => x.Name.Contains(itemTransaction.ItemName))!.Barcode;
+                var sortedDeliveries = (await inventoryService.GetDeliveriesAsync(barcode)).OrderBy(x => x.DateDelivered).ToList();
+                var invRecords = await inventoryService.GetInventoriesAsync(barcode);
+
+                int totalInv = 0;
+                foreach (var inv in invRecords)
+                {
+                    if (inv.IsDeleted) continue;
+                    totalInv += inv.TotalAmount;
                 }
 
                 // saving of sales transaction

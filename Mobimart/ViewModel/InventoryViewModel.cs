@@ -29,6 +29,9 @@ namespace MobiMart.ViewModel
         private List<InventoryRecord> _allItems;
         InventoryService inventoryService;
 
+        [ObservableProperty]
+        bool isLoadingInventory = false;
+
         public InventoryViewModel(InventoryService inventoryService)
         {
             this.inventoryService = inventoryService;
@@ -80,11 +83,13 @@ namespace MobiMart.ViewModel
         {
             if (IsBusy) return;
             IsBusy = true;
+            IsLoadingInventory = true;
 
             InventoryItems = [];
             _allItems = await inventoryService.GetInventoryRecordsAsync();
             InventoryItems = [.. _allItems];
 
+            IsLoadingInventory = false;
             IsBusy = false;
         }
 

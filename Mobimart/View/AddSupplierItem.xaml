@@ -60,7 +60,7 @@
                     <Entry Placeholder="Enter Item Name" Text="{Binding WItemName}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
                 </Border>
 
-                <Label Text="Item Description" FontAttributes="Bold" TextColor="#6F4E37" />
+                <Label Text="Item Description (optional)" FontAttributes="Bold" TextColor="#6F4E37" />
                 <Border
                 Stroke="#A9882D"
                 StrokeThickness="1.5"
@@ -68,7 +68,7 @@
                     <Editor AutoSize="TextChanges" Placeholder="Enter Item Description" Text="{Binding WItemDesc}" BackgroundColor="#F8ECC6" TextColor="#A9882D" />
                 </Border>
 
-                <Label Text="Item Type" FontAttributes="Bold" TextColor="#6F4E37" />
+                <Label Text="Item Type (optional)" FontAttributes="Bold" TextColor="#6F4E37" />
                 <Border
                 Stroke="#A9882D"
                 StrokeThickness="1.5"

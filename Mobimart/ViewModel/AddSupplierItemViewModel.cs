@@ -32,7 +32,7 @@ namespace MobiMart.ViewModel
         string wUnitCostText;
         decimal? WUnitCost;
         [ObservableProperty]
-        bool isBatchCost = true;
+        bool isBatchCost = false;
         [ObservableProperty]
         string wConsignmentSchedule = "";
         [ObservableProperty]
@@ -82,8 +82,8 @@ namespace MobiMart.ViewModel
             int emptyCount = 0;
             if (BarcodeId.Equals("")) emptyCount += 1;
             if (WItemName.Equals("")) emptyCount += 1;
-            if (WItemDesc.Equals("")) emptyCount += 1;
-            if (WItemType.Equals("")) emptyCount += 1;
+            // if (WItemDesc.Equals("")) emptyCount += 1;
+            // if (WItemType.Equals("")) emptyCount += 1;
             if (WRetailPrice == null) emptyCount += 1;
             if (WDelivQuantity == null) emptyCount += 1;
             if (WBatchCost == null && WUnitCost == null) emptyCount += 1;

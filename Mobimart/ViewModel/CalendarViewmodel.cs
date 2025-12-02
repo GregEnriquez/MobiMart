@@ -75,14 +75,22 @@ namespace MobiMart.ViewModel
         [RelayCommand]
         private async Task NextMonth()
         {
-            CurrentDate = new DateTime(CurrentDate.Year, CurrentDate.Month + 1, 1);
+            if (CurrentDate.Month == 12)
+                CurrentDate = new DateTime(CurrentDate.Year + 1, 1, 1);
+            else 
+                CurrentDate = new DateTime(CurrentDate.Year, CurrentDate.Month + 1, 1);
+
             await LoadMonth();
         }
 
         [RelayCommand]
         private async Task PrevMonth()
         {
-            CurrentDate = new DateTime(CurrentDate.Year, CurrentDate.Month - 1, 1);
+            if (CurrentDate.Month == 1)
+                CurrentDate = new DateTime(CurrentDate.Year - 1, 12, 1);
+            else
+                CurrentDate = new DateTime(CurrentDate.Year, CurrentDate.Month - 1, 1);
+
             await LoadMonth();
         }
 
@@ -114,7 +122,8 @@ namespace MobiMart.ViewModel
             // add notification indicator to proper days
             foreach (var reminder in allReminders)
             {
-                if (reminder.NotifyAtDate.LocalDateTime.Month != CurrentDate.Month) continue;
+                if (reminder.NotifyAtDate.LocalDateTime.Month != CurrentDate.Month
+                && reminder.NotifyAtDate.LocalDateTime.Year != CurrentDate.Year) continue;
                 if (reminder.IsDeleted) continue;
                 Days[reminder.NotifyAtDate.LocalDateTime.Day - 1].HasReminders = true;
             }
